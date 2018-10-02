@@ -3,10 +3,12 @@
 var camera;
 var scene, renderer;
 var switchCamera = 1;
-var Speed = 0;  //Don't touch this
-var MaxSpeed = 10;//This is the maximum speed that the object will achieve
-var Acceleration = 10;//How fast will object reach a maximum speed
-var Deceleration = 10;//How fast will object reach a speed of 0
+var speed = 0.1;  //Don't touch this
+var maxSpeed = 10;//This is the maximum speed that the object will achieve
+var acceleration = 10;//How fast will object reach a maximum speed
+var deceleration = 10;//How fast will object reach a speed of 0
+var chairForward, chairBack, chairLeft, chairRight;
+var chair, table, lamp;
 
 var geometry, material, mesh;
 
@@ -49,13 +51,13 @@ function createScene() {
 
   scene.add( new THREE.AxisHelper(10) );
 
-  createTable(0, 9, 0);
+  createTable(0, 0, 0);
   createChair(0, 0, -40);
-  createLamp(80,-17,0);
+  createLamp(50,0,0);
 }
 
 function createTable(x, y, z) {
-  var table = new Table();
+  table = new Table();
 
   scene.add(table);
 
@@ -64,9 +66,8 @@ function createTable(x, y, z) {
   table.position.z = z;
 }
 
-
 function createChair(x, y, z){
-  var chair = new Chair();
+  chair = new Chair();
   chair.userData = {
     vx: 0, vy: 0,
     ax: 0, ay: 0,
@@ -80,9 +81,8 @@ function createChair(x, y, z){
   chair.position.z = z;
 }
 
-
 function createLamp(x, y, z) {
-  var lamp = new Lamp();
+  lamp = new Lamp();
 
   scene.add(lamp);
 
@@ -91,6 +91,21 @@ function createLamp(x, y, z) {
   lamp.position.z = z;
 }
 
+function onKeyUp(e) {
+  switch (e.keyCode) {
+    case 37:  // left arrow
+      chairLeft = false;
+      break;
+    case 38:  // up arrow
+      chairForward = false;
+      break;
+    case 39:  // right arrow
+      chairRight = false;
+      break;
+    case 40: // down arrow
+      chairBack = false;
+  }
+}
 
 function onKeyDown(e) {
 
@@ -118,22 +133,22 @@ function onKeyDown(e) {
       break;
 
     case 37:  // left arrow
-
+      chairLeft = true;
       console.log("onKeyDown! Move Chair: Left");
       break;
 
     case 38:  // up arrow
-
-      console.log("onKeyDown! Move Chair: Up");
+      chairForward = true;
+      console.log("onKeyDown! Move Chair: Forward");
       break;
 
     case 39:  // right arrow
-
+      chairRight = true;
       console.log("onKeyDown! Move Chair: Right");
       break;
 
     case 40:  // down arrow
-
+      chairBack = true;
       console.log("onKeyDown! Move Chair: Down");
       break;
 
@@ -143,7 +158,6 @@ function onKeyDown(e) {
     case 78: camera.position.y -=3; render(); camera.lookAt(scene.position); break;
     case 74: camera.position.z +=3; render(); camera.lookAt(scene.position); break;
     case 77: camera.position.z -=3; render(); camera.lookAt(scene.position); break;
-
   }
 }
 
@@ -190,10 +204,28 @@ function animate() {
       camera.lookAt(scene.position);
       break;
   }
+
+  if (chairForward) {
+    chair.position.x += (Math.sin(chair.rotation.y));
+    chair.position.z += (Math.cos(chair.rotation.y));
+  }
+  if (chairBack) {
+    chair.position.x -= (Math.sin(chair.rotation.y));
+    chair.position.z -= (Math.cos(chair.rotation.y));
+  }
+  if (chairLeft) {
+    chair.rotation.y += 0.05;
+  }
+  if (chairRight) {
+    chair.rotation.y -= 0.05;
+  }
+
+  updatePosition(chair);
   switchCamera = 0;
   render();
   requestAnimationFrame(animate);
 }
+
 
 function init() {
 
@@ -201,8 +233,8 @@ function init() {
 
   renderer.setSize(window.innerWidth, window.innerHeight );
 
-  var world_clock = new THREE.Clock(true);
-	world_clock.start();
+  var clock = new THREE.Clock(true);
+	clock.start();
 
   document.body.appendChild(renderer.domElement);
 
@@ -213,4 +245,5 @@ function init() {
 
   window.addEventListener("resize", onResize);
   window.addEventListener("keydown", onKeyDown);
+  window.addEventListener("keyup", onKeyUp);
 }
