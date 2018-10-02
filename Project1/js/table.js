@@ -14,7 +14,6 @@ class Table extends THREE.Object3D {
 	}
 
   addTableLeg(x, y, z) {
-
     var geometry = new THREE.CylinderGeometry( 1.5, 1, 25, 10 );
     mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(x, y - 12.5, z);
@@ -22,11 +21,9 @@ class Table extends THREE.Object3D {
   }
 
   addTableTop(x, y, z) {
-
     geometry = new THREE.CubeGeometry(60, 2, 20);
     mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(x, y, z);
-
     this.add(mesh);
   }
 }

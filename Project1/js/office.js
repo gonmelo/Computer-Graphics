@@ -1,4 +1,4 @@
-  'use strict'
+'use strict'
 
 var camera;
 var scene, renderer;
@@ -81,7 +81,7 @@ function createChair(x, y, z){
 }
 
 
-function createLamp(x, y, z){
+function createLamp(x, y, z) {
   var lamp = new Lamp();
 
   scene.add(lamp);
