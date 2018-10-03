@@ -51,9 +51,9 @@ function createScene() {
 
   scene.add( new THREE.AxisHelper(10) );
 
-  createTable(0, 9, 0);
+  createTable(0, 0, 0);
   createChair(0, 0, -40);
-  createLamp(80,-17,0);
+  createLamp(50,0,0);
 }
 
 function createTable(x, y, z) {

@@ -5,32 +5,32 @@ class Chair extends THREE.Object3D {
 		super();
     material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
 
-    this.addChairBack(0, 1, -10);
-    this.addChairSit(0, 0, 0);
-    this.addChairSupport(0, -1, 0);
+    this.addChairBack(0, 21, 0);
+    this.addChairSit(0, 19, 0);
+    this.addChairSupport(0, 7, 0);
 
-    this.addChairLeg1(-1, -13, 0);
-    this.addChairLeg1(9, -13, 0);
-    this.addChairLeg2(0, -13, -1);
-    this.addChairLeg2(0, -13, 9);
+    this.addChairLeg1(-1, 4, 0);
+    this.addChairLeg1(9, 4, 0);
+    this.addChairLeg2(0, 4, -1);
+    this.addChairLeg2(0, 4, 9);
 
-    this.addChairWheel(-9, -13, 1);
-    this.addChairWheel(7, -13, 1);
-    this.addChairWheel(-1, -13, 9);
-    this.addChairWheel(-1, -13, -7);
+    this.addChairWheel(-9, 0, 1);
+    this.addChairWheel(7, 0, 1);
+    this.addChairWheel(-1, 0, 9);
+    this.addChairWheel(-1, 0, -7);
 
 	}
 
   addChairSit(x, y, z) {
     geometry = new THREE.CubeGeometry(20, 2, 20);
     mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(x, y, z);
+    mesh.position.set(x, y + 1, z);
     this.add(mesh);
   }
   addChairSupport(x, y, z) {
     var geometry = new THREE.CubeGeometry( 2, 12, 2);
     mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(x, y-6, z);
+    mesh.position.set(x, y+6, z);
     this.add(mesh);
   }
   addChairLeg1(x, y, z) {
@@ -48,14 +48,14 @@ class Chair extends THREE.Object3D {
   addChairWheel(x, y, z) {
     geometry = new THREE.TorusGeometry(1, 1, 16, 100);
     mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(x + 1, y-2, z-1);
+    mesh.position.set(x + 1, y+2, z-1);
     mesh.rotation.y += Math.PI / 2;
     this.add(mesh);
   }
   addChairBack(x, y, z) {
     geometry = new THREE.CubeGeometry(20, 20, 2);
     mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(x, y+10, z+1);
+    mesh.position.set(x, y+10, z-9);
     this.add(mesh);
   }
 
