@@ -11,36 +11,50 @@ var chairForward, chairBack, chairLeft, chairRight;
 var chair, table, lamp;
 
 var geometry, material, mesh;
+var originalAspect;
+var aspect, change;
 
 function onResize() {
-  if (window.innerHeight > window.innerWidth) {
-  		var aspectRatio = window.innerHeight / window.innerWidth;
-  		camera.left = -window.innerWidth / 8;
-  		camera.right = window.innerWidth / 8;
-  		camera.top = window.innerHeight / 8;
-  		camera.bottom = -window.innerHeight / 8;
 
-  	} else {
-  		var aspectRatio = window.innerWidth / window.innerHeight;
-  		camera.left = -window.innerWidth / 8;
-  		camera.right = window.innerWidth  / 8;
-  		camera.top = window.innerHeight / 8;
-  		camera.bottom = -window.innerHeight / 8;
+    aspect= window.innerWidth / window.innerHeight;
+
+  if (window.innerHeight > window.innerWidth) {
+  		//var aspect = window.innerHeight / window.innerWidth;
+      change = aspect / originalAspect;
+    //  var newScene = sceneAspect * change;
+  		camera.left = -window.innerWidth/ (change *8);
+  		camera.right = window.innerWidth / (change *8);
+  		camera.top = window.innerHeight / (change *8);
+  		camera.bottom = -window.innerHeight / (change *8);
+
+  	}
+    else{
+  	//	var aspect= window.innerWidth / window.innerHeight;
+      change =  aspect / originalAspect ;
+    //  var newScene = sceneAspect * change;
+  		camera.left = -change * window.innerWidth /8;
+  		camera.right = change * window.innerWidth / 8;
+  		camera.top = change * window.innerHeight / 8;
+  		camera.bottom = -change * window.innerHeight / 8;
   	}
 
   	renderer.setSize(window.innerWidth, window.innerHeight);
 
-  	camera.aspect = aspectRatio;
+  	camera.aspect = aspect;
   	camera.updateProjectionMatrix();
 }
 
 function createCamera() {
-  if (window.innerHeight > window.innerWidth) {
-		camera = new THREE.OrthographicCamera(-window.innerWidth / 8, window.innerWidth / 8, window.innerHeight / 8, -window.innerHeight / 8, -100, 1000);
-	} else {
-		camera = new THREE.OrthographicCamera(-window.innerWidth / 8, window.innerWidth  / 8, window.innerHeight / 8, -window.innerHeight / 8, -100, 1000);
-	}
 
+//  if (window.innerHeight > window.innerWidth) {
+    camera = new THREE.OrthographicCamera(-window.innerWidth / 8, window.innerWidth / 8, window.innerHeight / 8, -window.innerHeight / 8, -100, 1000);
+    //originalAspect = window.innerHeight / window.innerWidth;
+  //} else {
+		//camera = new THREE.OrthographicCamera(-window.innerWidth / 8, window.innerWidth  / 8, window.innerHeight / 8, -window.innerHeight / 8, -100, 1000);
+    //originalAspect = window.innerWidth / window.innerHeight;
+  //}
+
+  originalAspect = window.innerWidth / window.innerHeight;
 	camera.position.set(50, 0, 0);
 	camera.lookAt(scene.position);
 }
@@ -70,7 +84,7 @@ function createChair(x, y, z){
   chair = new Chair();
   chair.userData = {
     vx: 0, vy: 0,
-    ax: 0, ay: 0,
+    ax: 0.05, ay: 0.05,
     r: 0
   };
 
