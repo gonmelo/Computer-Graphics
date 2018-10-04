@@ -10,7 +10,6 @@ class Lamp extends THREE.Object3D {
      this.addLampAbajour(0, 51, 0);
      this.addLampLight(0, 51, 0);
      this.addLampSphere(0, 54, 0);
-
   }
 
   addLampBase(x, y, z) {

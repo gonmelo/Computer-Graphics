@@ -49,7 +49,7 @@ class Chair extends THREE.Object3D {
     this.add(mesh);
   }
   addChairWheel(x, y, z) {
-    geometry = new THREE.TorusGeometry(1, 1, 16, 100);
+    geometry = new THREE.TorusGeometry(1, 1, 2, 10);
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x + 1, y+2, z-1);
     mesh.rotation.y += Math.PI / 2;
@@ -70,12 +70,12 @@ class Chair extends THREE.Object3D {
       	speed += acceleration;
     	chair.position.x += (Math.sin(chair.rotation.y)) * speed;
     	chair.position.z += (Math.cos(chair.rotation.y)) * speed;
-			for each (children in chair.children){
-				if (children == "chairWheel"){
+			chair.children.forEach(function(children) {
+				if (children.name == "chairWheel") {
 					children.rotation.x += (Math.sin(chair.rotation.y)) * speed;
-					children.rotation.z += (Math.sin(chair.rotation.y)) * speed;
+		    	children.rotation.z += (Math.cos(chair.rotation.y)) * speed;
 				}
-			}
+			});
 		}
 		else {
 			if (speed < maxSpeed)
