@@ -9,23 +9,23 @@ var acceleration = 10;//How fast will object reach a maximum speed
 var deceleration = 10;//How fast will object reach a speed of 0
 var chairForward, chairBack, chairLeft, chairRight;
 var chair, table, lamp;
-
 var geometry, material, mesh;
+var materials = [];
 
 function onResize() {
   if (window.innerHeight > window.innerWidth) {
-  		var aspectRatio = window.innerHeight / window.innerWidth;
-  		camera.left = -window.innerWidth / 8;
-  		camera.right = window.innerWidth / 8;
-  		camera.top = window.innerHeight / 8;
-  		camera.bottom = -window.innerHeight / 8;
+  		var aspectRatio = window.innerWidth / window.innerHeight;
+  		camera.left = originalAspect *-window.innerWidth / 8;
+  		camera.right = originalAspect * window.innerWidth / 8;
+  		camera.top = originalAspect * window.innerHeight / 8;
+  		camera.bottom = originalAspect* -window.innerHeight / 8;
 
   	} else {
-  		var aspectRatio = window.innerWidth / window.innerHeight;
-  		camera.left = -window.innerWidth / 8;
-  		camera.right = window.innerWidth  / 8;
-  		camera.top = window.innerHeight / 8;
-  		camera.bottom = -window.innerHeight / 8;
+  		var aspectRatio = window.innerHeight / window.innerWidth;
+  		camera.left = originalAspect * -window.innerWidth / 8;
+  		camera.right = originalAspect * window.innerWidth  / 8;
+  		camera.top = originalAspect * window.innerHeight / 8;
+  		camera.bottom = originalAspect * -window.innerHeight / 8;
   	}
 
   	renderer.setSize(window.innerWidth, window.innerHeight);
@@ -35,6 +35,7 @@ function onResize() {
 }
 
 function createCamera() {
+  var aspectRatio = window.innerHeight / window.innerWidth;
   if (window.innerHeight > window.innerWidth) {
 		camera = new THREE.OrthographicCamera(-window.innerWidth / 8, window.innerWidth / 8, window.innerHeight / 8, -window.innerHeight / 8, -100, 1000);
 	} else {
@@ -58,7 +59,6 @@ function createScene() {
 
 function createTable(x, y, z) {
   table = new Table();
-
   scene.add(table);
 
   table.position.x = x;
@@ -112,13 +112,11 @@ function onKeyDown(e) {
   switch (e.keyCode) {
     case 65:  //A
     case 97: //a
-      scene.traverse(function (node) {
-        if (node instanceof THREE.Mesh) {
-          node.material.wireframe = !node.material.wireframe;
-        }
+      console.log(materials);
+      materials.forEach(function(material) {
+        material.wireframe = !material.wireframe;
       });
       break;
-
     case 49:  // 1
       switchCamera = 1;
       console.log("onKeyDown! Switch to camera: " + switchCamera);
