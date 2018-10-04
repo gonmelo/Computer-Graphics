@@ -14,6 +14,7 @@ var geometry, material, mesh;
 var sceneWidth = 120, sceneHeight = 80;
 var sceneRatio = sceneWidth / sceneHeight;
 var aspect, change;
+var materials = [];
 
 function onResize() {
 
@@ -72,6 +73,7 @@ function createScene() {
 
 function createTable(x, y, z) {
   table = new Table();
+  materials.push(table.material);
   scene.add(table);
 
   table.position.x = x;
@@ -81,7 +83,7 @@ function createTable(x, y, z) {
 
 function createChair(x, y, z){
   chair = new Chair();
-
+  materials.push(chair.material);
   scene.add(chair);
 
   chair.position.x = x;
@@ -91,7 +93,7 @@ function createChair(x, y, z){
 
 function createLamp(x, y, z) {
   lamp = new Lamp();
-
+  materials.push(lamp.material);
   scene.add(lamp);
 
   lamp.position.x = x;

@@ -5,7 +5,7 @@ class Table extends THREE.Object3D {
   constructor() {
 		super();
     this.material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
-    materials.push(this.material);
+
     this.addTableTop( 0, 25, 0);
     this.addTableLeg(-25, 0, -8);
     this.addTableLeg(-25, 0, 8);

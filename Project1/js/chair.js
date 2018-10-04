@@ -4,7 +4,6 @@ class Chair extends THREE.Object3D {
 	constructor() {
 		super();
     this.material = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
-		materials.push(this.material);
 
     this.addChairBack(0, 21, 0);
     this.addChairSit(0, 19, 0);

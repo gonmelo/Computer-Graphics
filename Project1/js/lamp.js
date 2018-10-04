@@ -4,7 +4,6 @@ class Lamp extends THREE.Object3D {
   constructor() {
 	   super();
      this.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
-     materials.push(this.material);
 
      this.addLampBase(0,0,0);
      this.addLampSupport(0, 1, 0);
