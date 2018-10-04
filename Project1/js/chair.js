@@ -58,4 +58,41 @@ class Chair extends THREE.Object3D {
     this.add(mesh);
   }
 
+	move(){
+		if(direction){
+			if (speed < maxSpeed)
+      	speed += acceleration;
+    	chair.position.x += (Math.sin(chair.rotation.y)) * speed;
+    	chair.position.z += (Math.cos(chair.rotation.y)) * speed;
+			for each (children in chair.children){
+				if (children == "chairWheel"){
+					children.rotation.x += (Math.sin(chair.rotation.y)) * speed;
+					children.rotation.z += (Math.sin(chair.rotation.y)) * speed;
+				}
+			}
+		}
+		else {
+			if (speed < maxSpeed)
+      	speed += acceleration;
+    	chair.position.x -= (Math.sin(chair.rotation.y)) * speed;
+    	chair.position.z -= (Math.cos(chair.rotation.y)) * speed;
+		}
+	}
+
+	stop(){
+		speed *= friction;
+    if (speed < 0.001)
+      speed = 0;
+    if (direction){
+      chair.position.x += (Math.sin(chair.rotation.y)) * speed;
+      chair.position.z += (Math.cos(chair.rotation.y)) * speed;
+    }
+    else {
+      chair.position.x -= (Math.sin(chair.rotation.y)) * speed;
+      chair.position.z -= (Math.cos(chair.rotation.y)) * speed;
+    }
+	}
+
+
+
 }

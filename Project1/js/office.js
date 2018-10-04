@@ -16,6 +16,7 @@ var sceneRatio = sceneWidth / sceneHeight;
 var aspect, change;
 var materials = [];
 
+
 function onResize() {
 
     aspect= window.innerWidth / window.innerHeight;
@@ -202,17 +203,11 @@ function animate() {
 
   if (chairForward) {
     direction = true;
-    if (speed < maxSpeed)
-      speed += acceleration;
-    chair.position.x += (Math.sin(chair.rotation.y)) * speed;
-    chair.position.z += (Math.cos(chair.rotation.y)) * speed;
+    chair.move();
   }
   if (chairBack) {
     direction = false;
-    if (speed < maxSpeed)
-      speed += acceleration;
-    chair.position.x -= (Math.sin(chair.rotation.y)) * speed;
-    chair.position.z -= (Math.cos(chair.rotation.y)) * speed;
+    chair.move();
   }
   if (chairLeft) {
     chair.rotation.y += 0.05;
@@ -222,17 +217,7 @@ function animate() {
   }
 
   if (!(chairForward) && !(chairBack)) {
-    speed *= friction;
-    if (speed < 0.001)
-      speed = 0;
-    if (direction){
-      chair.position.x += (Math.sin(chair.rotation.y)) * speed;
-      chair.position.z += (Math.cos(chair.rotation.y)) * speed;
-    }
-    else {
-      chair.position.x -= (Math.sin(chair.rotation.y)) * speed;
-      chair.position.z -= (Math.cos(chair.rotation.y)) * speed;
-    }
+    chair.stop();
   }
 
 
@@ -247,9 +232,6 @@ function init() {
   renderer = new THREE.WebGLRenderer( { antialias: true });
 
   renderer.setSize(window.innerWidth, window.innerHeight );
-
-  var clock = new THREE.Clock(true);
-	clock.start();
 
   document.body.appendChild(renderer.domElement);
 
