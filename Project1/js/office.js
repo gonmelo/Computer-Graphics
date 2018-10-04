@@ -3,39 +3,40 @@
 var camera;
 var scene, renderer;
 var switchCamera = 1;
-var speed = 0.1;  //Don't touch this
-var maxSpeed = 10;//This is the maximum speed that the object will achieve
-var acceleration = 10;//How fast will object reach a maximum speed
-var deceleration = 10;//How fast will object reach a speed of 0
+var speed = 0;  //Don't touch this
+var maxSpeed = 1.5;//This is the maximum speed that the object will achieve
+var acceleration = 0.02;//How fast will object reach a maximum speed
+var friction = 0.97;//How fast will object reach a speed of 0
 var chairForward, chairBack, chairLeft, chairRight;
+var direction;
 var chair, table, lamp;
 
 var geometry, material, mesh;
-var originalAspect;
+var sceneWidth = 120, sceneHeight = 80;
+var sceneRatio = sceneWidth / sceneHeight;
 var aspect, change;
 
 function onResize() {
 
     aspect= window.innerWidth / window.innerHeight;
 
-  if (window.innerHeight > window.innerWidth) {
+  if (sceneRatio > aspect) {
   		//var aspect = window.innerHeight / window.innerWidth;
-      change = aspect / originalAspect;
     //  var newScene = sceneAspect * change;
-  		camera.left = -window.innerWidth/ (change *8);
-  		camera.right = window.innerWidth / (change *8);
-  		camera.top = window.innerHeight / (change *8);
-  		camera.bottom = -window.innerHeight / (change *8);
+  		camera.left = -sceneWidth /aspect;
+  		camera.right =sceneWidth /aspect;
+  		camera.top = sceneHeight * aspect;
+  		camera.bottom = -sceneHeight * aspect;
 
   	}
     else{
   	//	var aspect= window.innerWidth / window.innerHeight;
-      change =  aspect / originalAspect ;
+
     //  var newScene = sceneAspect * change;
-  		camera.left = -change * window.innerWidth /8;
-  		camera.right = change * window.innerWidth / 8;
-  		camera.top = change * window.innerHeight / 8;
-  		camera.bottom = -change * window.innerHeight / 8;
+  		camera.left = - sceneWidth;
+  		camera.right = sceneWidth;
+  		camera.top = aspect * sceneHeight / sceneRatio;
+  		camera.bottom = -aspect * sceneHeight / sceneRatio;
   	}
 
   	renderer.setSize(window.innerWidth, window.innerHeight);
@@ -54,7 +55,7 @@ function createCamera() {
     //originalAspect = window.innerWidth / window.innerHeight;
   //}
 
-  originalAspect = window.innerWidth / window.innerHeight;
+
 	camera.position.set(50, 0, 0);
 	camera.lookAt(scene.position);
 }
@@ -82,11 +83,6 @@ function createTable(x, y, z) {
 
 function createChair(x, y, z){
   chair = new Chair();
-  chair.userData = {
-    vx: 0, vy: 0,
-    ax: 0.05, ay: 0.05,
-    r: 0
-  };
 
   scene.add(chair);
 
@@ -175,19 +171,6 @@ function onKeyDown(e) {
   }
 }
 
-function updatePosition(obj) {
-  // update velocity
-  obj.vx += obj.ax;
-  obj.vy += obj.ay;
-
-  // friction
-  obj.vx *= obj.vx;
-  obj.vy *= obj.vy;
-
-  // update position
-  obj.x += obj.vx;
-  obj.y += obj.vy;
-}
 
 function render() {
 
@@ -220,12 +203,18 @@ function animate() {
   }
 
   if (chairForward) {
-    chair.position.x += (Math.sin(chair.rotation.y));
-    chair.position.z += (Math.cos(chair.rotation.y));
+    direction = true;
+    if (speed < maxSpeed)
+      speed += acceleration;
+    chair.position.x += (Math.sin(chair.rotation.y)) * speed;
+    chair.position.z += (Math.cos(chair.rotation.y)) * speed;
   }
   if (chairBack) {
-    chair.position.x -= (Math.sin(chair.rotation.y));
-    chair.position.z -= (Math.cos(chair.rotation.y));
+    direction = false;
+    if (speed < maxSpeed)
+      speed += acceleration;
+    chair.position.x -= (Math.sin(chair.rotation.y)) * speed;
+    chair.position.z -= (Math.cos(chair.rotation.y)) * speed;
   }
   if (chairLeft) {
     chair.rotation.y += 0.05;
@@ -234,7 +223,21 @@ function animate() {
     chair.rotation.y -= 0.05;
   }
 
-  updatePosition(chair);
+  if (!(chairForward) && !(chairBack)) {
+    speed *= friction;
+    if (speed < 0.001)
+      speed = 0;
+    if (direction){
+      chair.position.x += (Math.sin(chair.rotation.y)) * speed;
+      chair.position.z += (Math.cos(chair.rotation.y)) * speed;
+    }
+    else {
+      chair.position.x -= (Math.sin(chair.rotation.y)) * speed;
+      chair.position.z -= (Math.cos(chair.rotation.y)) * speed;
+    }
+  }
+
+
   switchCamera = 0;
   render();
   requestAnimationFrame(animate);
