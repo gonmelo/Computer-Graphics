@@ -11,7 +11,7 @@ var chairForward, chairBack, chairLeft, chairRight;
 var direction;
 var chair, table, lamp;
 var geometry, material, mesh;
-var sceneWidth = 120, sceneHeight = 80;
+var sceneWidth = 90, sceneHeight = 80;
 var sceneRatio = sceneWidth / sceneHeight;
 var aspect, change;
 var materials = [];
@@ -21,25 +21,21 @@ function onResize() {
 
     aspect= window.innerWidth / window.innerHeight;
 
-  if (sceneRatio > aspect) {
-  		//var aspect = window.innerHeight / window.innerWidth;
-    //  var newScene = sceneAspect * change;
-  		camera.left = -sceneWidth /aspect;
-  		camera.right =sceneWidth /aspect;
-  		camera.top = sceneHeight * aspect;
-  		camera.bottom = -sceneHeight * aspect;
+    if (aspect > sceneRatio) {
 
-  	}
-    else{
-  	//	var aspect= window.innerWidth / window.innerHeight;
+    		camera.left = -sceneWidth * aspect;
+    		camera.right = sceneWidth * aspect;
+    		camera.top = sceneHeight;
+    		camera.bottom = -sceneHeight;
 
-    //  var newScene = sceneAspect * change;
-  		camera.left = - sceneWidth;
-  		camera.right = sceneWidth;
-  		camera.top = aspect * sceneHeight / sceneRatio;
-  		camera.bottom = -aspect * sceneHeight / sceneRatio;
-  	}
+    	}
+      else{
 
+    		camera.left = - sceneWidth;
+    		camera.right = sceneWidth;
+    		camera.top = sceneHeight / aspect;
+    		camera.bottom = -sceneHeight / aspect;
+    	}
   	renderer.setSize(window.innerWidth, window.innerHeight);
 
   	camera.aspect = aspect;
@@ -48,14 +44,8 @@ function onResize() {
 
 function createCamera() {
 
-//  if (window.innerHeight > window.innerWidth) {
-    camera = new THREE.OrthographicCamera(-window.innerWidth / 8, window.innerWidth / 8, window.innerHeight / 8, -window.innerHeight / 8, -100, 1000);
-    //originalAspect = window.innerHeight / window.innerWidth;
-  //} else {
-		//camera = new THREE.OrthographicCamera(-window.innerWidth / 8, window.innerWidth  / 8, window.innerHeight / 8, -window.innerHeight / 8, -100, 1000);
-    //originalAspect = window.innerWidth / window.innerHeight;
-  //}
 
+  camera = new THREE.OrthographicCamera(-window.innerWidth / 8, window.innerWidth / 8, window.innerHeight / 8, -window.innerHeight / 8, -100, 1000);
 
 	camera.position.set(50, 0, 0);
 	camera.lookAt(scene.position);
