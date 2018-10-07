@@ -65,82 +65,41 @@ class Chair extends THREE.Object3D {
   }
 
 	move(){
-		if(direction){
-			if (speed < maxSpeed)
-      	speed += acceleration;
+			if (speed < maxSpeed && speed > -maxSpeed){
+				if (direction)
+					speed += acceleration;
+				else {
+					speed -= acceleration;
+				}
+			}
     	chair.position.x += (Math.sin(chair.rotation.y)) * speed;
     	chair.position.z += (Math.cos(chair.rotation.y)) * speed;
-			chair.children.forEach(function(children) {
-				if (children.name == "chairWheel") {
-					if (Math.cos(chair.rotation.y) < 0) {
-						children.rotation.x -= (Math.sin(chair.rotation.y)) * speed /3.14;
-						children.rotation.z -= (Math.cos(chair.rotation.y)) * speed /3.14;
-					}
-					else {
-						children.rotation.x += (Math.sin(chair.rotation.y)) * speed /3.14;
-						children.rotation.z += (Math.cos(chair.rotation.y)) * speed /3.14;
-					}
-				}
-			});
+
+		chair.moveWheels();
 		}
-		else {
-			if (speed < maxSpeed)
-      	speed += acceleration;
-    	chair.position.x -= (Math.sin(chair.rotation.y)) * speed;
-    	chair.position.z -= (Math.cos(chair.rotation.y)) * speed;
-			chair.children.forEach(function(children) {
-				if (children.name == "chairWheel") {
-					if (Math.cos(chair.rotation.y) < 0) {
-						children.rotation.x += (Math.sin(chair.rotation.y)) * speed /3.14;
-						children.rotation.z += (Math.cos(chair.rotation.y)) * speed /3.14;
-					}
-					else {
-						children.rotation.x -= (Math.sin(chair.rotation.y)) * speed /3.14;
-						children.rotation.z -= (Math.cos(chair.rotation.y)) * speed /3.14;
-					}
-				}
-			});
-		}
-	}
 
 	stop(){
 		speed *= friction;
-    if (speed < 0.001)
+    if (speed < 0.001 && speed > -0.001)
       speed = 0;
-			if (direction){
-	      chair.position.x += (Math.sin(chair.rotation.y)) * speed;
-	      chair.position.z += (Math.cos(chair.rotation.y)) * speed;
-				chair.children.forEach(function(children) {
-					if (children.name == "chairWheel") {
-						if (Math.cos(chair.rotation.y) < 0) {
-							children.rotation.x -= (Math.sin(chair.rotation.y)) * speed /3.14;
-							children.rotation.z -= (Math.cos(chair.rotation.y)) * speed /3.14;
-						}
-						else {
-							children.rotation.x += (Math.sin(chair.rotation.y)) * speed /3.14;
-							children.rotation.z += (Math.cos(chair.rotation.y)) * speed /3.14;
-						}
-					}
-				});
-		}
-    else {
-      chair.position.x -= (Math.sin(chair.rotation.y)) * speed;
-      chair.position.z -= (Math.cos(chair.rotation.y)) * speed;
-			chair.children.forEach(function(children) {
-				if (children.name == "chairWheel") {
-					if (Math.cos(chair.rotation.y) < 0) {
-						children.rotation.x += (Math.sin(chair.rotation.y)) * speed / 3.14;
-						children.rotation.z += (Math.cos(chair.rotation.y)) * speed /3.14;
-					}
-					else {
-						children.rotation.x -= (Math.sin(chair.rotation.y)) * speed / 3.14;
-						children.rotation.z -= (Math.cos(chair.rotation.y)) * speed /3.14;
-					}
-				}
-			});
-    }
+	  chair.position.x += (Math.sin(chair.rotation.y)) * speed;
+	  chair.position.z += (Math.cos(chair.rotation.y)) * speed;
+
+		chair.moveWheels();
 	}
 
-
-
+	moveWheels(){
+		chair.children.forEach(function(children) {
+			if (children.name == "chairWheel") {
+				if (Math.cos(chair.rotation.y) < 0) {
+					children.rotation.x -= (Math.sin(chair.rotation.y)) * speed /3.14;
+					children.rotation.z -= (Math.cos(chair.rotation.y)) * speed /3.14;
+				}
+				else {
+					children.rotation.x += (Math.sin(chair.rotation.y)) * speed /3.14;
+					children.rotation.z += (Math.cos(chair.rotation.y)) * speed /3.14;
+				}
+			}
+		});
+	}
 }
