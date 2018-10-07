@@ -8,14 +8,13 @@ var maxSpeed = 1.5;//This is the maximum speed that the object will achieve
 var acceleration = 0.02;//How fast will object reach a maximum speed
 var friction = 0.97;//How fast will object reach a speed of 0
 var chairForward, chairBack, chairLeft, chairRight;
-var direction;
+var direction, rot;
 var chair, table, lamp;
 var geometry, material, mesh;
-var sceneWidth = 90, sceneHeight = 80;
+var sceneWidth = 80, sceneHeight = 80;
 var sceneRatio = sceneWidth / sceneHeight;
 var aspect, change;
 var materials = [];
-
 
 function onResize() {
 
@@ -27,25 +26,24 @@ function onResize() {
     		camera.right = sceneWidth * aspect;
     		camera.top = sceneHeight;
     		camera.bottom = -sceneHeight;
-
-    	}
-      else{
+    }
+    else{
 
     		camera.left = - sceneWidth;
     		camera.right = sceneWidth;
     		camera.top = sceneHeight / aspect;
     		camera.bottom = -sceneHeight / aspect;
-    	}
-  	renderer.setSize(window.innerWidth, window.innerHeight);
+    }
 
+  	renderer.setSize(window.innerWidth, window.innerHeight);
   	camera.aspect = aspect;
   	camera.updateProjectionMatrix();
 }
 
 function createCamera() {
 
-
-  camera = new THREE.OrthographicCamera(-window.innerWidth / 8, window.innerWidth / 8, window.innerHeight / 8, -window.innerHeight / 8, -100, 1000);
+  aspect= window.innerWidth / window.innerHeight;
+  camera = new THREE.OrthographicCamera(-sceneWidth * aspect, sceneWidth * aspect, sceneHeight, -sceneHeight, -100, 1000);
 
 	camera.position.set(50, 0, 0);
 	camera.lookAt(scene.position);
@@ -160,7 +158,6 @@ function onKeyDown(e) {
   }
 }
 
-
 function render() {
 
   renderer.render(scene, camera);
@@ -205,17 +202,14 @@ function animate() {
   if (chairRight) {
     chair.rotation.y -= 0.05;
   }
-
   if (!(chairForward) && !(chairBack)) {
     chair.stop();
   }
-
 
   switchCamera = 0;
   render();
   requestAnimationFrame(animate);
 }
-
 
 function init() {
 

@@ -49,7 +49,7 @@ class Chair extends THREE.Object3D {
     this.add(mesh);
   }
   addChairWheel(x, y, z) {
-    geometry = new THREE.TorusGeometry(1, 1, 2, 10);
+    geometry = new THREE.TorusGeometry(1, 1, 5, 10);
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x + 1, y+2, z-1);
     mesh.rotation.y += Math.PI / 2;
@@ -73,12 +73,12 @@ class Chair extends THREE.Object3D {
 			chair.children.forEach(function(children) {
 				if (children.name == "chairWheel") {
 					if (Math.cos(chair.rotation.y) < 0) {
-						children.rotation.x -= (Math.sin(chair.rotation.y)) * speed;
-						children.rotation.z -= (Math.cos(chair.rotation.y)) * speed;
+						children.rotation.x -= (Math.sin(chair.rotation.y)) * speed /3.14;
+						children.rotation.z -= (Math.cos(chair.rotation.y)) * speed /3.14;
 					}
 					else {
-						children.rotation.x += (Math.sin(chair.rotation.y)) * speed;
-						children.rotation.z += (Math.cos(chair.rotation.y)) * speed;
+						children.rotation.x += (Math.sin(chair.rotation.y)) * speed /3.14;
+						children.rotation.z += (Math.cos(chair.rotation.y)) * speed /3.14;
 					}
 				}
 			});
@@ -91,12 +91,12 @@ class Chair extends THREE.Object3D {
 			chair.children.forEach(function(children) {
 				if (children.name == "chairWheel") {
 					if (Math.cos(chair.rotation.y) < 0) {
-						children.rotation.x += (Math.sin(chair.rotation.y)) * speed;
-						children.rotation.z += (Math.cos(chair.rotation.y)) * speed;
+						children.rotation.x += (Math.sin(chair.rotation.y)) * speed /3.14;
+						children.rotation.z += (Math.cos(chair.rotation.y)) * speed /3.14;
 					}
 					else {
-						children.rotation.x -= (Math.sin(chair.rotation.y)) * speed;
-						children.rotation.z -= (Math.cos(chair.rotation.y)) * speed;
+						children.rotation.x -= (Math.sin(chair.rotation.y)) * speed /3.14;
+						children.rotation.z -= (Math.cos(chair.rotation.y)) * speed /3.14;
 					}
 				}
 			});
@@ -113,12 +113,12 @@ class Chair extends THREE.Object3D {
 				chair.children.forEach(function(children) {
 					if (children.name == "chairWheel") {
 						if (Math.cos(chair.rotation.y) < 0) {
-							children.rotation.x -= (Math.sin(chair.rotation.y)) * speed;
-							children.rotation.z -= (Math.cos(chair.rotation.y)) * speed;
+							children.rotation.x -= (Math.sin(chair.rotation.y)) * speed /3.14;
+							children.rotation.z -= (Math.cos(chair.rotation.y)) * speed /3.14;
 						}
 						else {
-							children.rotation.x += (Math.sin(chair.rotation.y)) * speed;
-							children.rotation.z += (Math.cos(chair.rotation.y)) * speed;
+							children.rotation.x += (Math.sin(chair.rotation.y)) * speed /3.14;
+							children.rotation.z += (Math.cos(chair.rotation.y)) * speed /3.14;
 						}
 					}
 				});
@@ -129,12 +129,12 @@ class Chair extends THREE.Object3D {
 			chair.children.forEach(function(children) {
 				if (children.name == "chairWheel") {
 					if (Math.cos(chair.rotation.y) < 0) {
-						children.rotation.x += (Math.sin(chair.rotation.y)) * speed;
-						children.rotation.z += (Math.cos(chair.rotation.y)) * speed;
+						children.rotation.x += (Math.sin(chair.rotation.y)) * speed / 3.14;
+						children.rotation.z += (Math.cos(chair.rotation.y)) * speed /3.14;
 					}
 					else {
-						children.rotation.x -= (Math.sin(chair.rotation.y)) * speed;
-						children.rotation.z -= (Math.cos(chair.rotation.y)) * speed;
+						children.rotation.x -= (Math.sin(chair.rotation.y)) * speed / 3.14;
+						children.rotation.z -= (Math.cos(chair.rotation.y)) * speed /3.14;
 					}
 				}
 			});
