@@ -9,10 +9,10 @@ class Chair extends THREE.Object3D {
     this.addChairSit(0, 19, 0);
     this.addChairSupport(0, 7, 0);
 
-    this.addChairLeg1(-1, 4, 0);
-    this.addChairLeg1(9, 4, 0);
-    this.addChairLeg2(0, 4, -1);
-    this.addChairLeg2(0, 4, 9);
+    this.addChairLeg(-1, 4, 0);
+    this.addChairLeg(9, 4, 0);
+    this.addChairLegAndRotate(0, 4, -1);
+    this.addChairLegAndRotate(0, 4, 9);
 
     this.addChairWheel(-9, 0, 1);
     this.addChairWheel(7, 0, 1);
@@ -34,20 +34,23 @@ class Chair extends THREE.Object3D {
 		mesh.name = "chairSupport";
     this.add(mesh);
   }
-  addChairLeg1(x, y, z) {
+  addChairLeg(x, y, z) {
     var geometry = new THREE.CubeGeometry(8, 3, 1);
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x - 4, y+1.5, z);
 		mesh.name = "chairLeg";
     this.add(mesh);
   }
-  addChairLeg2(x, y, z) {
-    var geometry = new THREE.CubeGeometry(1, 3, 8);
+
+	addChairLegAndRotate(x, y, z) {
+    var geometry = new THREE.CubeGeometry(8, 3, 1);
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x, y+1.5, z - 4);
 		mesh.name = "chairLeg";
+		mesh.rotation.y += Math.PI / 2;
     this.add(mesh);
   }
+
   addChairWheel(x, y, z) {
     geometry = new THREE.TorusGeometry(1, 1, 5, 10);
     mesh = new THREE.Mesh(geometry, this.material);
@@ -101,5 +104,12 @@ class Chair extends THREE.Object3D {
 				}
 			}
 		});
+	}
+
+	rotateLeg(){
+		chair.children.forEach(function(children) {
+			if (children.name == "chairLeg")
+					children.rotation.y += Math.PI / 2;
+			});
 	}
 }
