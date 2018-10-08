@@ -27,6 +27,7 @@ class Chair extends THREE.Object3D {
 		mesh.name = "chairSit";
     this.add(mesh);
   }
+
   addChairSupport(x, y, z) {
     var geometry = new THREE.CubeGeometry( 2, 12, 2);
     mesh = new THREE.Mesh(geometry, this.material);
@@ -34,6 +35,7 @@ class Chair extends THREE.Object3D {
 		mesh.name = "chairSupport";
     this.add(mesh);
   }
+
   addChairLeg(x, y, z) {
     var geometry = new THREE.CubeGeometry(8, 3, 1);
     mesh = new THREE.Mesh(geometry, this.material);
@@ -52,13 +54,14 @@ class Chair extends THREE.Object3D {
   }
 
   addChairWheel(x, y, z) {
-    geometry = new THREE.TorusGeometry(1, 1, 5, 10);
+    geometry = new THREE.TorusGeometry(1, 1, 3, 7);
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x + 1, y+2, z-1);
     mesh.rotation.y += Math.PI / 2;
 		mesh.name = "chairWheel";
     this.add(mesh);
   }
+
   addChairBack(x, y, z) {
     geometry = new THREE.CubeGeometry(20, 20, 2);
     mesh = new THREE.Mesh(geometry, this.material);
@@ -68,39 +71,39 @@ class Chair extends THREE.Object3D {
   }
 
 	move(){
-			if (speed < maxSpeed && speed > -maxSpeed){
-				if (direction)
-					speed += acceleration;
-				else {
-					speed -= acceleration;
-				}
-			}
-    	chair.position.x += (Math.sin(chair.rotation.y)) * speed;
-    	chair.position.z += (Math.cos(chair.rotation.y)) * speed;
-
-		chair.moveWheels();
+		var deltaT = clock.getDelta();
+		if (speed < maxSpeed && speed > -maxSpeed){
+				speed += acceleration * deltaT;
+		}
+		var deltaX = ( speed * deltaT + 0.5 * acceleration * Math.pow(deltaT,2) );
+    chair.position.x += (Math.sin(chair.rotation.y)) * deltaX;
+    chair.position.z += (Math.cos(chair.rotation.y)) * deltaX;
+		chair.moveWheels(deltaX);
 		}
 
 	stop(){
-		speed *= friction;
-    if (speed < 0.001 && speed > -0.001)
-      speed = 0;
-	  chair.position.x += (Math.sin(chair.rotation.y)) * speed;
-	  chair.position.z += (Math.cos(chair.rotation.y)) * speed;
-
-		chair.moveWheels();
+		var deltaT = clock.getDelta();
+		speed += acceleration * deltaT;
+    if ((speed < 0.0001 && movingForward) || (speed > -0.0001 && !movingForward)) {
+			speed = 0;
+			acceleration = 0;
+		}
+		var deltaX = ( speed * deltaT + 0.5 * acceleration * Math.pow(deltaT,2) );
+		chair.position.x += (Math.sin(chair.rotation.y)) * deltaX;
+		chair.position.z += (Math.cos(chair.rotation.y)) * deltaX;
+		chair.moveWheels(deltaX);
 	}
 
-	moveWheels(){
+	moveWheels(deltaX) {
 		chair.children.forEach(function(children) {
 			if (children.name == "chairWheel") {
 				if (Math.cos(chair.rotation.y) < 0) {
-					children.rotation.x -= (Math.sin(chair.rotation.y)) * speed /3.14;
-					children.rotation.z -= (Math.cos(chair.rotation.y)) * speed /3.14;
+					children.rotation.x -= (Math.sin(chair.rotation.y)) * deltaX /2;
+					children.rotation.z -= (Math.cos(chair.rotation.y)) * deltaX /2;
 				}
 				else {
-					children.rotation.x += (Math.sin(chair.rotation.y)) * speed /3.14;
-					children.rotation.z += (Math.cos(chair.rotation.y)) * speed /3.14;
+					children.rotation.x += (Math.sin(chair.rotation.y)) * deltaX /2;
+					children.rotation.z += (Math.cos(chair.rotation.y)) * deltaX /2;
 				}
 			}
 		});

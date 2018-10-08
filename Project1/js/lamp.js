@@ -19,6 +19,7 @@ class Lamp extends THREE.Object3D {
     mesh.name = "lampBase";
     this.add(mesh);
   }
+
   addLampSupport(x, y, z) {
     var geometry = new THREE.CylinderGeometry( 1, 1, 50, 25 );
     mesh = new THREE.Mesh(geometry, this.material);
@@ -26,6 +27,7 @@ class Lamp extends THREE.Object3D {
     mesh.name = "lampSupport";
     this.add(mesh);
   }
+
   addLampAbajour(x, y, z) {
     var geometry = new THREE.CylinderGeometry( 5, 10, 12, 25 );
     mesh = new THREE.Mesh(geometry, this.material);
@@ -33,6 +35,7 @@ class Lamp extends THREE.Object3D {
     mesh.name = "lampAbajour";
     this.add(mesh);
   }
+
   addLampLight(x, y, z) {
     var geometry = new THREE.CylinderGeometry( 2, 0, 4, 25 );
     mesh = new THREE.Mesh(geometry, this.material);
@@ -40,6 +43,7 @@ class Lamp extends THREE.Object3D {
     mesh.name = "lampLight";
     this.add(mesh);
   }
+
   addLampSphere(x, y, z) {
     var geometry = new THREE.SphereGeometry(2, 26, 5, 0, 6, 0, 1.5);
     mesh = new THREE.Mesh(geometry, this.material);
