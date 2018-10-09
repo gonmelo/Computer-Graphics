@@ -7,16 +7,14 @@ class Lamp extends THREE.Object3D {
 
      this.addLampBase(0,0,0);
      this.addLampSupport(0, 1, 0);
-     this.addLampAbajour(0, 51, 0);
-     this.addLampLight(0, 51, 0);
-     this.addLampSphere(0, 54, 0);
+     this.addHead();
   }
 
   addLampBase(x, y, z) {
     var geometry = new THREE.CylinderGeometry( 12, 12, 1, 25 );
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x, y+0.5, z);
-    mesh.name = "lampBase";
+    mesh.name = "base";
     this.add(mesh);
   }
 
@@ -24,32 +22,40 @@ class Lamp extends THREE.Object3D {
     var geometry = new THREE.CylinderGeometry( 1, 1, 50, 25 );
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x, y + 25, z);
-    mesh.name = "lampSupport";
+    mesh.name = "support";
     this.add(mesh);
   }
 
-  addLampAbajour(x, y, z) {
+  addAbajour(x, y, z, object) {
     var geometry = new THREE.CylinderGeometry( 5, 10, 12, 25 );
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x, y + 4, z);
-    mesh.name = "lampAbajour";
-    this.add(mesh);
+    mesh.name = "abajour";
+    object.add(mesh);
   }
 
-  addLampLight(x, y, z) {
+  addCap(x, y, z, object) {
     var geometry = new THREE.CylinderGeometry( 2, 0, 4, 25 );
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x, y+1, z);
-    mesh.name = "lampLight";
-    this.add(mesh);
+    mesh.name = "cap";
+    object.add(mesh);
   }
 
-  addLampSphere(x, y, z) {
+  addLightBulb(x, y, z, object) {
     var geometry = new THREE.SphereGeometry(2, 26, 5, 0, 6, 0, 1.5);
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x, y, z);
-    mesh.name = "lampSphere";
-    this.add(mesh);
+    mesh.name = "lightBulb";
+    object.add(mesh);
+  }
+
+  addHead() {
+    var head = new THREE.Object3D();
+    this.addLightBulb(0, 54, 0, head);
+    this.addCap(0, 51, 0, head);
+    this.addAbajour(0, 51, 0, head);
+    this.add(head);
   }
 
 }

@@ -6,26 +6,35 @@ class Table extends THREE.Object3D {
 		super();
     this.material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
 
-    this.addTableTop( 0, 25, 0);
-    this.addTableLeg(-25, 0, -8);
-    this.addTableLeg(-25, 0, 8);
-    this.addTableLeg(25, 0, 8);
-    this.addTableLeg(25, 0, -8);
+    this.addTop( 0, 25, 0);
+    this.addLegs();
 	}
 
-  addTableLeg(x, y, z) {
+  addLeg(x, y, z, object) {
     var geometry = new THREE.CylinderGeometry( 1.5, 1, 25, 10 );
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x, y + 12.5, z);
-    mesh.name = "tableLeg";
-    this.add(mesh);
+    mesh.name = "leg";
+    object.add(mesh);
   }
 
-  addTableTop(x, y, z) {
+  addLegs() {
+    var legs = new THREE.Object3D();
+    this.addLeg(-25, 0, -8, legs);
+    this.addLeg(-25, 0, 8, legs);
+    this.addLeg(25, 0, 8, legs);
+    this.addLeg(25, 0, -8, legs);
+    this.add(legs);
+  }
+
+  addTop(x, y, z) {
+    var top = new THREE.Object3D();
     geometry = new THREE.CubeGeometry(60, 2, 20);
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x, y + 1, z);
-    mesh.name = "tableTop";
-    this.add(mesh);
+    mesh.name = "top";
+    top.add(mesh);
+    this.add(top);
   }
+
 }

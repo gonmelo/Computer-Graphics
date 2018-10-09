@@ -5,70 +5,87 @@ class Chair extends THREE.Object3D {
 		super();
     this.material = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
 
-    this.addChairBack(0, 21, 0);
-    this.addChairSit(0, 19, 0);
-    this.addChairSupport(0, 7, 0);
+    this.addBack(0, 21, 0);
+    this.addSeat(0, 19, 0);
+    this.addSupport(0, 7, 0);
 
-    this.addChairLeg(-1, 4, 0);
-    this.addChairLeg(9, 4, 0);
-    this.addChairLegAndRotate(0, 4, -1);
-    this.addChairLegAndRotate(0, 4, 9);
-
-    this.addChairWheel(-9, 0, 1);
-    this.addChairWheel(7, 0, 1);
-    this.addChairWheel(-1, 0, 9);
-    this.addChairWheel(-1, 0, -7);
+		this.addSpindle();
+		this.addWheels();
 	}
 
-  addChairSit(x, y, z) {
+  addSeat(x, y, z) {
     geometry = new THREE.CubeGeometry(20, 2, 20);
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x, y + 1, z);
-		mesh.name = "chairSit";
+		mesh.name = "seat";
     this.add(mesh);
   }
 
-  addChairSupport(x, y, z) {
+  addSupport(x, y, z) {
     var geometry = new THREE.CubeGeometry( 2, 12, 2);
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x, y+6, z);
-		mesh.name = "chairSupport";
+		mesh.name = "support";
     this.add(mesh);
   }
 
-  addChairLeg(x, y, z) {
+  addLeg(x, y, z, object) {
     var geometry = new THREE.CubeGeometry(8, 3, 1);
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x - 4, y+1.5, z);
-		mesh.name = "chairLeg";
-    this.add(mesh);
+		mesh.name = "leg";
+    object.add(mesh);
   }
 
-	addChairLegAndRotate(x, y, z) {
+	addLegAndRotate(x, y, z, object) {
     var geometry = new THREE.CubeGeometry(8, 3, 1);
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x, y+1.5, z - 4);
-		mesh.name = "chairLeg";
+		mesh.name = "leg";
 		mesh.rotation.y += Math.PI / 2;
-    this.add(mesh);
+    object.add(mesh);
   }
 
-  addChairWheel(x, y, z) {
+  addWheel(x, y, z, object) {
     geometry = new THREE.TorusGeometry(1, 1, 5, 10);
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x + 1, y+2, z-1);
     mesh.rotation.y += Math.PI / 2;
 		mesh.name = "chairWheel";
-    this.add(mesh);
+    object.add(mesh);
   }
 
-  addChairBack(x, y, z) {
+  addBack(x, y, z) {
+		var back = new THREE.Object3D();
     geometry = new THREE.CubeGeometry(20, 20, 2);
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x, y+10, z-9);
-		mesh.name = "chairBack";
-    this.add(mesh);
+		mesh.name = "back";
+    back.add(mesh);
+		this.add(back);
   }
+
+	addSpindle() {
+		var spindle = new THREE.Object3D();
+
+		this.addLeg(-1, 4, 0, spindle);
+		this.addLeg(9, 4, 0, spindle);
+		this.addLegAndRotate(0, 4, -1, spindle);
+		this.addLegAndRotate(0, 4, 9, spindle);
+
+		this.add(spindle);
+	}
+
+	addWheels() {
+		var wheels = new THREE.Object3D();
+
+		this.addWheel(-9, 0, 1, wheels);
+		this.addWheel(7, 0, 1, wheels);
+		this.addWheel(-1, 0, 9, wheels);
+		this.addWheel(-1, 0, -7, wheels);
+
+		this.add(wheels);
+	}
 
 	move(){
 		var deltaT = clock.getDelta();
