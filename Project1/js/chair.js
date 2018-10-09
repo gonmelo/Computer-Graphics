@@ -112,21 +112,16 @@ class Chair extends THREE.Object3D {
 	}
 
 	moveWheels(deltaX) {
-		var i = -1;
-		chair.children.forEach(function(children) {
-			i++;
-			if (children.name == "wheels") {
-				chair.children[i].children.forEach(function(children) {
-					if (Math.cos(chair.rotation.y) < 0) {
-						children.rotation.x -= (Math.sin(chair.rotation.y)) * deltaX /2;
-						children.rotation.z -= (Math.cos(chair.rotation.y)) * deltaX /2;
-					}
-					else {
-						children.rotation.x += (Math.sin(chair.rotation.y)) * deltaX /2;
-						children.rotation.z += (Math.cos(chair.rotation.y)) * deltaX /2;
-					}
-				});
-			}
+		var wheels = scene.getObjectByName("wheels");
+		wheels.children.forEach(function(wheel) {
+				if (Math.cos(chair.rotation.y) < 0) {
+					wheel.rotation.x -= (Math.sin(chair.rotation.y)) * deltaX /2;
+					wheel.rotation.z -= (Math.cos(chair.rotation.y)) * deltaX /2;
+				}
+				else {
+					wheel.rotation.x += (Math.sin(chair.rotation.y)) * deltaX /2;
+					wheel.rotation.z += (Math.cos(chair.rotation.y)) * deltaX /2;
+				}
 		});
 	}
 }
