@@ -56,18 +56,18 @@ class Chair extends THREE.Object3D {
   }
 
   addBack(x, y, z) {
-		var back = new THREE.Object3D();
+		//var back = new THREE.Object3D();
     geometry = new THREE.CubeGeometry(20, 20, 2);
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x, y+10, z-9);
 		mesh.name = "back";
-    back.add(mesh);
-		this.add(back);
+    //back.add(mesh);
+		this.add(mesh);
   }
 
 	addSpindle() {
 		var spindle = new THREE.Object3D();
-
+		spindle.name = "spindle";
 		this.addLeg(-1, 4, 0, spindle);
 		this.addLeg(9, 4, 0, spindle);
 		this.addLegAndRotate(0, 4, -1, spindle);
@@ -78,7 +78,7 @@ class Chair extends THREE.Object3D {
 
 	addWheels() {
 		var wheels = new THREE.Object3D();
-
+		wheels.name = "wheels";
 		this.addWheel(-9, 0, 1, wheels);
 		this.addWheel(7, 0, 1, wheels);
 		this.addWheel(-1, 0, 9, wheels);
@@ -112,16 +112,20 @@ class Chair extends THREE.Object3D {
 	}
 
 	moveWheels(deltaX) {
+		var i = -1;
 		chair.children.forEach(function(children) {
-			if (children.name == "chairWheel") {
-				if (Math.cos(chair.rotation.y) < 0) {
-					children.rotation.x -= (Math.sin(chair.rotation.y)) * deltaX /2;
-					children.rotation.z -= (Math.cos(chair.rotation.y)) * deltaX /2;
-				}
-				else {
-					children.rotation.x += (Math.sin(chair.rotation.y)) * deltaX /2;
-					children.rotation.z += (Math.cos(chair.rotation.y)) * deltaX /2;
-				}
+			i++;
+			if (children.name == "wheels") {
+				chair.children[i].children.forEach(function(children) {
+					if (Math.cos(chair.rotation.y) < 0) {
+						children.rotation.x -= (Math.sin(chair.rotation.y)) * deltaX /2;
+						children.rotation.z -= (Math.cos(chair.rotation.y)) * deltaX /2;
+					}
+					else {
+						children.rotation.x += (Math.sin(chair.rotation.y)) * deltaX /2;
+						children.rotation.z += (Math.cos(chair.rotation.y)) * deltaX /2;
+					}
+				});
 			}
 		});
 	}
