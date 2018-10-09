@@ -5,7 +5,7 @@ var camera;
 var scene, renderer;
 var switchCamera = 1;
 var speed = 0;  //Don't touch this
-var maxSpeed = 50;//This is the maximum speed that the object will achieve
+var maxSpeed = 70;//This is the maximum speed that the object will achieve
 var acceleration = 0;
 var friction = 1;//How fast will object reach a speed of 0
 var chairForward, chairBack, chairLeft, chairRight;
@@ -183,12 +183,12 @@ function animate() {
 
   if (chairForward) {
     movingForward = true;
-    acceleration = 20;
+    acceleration = 40;
     chair.move();
   }
   if (chairBack) {
     movingForward = false;
-    acceleration = -20;
+    acceleration = -40;
     chair.move();
   }
   if (chairLeft) {

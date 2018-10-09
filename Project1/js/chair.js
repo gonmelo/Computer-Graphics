@@ -54,7 +54,7 @@ class Chair extends THREE.Object3D {
   }
 
   addChairWheel(x, y, z) {
-    geometry = new THREE.TorusGeometry(1, 1, 3, 7);
+    geometry = new THREE.TorusGeometry(1, 1, 5, 10);
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x + 1, y+2, z-1);
     mesh.rotation.y += Math.PI / 2;
@@ -107,12 +107,5 @@ class Chair extends THREE.Object3D {
 				}
 			}
 		});
-	}
-
-	rotateLeg(){
-		chair.children.forEach(function(children) {
-			if (children.name == "chairLeg")
-					children.rotation.y += Math.PI / 2;
-			});
 	}
 }
