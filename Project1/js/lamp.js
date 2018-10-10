@@ -5,17 +5,20 @@ class Lamp extends THREE.Object3D {
 	   super();
      this.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
 
-     this.addLampBase(0,0,0);
+     this.addBase(0,0,0);
      this.addLampSupport(0, 1, 0);
      this.addHead();
   }
 
-  addLampBase(x, y, z) {
+  addBase(x, y, z) {
+    var base = new THREE.Object3D();
     var geometry = new THREE.CylinderGeometry( 12, 12, 1, 25 );
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x, y+0.5, z);
     mesh.name = "base";
-    this.add(mesh);
+    base.name = "base";
+    base.add(mesh);
+    this.add(base);
   }
 
   addLampSupport(x, y, z) {

@@ -8,25 +8,28 @@ class Chair extends THREE.Object3D {
     this.addBack(0, 21, 0);
     this.addSeat(0, 19, 0);
     this.addSupport(0, 7, 0);
-
 		this.addSpindle();
 		this.addWheels();
 	}
 
   addSeat(x, y, z) {
+		var seat = new THREE.Object3D();
     geometry = new THREE.CubeGeometry(20, 2, 20);
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x, y + 1, z);
 		mesh.name = "seat";
-    this.add(mesh);
+    seat.add(mesh);
+		this.add(seat);
   }
 
   addSupport(x, y, z) {
+		var support = new THREE.Object3D();
     var geometry = new THREE.CubeGeometry( 2, 12, 2);
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x, y+6, z);
 		mesh.name = "support";
-    this.add(mesh);
+    support.add(mesh);
+		this.add(support);
   }
 
   addLeg(x, y, z, object) {
@@ -56,13 +59,13 @@ class Chair extends THREE.Object3D {
   }
 
   addBack(x, y, z) {
-		//var back = new THREE.Object3D();
+		var back = new THREE.Object3D();
     geometry = new THREE.CubeGeometry(20, 20, 2);
     mesh = new THREE.Mesh(geometry, this.material);
     mesh.position.set(x, y+10, z-9);
 		mesh.name = "back";
-    //back.add(mesh);
-		this.add(mesh);
+    back.add(mesh);
+		this.add(back);
   }
 
 	addSpindle() {
