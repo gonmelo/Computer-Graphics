@@ -44,7 +44,7 @@ function createCamera() {
   aspect= window.innerWidth / window.innerHeight;
   camera = new THREE.OrthographicCamera(-sceneWidth * aspect, sceneWidth * aspect, sceneHeight, -sceneHeight, -100, 1000);
 
-	camera.position.set(50, 0, 0);
+	camera.position.set(0, 100, 0);
 	camera.lookAt(scene.position);
 }
 
@@ -54,39 +54,8 @@ function createScene() {
 
   scene.add( new THREE.AxisHelper(10) );
 
-  createTable(0, 0, 0);
-  createChair(0, 0, -40);
-  createLamp(50,0,0);
-}
-
-function createTable(x, y, z) {
-  table = new Table();
-  materials.push(table.material);
-  scene.add(table);
-
-  table.position.x = x;
-  table.position.y = y;
-  table.position.z = z;
-}
-
-function createChair(x, y, z){
-  chair = new Chair();
-  materials.push(chair.material);
-  scene.add(chair);
-
-  chair.position.x = x;
-  chair.position.y = y;
-  chair.position.z = z;
-}
-
-function createLamp(x, y, z) {
-  lamp = new Lamp();
-  materials.push(lamp.material);
-  scene.add(lamp);
-
-  lamp.position.x = x;
-  lamp.position.y = y;
-  lamp.position.z = z;
+  createField(0, 0, 0);
+  createBalls();
 }
 
 function onKeyUp(e) {
