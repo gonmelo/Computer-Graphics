@@ -2,19 +2,19 @@
 
 class Ball extends THREE.Object3D {
 
-	constructor() {
+	constructor(x,y,z) {
 		super();
-    this.radius = 1;
-    this.material = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
-	}
+    this.radius 	= 1;
+		this.center   = new Point(x,z);
+    this.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
 
-	addBall(x, y, z, object) {
-    var geometry = new THREE.SphereGeometry(5*Math.sqrt(5)/2, 26, 20, 0, 6.3, 0, 3.2);
-    mesh = new THREE.Mesh(geometry, this.material);
-    mesh.position.set(x, y, z);
+		var geometry 	= new THREE.SphereGeometry(0.5, 20, 20);
+    var mesh     	= new THREE.Mesh(geometry, this.material);
+
+		this.position.set(x,y,z);
     mesh.name = "ball";
-    object.add(mesh);
-}
+		this.add(mesh);
+	}
 
 	move() {
 		deltaT = clock.getDelta();

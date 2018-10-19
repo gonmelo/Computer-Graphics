@@ -7,15 +7,15 @@ var geometry, material, mesh;
 var field;
 var chairForward, chairBack, chairLeft, chairRight;
 var deltaT, deltaX,  deltaAlpha, alpha = 0.05;
-var sceneWidth = 5, sceneHeight = 5;
+var sceneWidth = 10, sceneHeight = 10;
 var sceneRatio = sceneWidth / sceneHeight;
 var aspect;
 var materials = [];
 var balls = [];
 
 function getRandomPoint() {
-  const x = Math.floor(Math.random() * (7.5 + 7.5 + 1)) - 7.5;
-  const y = Math.floor(Math.random() * (3.5 + 3.5 + 1)) - 3.5;
+  const x = Math.floor(Math.random() * (3.5 + 3.5 + 1)) - 3.5;
+  const y = Math.floor(Math.random() * (1.5 + 1.5 + 1)) - 1.5;
 
   return new Point(x, y);
 }
@@ -79,6 +79,7 @@ function createScene() {
 
   scene.add( new THREE.AxisHelper(10) );
   createField();
+  createBalls();
 }
 
 function createField() {
@@ -87,13 +88,28 @@ function createField() {
   scene.add(field);
 }
 
-function createBall() {
-  ball = new Ball();
+function createBall(x,y,z) {
+  const ball = new Ball(x,y,z);
   materials.push(ball.material);
+  balls.push(ball);
   scene.add(ball);
 }
 
 function createBalls() {
+  while (balls.length < 10) {
+    var overlaps  = false;  // flag to know if possible position
+    var newCenter = getRandomPoint();
+    for (var i = 0; i < balls.length; i++) {
+      var distance = Point.distance(balls[i].center, newCenter);
+      if (distance < 1.2) { // 1.2 > 2 * radius (0.5)
+        overlaps = true;
+        break;
+      }
+    }
+    if (!overlaps) {
+      createBall(newCenter.x, 1.5, newCenter.y); // 2 = base height + radius
+    }
+  }
 }
 
 function onKeyDown(e) {
