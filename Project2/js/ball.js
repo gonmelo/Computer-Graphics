@@ -11,7 +11,7 @@ class Ball extends THREE.Object3D {
     this.minZ     =  -Math.sqrt(5) + 1.1;
 		this.center   = new Point(x,z);
     this.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: false });
-    this.velocity = new THREE.Vector3(Math.floor(Math.random() * (3.5 + 3.5 + 1)) - 3.5, 0, Math.floor(Math.random() * (3.5 + 3.5 + 1)) - 3.5);
+		this.velocity = new THREE.Vector3(Math.floor(Math.random() * (3.5 + 3.5 + 1)) - 3.5, 0, Math.floor(Math.random() * (3.5 + 3.5 + 1)) - 3.5);
 
 		var geometry 	= new THREE.SphereGeometry(0.5, 20, 20);
     var mesh     	= new THREE.Mesh(geometry, this.material);

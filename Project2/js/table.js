@@ -5,7 +5,7 @@ var orthographicCamera, perspectiveCamera, stalkerCamera;
 var scene, renderer;
 var geometry, material, mesh;
 var field;
-var deltaT, deltaX,  deltaAlpha, alpha = 0.05;
+var deltaX,  deltaAlpha, alpha = 0.05;
 var sceneWidth = 3.8, sceneHeight = 3.8;
 var sceneRatio = sceneWidth / sceneHeight;
 var aspect;
@@ -151,7 +151,7 @@ function onKeyDown(e) {
 }
 
 function moveBalls() {
-  deltaT = clock.getDelta();
+  const deltaT 	 = clock.getDelta();
   balls.forEach(function(ball) {
     ball.move(deltaT);
   });
