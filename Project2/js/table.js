@@ -1,17 +1,19 @@
 'use strict'
 
 var clock;
-var camera, perspectiveCamera, stalkerCamera;
+var orthographicCamera, perspectiveCamera, stalkerCamera;
 var scene, renderer;
 var geometry, material, mesh;
 var field;
-var chairForward, chairBack, chairLeft, chairRight;
 var deltaT, deltaX,  deltaAlpha, alpha = 0.05;
 var sceneWidth = 3.8, sceneHeight = 3.8;
 var sceneRatio = sceneWidth / sceneHeight;
 var aspect;
+var switchCamera = 0;
+var accel;
 var materials = [];
 var balls = [];
+
 
 function getRandomPoint() {
   const x = Math.floor(Math.random() * (3.5 + 3.5 + 1)) - 3.5;
@@ -20,41 +22,43 @@ function getRandomPoint() {
   return new Point(x, y);
 }
 
+
+
 function onResize() {
 
-    aspect= window.innerWidth / window.innerHeight;
+  aspect= window.innerWidth / window.innerHeight;
 
-    if (aspect > sceneRatio) {
-    		camera.left = -sceneWidth * aspect;
-    		camera.right = sceneWidth * aspect;
-    		camera.top = sceneHeight;
-    		camera.bottom = -sceneHeight;
-    }
-    else {
-    		camera.left = - sceneWidth;
-    		camera.right = sceneWidth;
-    		camera.top = sceneHeight / aspect;
-    		camera.bottom = -sceneHeight / aspect;
-    }
+  if (aspect > sceneRatio) {
+    	orthographicCamera.left = -sceneWidth * aspect;
+    	orthographicCamera.right = sceneWidth * aspect;
+    	orthographicCamera.top = sceneHeight;
+    	orthographicCamera.bottom = -sceneHeight;
+  }
+  else {
+    	orthographicCamera.left = - sceneWidth;
+    	orthographicCamera.right = sceneWidth;
+    	orthographicCamera.top = sceneHeight / aspect;
+    	orthographicCamera.bottom = -sceneHeight / aspect;
+  }
 
-  	renderer.setSize(window.innerWidth, window.innerHeight);
-  	camera.aspect = aspect;
-  	camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  orthographicCamera.aspect = aspect;
+  orthographicCamera.updateProjectionMatrix();
 }
 
 function createCamera() {
 
   aspect= window.innerWidth / window.innerHeight;
-  camera = new THREE.OrthographicCamera(-sceneWidth * aspect, sceneWidth * aspect, sceneHeight, -sceneHeight, -100, 1000);
+  orthographicCamera = new THREE.OrthographicCamera(-sceneWidth * aspect, sceneWidth * aspect, sceneHeight, -sceneHeight, -100, 1000);
 
-	camera.position.set(0, 0, 1);
-	camera.lookAt(scene.position);
+	orthographicCamera.position.set(0, 1, 0);
+	orthographicCamera.lookAt(scene.position);
 }
 
 function createPerspectiveCamera() {
 	perspectiveCamera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
 
-	perspectiveCamera.position.set(0, 10, 0);
+	perspectiveCamera.position.set(10, 10, 0);
 	perspectiveCamera.lookAt(scene.position);
 }
 
@@ -62,10 +66,12 @@ function createStalkerCamera() {
 	stalkerCamera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
 	stalkerCamera.direction = new THREE.Vector3(1, 0, 0);
 
-	moveStalkerCamera();
+	//moveStalkerCamera();
 }
 
 function moveStalkerCamera() {
+
+  var ball = balls[1];
 	stalkerCamera.position.x = ball.position.x - 70 * ball.direction.x;
 	stalkerCamera.position.y = ball.position.y + 40;
 	stalkerCamera.position.z = ball.position.z - 70 * ball.direction.z;
@@ -77,7 +83,7 @@ function createScene() {
 
   scene = new THREE.Scene();
 
-  scene.add( new THREE.AxisHelper(10) );
+  scene.add( new THREE.AxesHelper(10) );
   createField();
   createBalls();
 }
@@ -89,7 +95,7 @@ function createField() {
 }
 
 function createBall(x,y,z) {
-  const ball = new Ball(x,y,z);
+  const ball = new Ball( x, y, z );
   materials.push(ball.material);
   balls.push(ball);
   scene.add(ball);
@@ -121,9 +127,17 @@ function onKeyDown(e) {
         material.wireframe = !material.wireframe;
       });
       break;
+    case 69:  // E
+    case 101: // e
+        balls.forEach(function(ball) {
+          var axes= ball.getObjectByName( "axes" );
+          axes.visible = !axes.visible;
+        });
+        console.log(`Axes visibility changed to ${balls[1].getObjectByName( "axes" ).visible}`);
+        break;
     case 49:  // 1
       switchCamera = 1;
-      console.log("onKeyDown! Switch to camera: " + switchCamera);
+      console.log(`onKeyDown! Switch to camera: ${switchCamera}`);
       break;
     case 50:  // 2
       switchCamera = 2;
@@ -133,38 +147,40 @@ function onKeyDown(e) {
       switchCamera = 3;
       console.log("onKeyDown! Switch to camera: " + switchCamera);
       break;
-
-    case 37:  // left arrow
-      chairLeft = true;
-      deltaAlpha = -alpha;
-      console.log("onKeyDown! Move Chair: Left");
-      break;
-
-    case 38:  // up arrow
-      chairForward = true;
-      console.log("onKeyDown! Move Chair: Forward");
-      break;
-
-    case 39:  // right arrow
-      chairRight = true;
-      deltaAlpha = alpha;
-      console.log("onKeyDown! Move Chair: Right");
-      break;
-
-    case 40:  // down arrow
-      chairBack = true;
-      console.log("onKeyDown! Move Chair: Down");
-      break;
   }
 }
 
-function render() {
+function moveBalls() {
+  const deltaT 	 = clock.getDelta();
+  balls.forEach(function(ball) {
+    ball.move(deltaT);
+  });
+}
 
-  renderer.render(scene, camera);
+function render() {
+  renderer.render(scene, orthographicCamera);
 }
 
 function animate() {
+  switch (switchCamera) {
+    case 1:
+      orthographicCamera.position.x = 0;
+      orthographicCamera.position.y = 10;
+      orthographicCamera.position.z = 0;
+      orthographicCamera.lookAt(scene.position);
+      break;
 
+    case 2:
+      perspectiveCamera.lookAt(scene.position);
+      break;
+
+    case 3:
+      stalkerCamera.lookAt(scene.position);
+      break;
+  }
+
+  switchCamera = 0;
+  moveBalls();
   render();
   requestAnimationFrame(animate);
 }
@@ -180,6 +196,8 @@ function init() {
   document.body.appendChild(renderer.domElement);
 
   createScene();
+  createStalkerCamera();
+  createPerspectiveCamera();
   createCamera();
 
   render();
