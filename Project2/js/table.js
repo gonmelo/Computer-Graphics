@@ -1,16 +1,16 @@
 'use strict'
 
 var clock;
-var orthographicCamera, perspectiveCamera, stalkerCamera;
+var camera, orthographicCamera, perspectiveCamera, stalkerCamera;
 var scene, renderer;
 var geometry, material, mesh;
 var field;
-var deltaX,  deltaAlpha, alpha = 0.05;
+var deltaT, deltaX,  deltaAlpha, alpha;
 var sceneWidth = 3.8, sceneHeight = 3.8;
 var sceneRatio = sceneWidth / sceneHeight;
 var aspect;
 var switchCamera = 0;
-var accel;
+var sumRadius = 1;
 var materials = [];
 var balls = [];
 
@@ -58,7 +58,7 @@ function createCamera() {
 function createPerspectiveCamera() {
 	perspectiveCamera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
 
-	perspectiveCamera.position.set(10, 10, 0);
+	perspectiveCamera.position.set(9, 9, 2);
 	perspectiveCamera.lookAt(scene.position);
 }
 
@@ -151,35 +151,42 @@ function onKeyDown(e) {
 }
 
 function moveBalls() {
-  const deltaT 	 = clock.getDelta();
+  deltaT = clock.getDelta();
   balls.forEach(function(ball) {
     ball.move(deltaT);
+    ball.seeCollision(ball);
   });
 }
 
 function render() {
-  renderer.render(scene, orthographicCamera);
-}
-
-function animate() {
   switch (switchCamera) {
     case 1:
       orthographicCamera.position.x = 0;
       orthographicCamera.position.y = 10;
       orthographicCamera.position.z = 0;
+      orthographicCamera.updateProjectionMatrix();
       orthographicCamera.lookAt(scene.position);
+      renderer.render(scene, orthographicCamera);
       break;
 
     case 2:
+      perspectiveCamera.updateProjectionMatrix();
       perspectiveCamera.lookAt(scene.position);
+      renderer.render(scene, perspectiveCamera);
       break;
 
     case 3:
+      stalkerCamera.updateProjectionMatrix();
       stalkerCamera.lookAt(scene.position);
+      renderer.render(scene, stalkerCamera);
       break;
+    default:
+      renderer.render(scene, orthographicCamera);
   }
+}
 
-  switchCamera = 0;
+function animate() {
+
   moveBalls();
   render();
   requestAnimationFrame(animate);
@@ -189,8 +196,8 @@ function init() {
 
   clock = new THREE.Clock();
   clock.start();
-  renderer = new THREE.WebGLRenderer( { antialias: true });
 
+  renderer = new THREE.WebGLRenderer( { antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight );
 
   document.body.appendChild(renderer.domElement);
