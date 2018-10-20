@@ -4,7 +4,11 @@ class Ball extends THREE.Object3D {
 
 	constructor(x,y,z) {
 		super();
+<<<<<<< HEAD
     this.radius 	= .5;
+=======
+    this.radius 	= 1;
+>>>>>>> 38f96a88e079f814f5e631e6e349242dd1e5e06e
     this.maxX     =  2*Math.sqrt(5) - .6;
     this.minX     =  -2*Math.sqrt(5) + .6;
     this.maxZ     =  Math.sqrt(5) - .6;
