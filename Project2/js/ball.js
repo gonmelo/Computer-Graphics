@@ -6,7 +6,7 @@ class Ball extends THREE.Object3D {
 		super();
     this.radius 	= 1;
 		this.center   = new Point(x,z);
-    this.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+    this.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: false });
 
 		var geometry 	= new THREE.SphereGeometry(0.5, 20, 20);
     var mesh     	= new THREE.Mesh(geometry, this.material);

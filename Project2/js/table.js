@@ -7,7 +7,7 @@ var geometry, material, mesh;
 var field;
 var chairForward, chairBack, chairLeft, chairRight;
 var deltaT, deltaX,  deltaAlpha, alpha = 0.05;
-var sceneWidth = 10, sceneHeight = 10;
+var sceneWidth = 3.8, sceneHeight = 3.8;
 var sceneRatio = sceneWidth / sceneHeight;
 var aspect;
 var materials = [];
@@ -47,7 +47,7 @@ function createCamera() {
   aspect= window.innerWidth / window.innerHeight;
   camera = new THREE.OrthographicCamera(-sceneWidth * aspect, sceneWidth * aspect, sceneHeight, -sceneHeight, -100, 1000);
 
-	camera.position.set(0, 1, 0);
+	camera.position.set(0, 0, 1);
 	camera.lookAt(scene.position);
 }
 
@@ -84,7 +84,7 @@ function createScene() {
 
 function createField() {
   field = new Field();
-  materials.push(field.material);
+  materials = [...materials, field.baseMaterial, field.wallMaterial];
   scene.add(field);
 }
 
@@ -184,7 +184,7 @@ function init() {
 
   render();
 
-  //window.addEventListener("resize", onResize);
-  //window.addEventListener("keydown", onKeyDown);
+  window.addEventListener("resize", onResize);
+  window.addEventListener("keydown", onKeyDown);
   //window.addEventListener("keyup", onKeyUp);
 }
