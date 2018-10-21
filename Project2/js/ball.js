@@ -48,15 +48,15 @@ class Ball extends THREE.Object3D {
         this.velocity.z = -this.velocity.z;
         tentative_z = this.maxZ;
     }
-    this.position.x = tentative_x;
-    this.position.z = tentative_z;
 
+		this.rotation.z += this.velocity.x * deltaT / 0.5;
+    this.position.x = tentative_x;
+    this.rotation.x += this.velocity.z * deltaT / 0.5;
+    this.position.z = tentative_z;
 
     // alpha = Math.PI / 2 - Math.atan2(this.velocity.x, this.velocity.z); -- angulo em relacao ao eixo XX  q pode
     // ser preciso para calculo da velocidade atraves dos angulos
-    //var velocity = Math.sqrt(Math.pow(this.velocity.x, 2) + Math.pow(this.velocity.z, 2));
-    // this.rotation.x += this.velocity.x * deltaT / 0.5;
-      // this.rotation.z += this.velocity.z * deltaT / 0.5;
+  
 	}
 
   seeCollision(ball1){
