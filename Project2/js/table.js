@@ -80,6 +80,7 @@ function moveStalkerCamera() {
 	stalkerCamera.lookAt(ball.position);
 }
 
+
 function createScene() {
 
   scene = new THREE.Scene();
