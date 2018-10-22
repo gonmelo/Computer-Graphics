@@ -97,7 +97,6 @@ class Ball extends THREE.Object3D {
           ball.velocity.x = vel1_x;
           ball1.velocity.z = ball.velocity.z;
           ball.velocity.z = vel1_z;*/
-
       }
     }
   }
