@@ -4,14 +4,18 @@ class Ball extends THREE.Object3D {
 
 	constructor(x,y,z) {
 		super();
-    this.radius 	= 1;
+    this.radius 	= .5;
     this.maxX     =  2*Math.sqrt(5) - .6;
     this.minX     =  -2*Math.sqrt(5) + .6;
     this.maxZ     =  Math.sqrt(5) - .6;
     this.minZ     =  -Math.sqrt(5) + .6;
 		this.center   = new Point(x,z);
     this.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: false });
-    this.velocity = new THREE.Vector3(Math.floor(Math.random() * (3.5 + 3.5 + 1)) - 3.5, 0, Math.floor(Math.random() * (3.5 + 3.5 + 1)) - 3.5);
+    this.velocity = new THREE.Vector3(Math.floor(Math.random() * (1.5 + 1.5 + 1)) - 1.5, 0, Math.floor(Math.random() * (1.5 + 1.5 + 1)) - 1.5);
+    this.axisUP   = new THREE.Vector3(0,1,0);
+    this.axis     = new THREE.Vector3();
+
+    //this.matrix = new THREE.Matrix4();
 
 		var geometry 	= new THREE.SphereGeometry(0.5, 20, 10);
     var mesh     	= new THREE.Mesh(geometry, this.material);
@@ -49,14 +53,30 @@ class Ball extends THREE.Object3D {
         tentative_z = this.maxZ;
     }
 
-		this.rotation.z += this.velocity.x * deltaT / 0.5;
+    //this.rotation.z += this.velocity.x * deltaT / 0.5;
     this.position.x = tentative_x;
-    this.rotation.x += this.velocity.z * deltaT / 0.5;
+    //this.rotation.x += this.velocity.z * deltaT / 0.5;
     this.position.z = tentative_z;
+
+
+     this.axis.copy(this.velocity);
+     //var matrix4 = new THREE.Matrix4();
+
+     //matrix4.makeRotationAxis(this.axis.cross(this.axisUP).normalize(), this.velocity.length() * deltaT / 0.5);
+     //this.setRotationFromMatrix(matrix4);
+     //console.log(matrix4);
+     //this.applyMatrix(matrix4);
+    this.rotateOnAxis(this.axis.cross(this.axisUP).normalize(), this.velocity.length() * deltaT / 0.5);
+
+
+     //this.quaternion.setFromAxisAngle( this.velocity, Math.PI / 2 );
+     //this.rotation.setFromQuaternion(this.quaternion.normalize());
+     //this.applyQuaternion(this.quaternion);
 
     // alpha = Math.PI / 2 - Math.atan2(this.velocity.x, this.velocity.z); -- angulo em relacao ao eixo XX  q pode
     // ser preciso para calculo da velocidade atraves dos angulos
-  
+
+
 	}
 
   seeCollision(ball1){
@@ -92,4 +112,6 @@ class Ball extends THREE.Object3D {
     var res = new THREE.Vector3(fracao * deltaC.x, fracao * deltaC.y, fracao * deltaC.z);
     return new THREE.Vector3(v1.x - res.x, v1.y - res.y, v1.z - res.z);
   }
+
+
 }
