@@ -13,6 +13,7 @@ var switchCamera = 0;
 var sumRadius = 1;
 var materials = [];
 var balls = [];
+var timer = 60000;
 
 
 function getRandomPoint() {
@@ -73,13 +74,12 @@ function moveStalkerCamera() {
 
   var ball = balls[1];
 
-	stalkerCamera.position.x = ball.position.x - 1; //+ ball.velocity.x;
-	stalkerCamera.position.y = ball.position.y + .5;
-	stalkerCamera.position.z = ball.position.z - 1; // + ball.velocity.z;
+	stalkerCamera.position.x = ball.position.x - 1.5 * ball.direction.x;
+	stalkerCamera.position.y = ball.position.y + 2;
+	stalkerCamera.position.z = ball.position.z - 1.5 * ball.direction.z;
 
 	stalkerCamera.lookAt(ball.position);
 }
-
 
 function createScene() {
 
@@ -154,9 +154,9 @@ function onKeyDown(e) {
 
 function moveBalls() {
   deltaT = clock.getDelta();
-  for(var i = 0; i < 9; i++)
+  for(var i = 0; i < balls.length - 1; i++)
     balls[i].seeCollision(i + 1);
-  for(var i = 0; i < 10; i++){
+  for(var i = 0; i < balls.length; i++){
     balls[i].moveB();
     //balls[i].rotate();
   }
@@ -181,12 +181,20 @@ function render() {
 
     case 3:
       stalkerCamera.updateProjectionMatrix();
-      stalkerCamera.lookAt(scene.position);
       renderer.render(scene, stalkerCamera);
       break;
     default:
       renderer.render(scene, orthographicCamera);
   }
+
+}
+
+function updateVelocity() {
+  for (var i = 0; i < balls.length; i++){
+    balls[i].updateVelocity();
+  }
+  console.log("AAA");
+  setTimeout(updateVelocity, timer);
 
 }
 
@@ -202,7 +210,7 @@ function init() {
 
   clock = new THREE.Clock();
   clock.start();
-
+  setTimeout(updateVelocity, timer);
   renderer = new THREE.WebGLRenderer( { antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight );
 

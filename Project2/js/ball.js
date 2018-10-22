@@ -14,17 +14,19 @@ class Ball extends THREE.Object3D {
     this.velocity = new THREE.Vector3(Math.floor(Math.random() * (3.5 + 3.5 + 1)) - 3.5, 0, Math.floor(Math.random() * (3.5 + 3.5 + 1)) - 3.5);
     this.axisUP   = new THREE.Vector3(0,1,0);
     this.axis     = new THREE.Vector3();
+    this.direction = new THREE.Vector3();
+    this.direction.copy(this.velocity).normalize();
 
     //this.matrix = new THREE.Matrix4();
 
 		var geometry 	= new THREE.SphereGeometry(0.5, 20, 10);
-    var mesh     	= new THREE.Mesh(geometry, this.material);
+    this.mesh     	= new THREE.Mesh(geometry, this.material);
 
 		this.addAxes();
 		this.position.set(x,y,z);
 
     mesh.name = "ball";
-		this.add(mesh);
+		this.add(this.mesh);
 	}
 
 	addAxes() {
@@ -57,33 +59,23 @@ class Ball extends THREE.Object3D {
     this.position.x = tentative_x;
     //this.rotation.x += this.velocity.z * deltaT / 0.5;
     this.position.z = tentative_z;
+    this.rotate();
 
-
-    //this.rotateOnAxis(this.axis.cross(this.axisUP).normalize(), this.velocity.length() * deltaT / 0.5);
-
-
-     //this.quaternion.setFromAxisAngle( this.velocity, Math.PI / 2 );
-     //this.rotation.setFromQuaternion(this.quaternion.normalize());
-     //this.applyQuaternion(this.quaternion);
-
-    // alpha = Math.PI / 2 - Math.atan2(this.velocity.x, this.velocity.z); -- angulo em relacao ao eixo XX  q pode
-    // ser preciso para calculo da velocidade atraves dos angulos
 
 
 	}
 
   seeCollision(i){
 
-    var this_tentative_x = this.position.x + this.velocity.x * deltaT;
-    var this_tentative_z = this.position.z + this.velocity.z * deltaT;
 
-    for(var j = i; j < 10; j++) {
+    for(var j = i; j < balls.length; j++) {
 
-
+      var this_tentative_x = this.position.x + this.velocity.x * deltaT;
+      var this_tentative_z = this.position.z + this.velocity.z * deltaT;
       var j_tentative_x = balls[j].position.x + balls[j].velocity.x * deltaT;
   		var j_tentative_z = balls[j].position.z + balls[j].velocity.z * deltaT;
 
-        var distance = Math.pow(this_tentative_x - j_tentative_x, 2) + Math.pow(this_tentative_z - j_tentative_z, 2);
+        var distance = Math.sqrt(Math.pow(this_tentative_x - j_tentative_x, 2) + Math.pow(this_tentative_z - j_tentative_z, 2));
 
         if (distance <= sumRadius){
           var velj = new THREE.Vector3();
@@ -97,18 +89,19 @@ class Ball extends THREE.Object3D {
           ball.velocity.x = vel1_x;
           ball1.velocity.z = ball.velocity.z;
           ball.velocity.z = vel1_z;*/
+
       }
     }
   }
 
   rotate() {
-    this.axis.copy(this.velocity);
     var matrix4 = new THREE.Matrix4();
-
-    matrix4.makeRotationAxis(this.axis.cross(this.axisUP).normalize(), this.velocity.length() * deltaT / 0.5);
+    this.axis = this.velocity.clone();
+    this.axis.cross(this.axisUP).normalize();
+    matrix4.makeRotationAxis(this.axis, this.velocity.length() * deltaT / 0.5);
     //this.setRotationFromMatrix(matrix4);
     //console.log(matrix4);
-    this.applyMatrix(matrix4);
+    this.mesh.applyMatrix(matrix4);
   }
 
   calculateVelocity(v1, v2, c1, c2){
@@ -121,5 +114,9 @@ class Ball extends THREE.Object3D {
     return new THREE.Vector3(v1.x - res.x, v1.y - res.y, v1.z - res.z);
   }
 
+  updateVelocity() {
+    this.velocity.x *= 1.5;
+    this.velocity.z *= 1.5;
 
+  }
 }
