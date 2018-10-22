@@ -64,17 +64,18 @@ function createPerspectiveCamera() {
 
 function createStalkerCamera() {
 	stalkerCamera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
-	stalkerCamera.direction = new THREE.Vector3(1, 0, 0);
+	//stalkerCamera.velocity = new THREE.Vector3(1, 0, 0);
 
-	//moveStalkerCamera();
+	moveStalkerCamera();
 }
 
 function moveStalkerCamera() {
 
   var ball = balls[1];
-	stalkerCamera.position.x = ball.position.x - 70 * ball.direction.x;
-	stalkerCamera.position.y = ball.position.y + 40;
-	stalkerCamera.position.z = ball.position.z - 70 * ball.direction.z;
+
+	stalkerCamera.position.x = ball.position.x - 1; //+ ball.velocity.x;
+	stalkerCamera.position.y = ball.position.y + .5;
+	stalkerCamera.position.z = ball.position.z - 1; // + ball.velocity.z;
 
 	stalkerCamera.lookAt(ball.position);
 }
@@ -152,10 +153,12 @@ function onKeyDown(e) {
 
 function moveBalls() {
   deltaT = clock.getDelta();
-  balls.forEach(function(ball) {
-    ball.move(deltaT);
-    ball.seeCollision(ball);
-  });
+  for(var i = 0; i < 9; i++)
+    balls[i].seeCollision(i + 1);
+  for(var i = 0; i < 10; i++){
+    balls[i].moveB();
+    //balls[i].rotate();
+  }
 }
 
 function render() {
@@ -183,6 +186,7 @@ function render() {
     default:
       renderer.render(scene, orthographicCamera);
   }
+
 }
 
 function animate() {
@@ -190,6 +194,7 @@ function animate() {
   moveBalls();
   render();
   requestAnimationFrame(animate);
+  moveStalkerCamera();
 }
 
 function init() {

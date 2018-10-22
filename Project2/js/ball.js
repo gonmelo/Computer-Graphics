@@ -11,7 +11,7 @@ class Ball extends THREE.Object3D {
     this.minZ     =  -Math.sqrt(5) + .6;
 		this.center   = new Point(x,z);
     this.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: false });
-    this.velocity = new THREE.Vector3(Math.floor(Math.random() * (1.5 + 1.5 + 1)) - 1.5, 0, Math.floor(Math.random() * (1.5 + 1.5 + 1)) - 1.5);
+    this.velocity = new THREE.Vector3(Math.floor(Math.random() * (3.5 + 3.5 + 1)) - 3.5, 0, Math.floor(Math.random() * (3.5 + 3.5 + 1)) - 3.5);
     this.axisUP   = new THREE.Vector3(0,1,0);
     this.axis     = new THREE.Vector3();
 
@@ -33,7 +33,7 @@ class Ball extends THREE.Object3D {
 		this.add(axes);
 	}
 
-	move(deltaT) {
+	moveB() {
 
 		var tentative_x = this.position.x + this.velocity.x * deltaT;
 		var tentative_z = this.position.z + this.velocity.z * deltaT;
@@ -59,14 +59,7 @@ class Ball extends THREE.Object3D {
     this.position.z = tentative_z;
 
 
-     this.axis.copy(this.velocity);
-     //var matrix4 = new THREE.Matrix4();
-
-     //matrix4.makeRotationAxis(this.axis.cross(this.axisUP).normalize(), this.velocity.length() * deltaT / 0.5);
-     //this.setRotationFromMatrix(matrix4);
-     //console.log(matrix4);
-     //this.applyMatrix(matrix4);
-    this.rotateOnAxis(this.axis.cross(this.axisUP).normalize(), this.velocity.length() * deltaT / 0.5);
+    //this.rotateOnAxis(this.axis.cross(this.axisUP).normalize(), this.velocity.length() * deltaT / 0.5);
 
 
      //this.quaternion.setFromAxisAngle( this.velocity, Math.PI / 2 );
@@ -79,35 +72,51 @@ class Ball extends THREE.Object3D {
 
 	}
 
-  seeCollision(ball1){
+  seeCollision(i){
 
-    balls.forEach(function(ball) {
-      if (ball.position.x != ball1.position.x || ball.position.z != ball1.position.z ){
-        var distance = Math.pow(ball.position.x - ball1.position.x, 2) + Math.pow(ball.position.z - ball1.position.z, 2);
+    var this_tentative_x = this.position.x + this.velocity.x * deltaT;
+    var this_tentative_z = this.position.z + this.velocity.z * deltaT;
+
+    for(var j = i; j < 10; j++) {
+
+
+      var j_tentative_x = balls[j].position.x + balls[j].velocity.x * deltaT;
+  		var j_tentative_z = balls[j].position.z + balls[j].velocity.z * deltaT;
+
+        var distance = Math.pow(this_tentative_x - j_tentative_x, 2) + Math.pow(this_tentative_z - j_tentative_z, 2);
 
         if (distance <= sumRadius){
-          //ball1.velocity = calculateVelocity(ball1.velocity, ball.velocity, ball1.position, ball.position);
-          var vel1_x = ball1.velocity.x;
+          var velj = new THREE.Vector3();
+
+          velj.copy(balls[j].velocity);
+          balls[j].velocity = this.calculateVelocity(balls[j].velocity, this.velocity, balls[j].position, this.position);
+          this.velocity = this.calculateVelocity(this.velocity, velj, this.position, balls[j].position);
+        /*  var vel1_x = ball1.velocity.x;
           var vel1_z= ball1.velocity.z;
           ball1.velocity.x = ball.velocity.x;
           ball.velocity.x = vel1_x;
           ball1.velocity.z = ball.velocity.z;
-          ball.velocity.z = vel1_z;
+          ball.velocity.z = vel1_z;*/
 
-          ball.position.x += ball.velocity.x * deltaT;
-          ball1.position.x += ball1.velocity.x * deltaT;
-          ball.position.z += ball.velocity.z * deltaT;
-          ball1.position.z += ball1.velocity.z * deltaT;
-        }
       }
-    });
+    }
+  }
+
+  rotate() {
+    this.axis.copy(this.velocity);
+    var matrix4 = new THREE.Matrix4();
+
+    matrix4.makeRotationAxis(this.axis.cross(this.axisUP).normalize(), this.velocity.length() * deltaT / 0.5);
+    //this.setRotationFromMatrix(matrix4);
+    //console.log(matrix4);
+    this.applyMatrix(matrix4);
   }
 
   calculateVelocity(v1, v2, c1, c2){
-    var deltaV = new THREE.Vector3(v2.x - v1.x, v2.y - v1.y, v2.z - v1.z);
-    var deltaC = new THREE.Vector3(c2.x - c1.x, c2.y - c1.y, c2.z - c1.z);
+    var deltaV = new THREE.Vector3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
+    var deltaC = new THREE.Vector3(c1.x - c2.x, c1.y - c2.y, c1.z - c2.z);
     var num = deltaV.x * deltaC.x + deltaV.y * deltaC.y + deltaV.z * deltaC.z;
-    var den = Math.sqrt(Math.pow(deltaC.x, 2) + Math.pow(deltaC.y, 2) + Math.pow(deltaC.z, 2));
+    var den = Math.pow(deltaC.x, 2) + Math.pow(deltaC.y, 2) + Math.pow(deltaC.z, 2);
     var fracao = num / den;
     var res = new THREE.Vector3(fracao * deltaC.x, fracao * deltaC.y, fracao * deltaC.z);
     return new THREE.Vector3(v1.x - res.x, v1.y - res.y, v1.z - res.z);
