@@ -11,10 +11,10 @@ class Ball extends THREE.Object3D {
     this.minZ     =  -Math.sqrt(5) + .6;
 		this.center   = new Point(x,z);
     this.material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: false });
-    this.velocity = new THREE.Vector3(Math.floor(Math.random() * (3.5 + 3.5 + 1)) - 3.5, 0, Math.floor(Math.random() * (3.5 + 3.5 + 1)) - 3.5);
+    this.velocity = new THREE.Vector3(Math.floor(Math.random() * (1.5 + 1.5 + 1)) - 1.5, 0, Math.floor(Math.random() * (1.5 + 1.5 + 1)) - 1.5);
     this.axisUP   = new THREE.Vector3(0,1,0);
     this.axis     = new THREE.Vector3();
-    this.direction = new THREE.Vector3();
+    this.direction= new THREE.Vector3();
     this.direction.copy(this.velocity).normalize();
 
     //this.matrix = new THREE.Matrix4();
@@ -32,7 +32,8 @@ class Ball extends THREE.Object3D {
 	addAxes() {
 		var axes  = new THREE.AxesHelper();
 		axes.name = "axes";
-		this.add(axes);
+		this.mesh.add(axes);
+
 	}
 
 	moveB() {
@@ -83,12 +84,6 @@ class Ball extends THREE.Object3D {
           velj.copy(balls[j].velocity);
           balls[j].velocity = this.calculateVelocity(balls[j].velocity, this.velocity, balls[j].position, this.position);
           this.velocity = this.calculateVelocity(this.velocity, velj, this.position, balls[j].position);
-        /*  var vel1_x = ball1.velocity.x;
-          var vel1_z= ball1.velocity.z;
-          ball1.velocity.x = ball.velocity.x;
-          ball.velocity.x = vel1_x;
-          ball1.velocity.z = ball.velocity.z;
-          ball.velocity.z = vel1_z;*/
 
       }
     }

@@ -59,13 +59,12 @@ function createCamera() {
 function createPerspectiveCamera() {
 	perspectiveCamera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
 
-	perspectiveCamera.position.set(9, 9, 2);
+	perspectiveCamera.position.set(7, 9, 4);
 	perspectiveCamera.lookAt(scene.position);
 }
 
 function createStalkerCamera() {
 	stalkerCamera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
-	//stalkerCamera.velocity = new THREE.Vector3(1, 0, 0);
 
 	moveStalkerCamera();
 }
@@ -154,11 +153,12 @@ function onKeyDown(e) {
 
 function moveBalls() {
   deltaT = clock.getDelta();
-  for(var i = 0; i < balls.length - 1; i++)
-    balls[i].seeCollision(i + 1);
-  for(var i = 0; i < balls.length; i++){
-    balls[i].moveB();
-    //balls[i].rotate();
+  if (deltaT < 0.1) {
+    for(var i = 0; i < balls.length - 1; i++)
+      balls[i].seeCollision(i + 1);
+    for(var i = 0; i < balls.length; i++){
+      balls[i].moveB();
+    }
   }
 }
 
@@ -221,9 +221,6 @@ function init() {
   createPerspectiveCamera();
   createCamera();
 
-  render();
-
   window.addEventListener("resize", onResize);
   window.addEventListener("keydown", onKeyDown);
-  //window.addEventListener("keyup", onKeyUp);
 }
