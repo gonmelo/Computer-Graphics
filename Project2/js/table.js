@@ -45,6 +45,11 @@ function onResize() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   orthographicCamera.aspect = aspect;
   orthographicCamera.updateProjectionMatrix();
+  
+  perspectiveCamera.aspect = aspect;
+  perspectiveCamera.updateProjectionMatrix();
+  stalkerCamera.aspect = aspect;
+  stalkerCamera.updateProjectionMatrix();
 }
 
 function createCamera() {
