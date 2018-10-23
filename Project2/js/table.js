@@ -5,79 +5,97 @@ var camera, orthographicCamera, perspectiveCamera, stalkerCamera;
 var scene, renderer;
 var geometry, material, mesh;
 var field;
-var deltaT, deltaX,  deltaAlpha, alpha;
+var deltaT;
 var sceneWidth = 3.8, sceneHeight = 3.8;
 var sceneRatio = sceneWidth / sceneHeight;
 var aspect;
-var switchCamera = 0;
-var sumRadius = 1;
+var switchCamera = 0; // default
 var materials = [];
-var balls = [];
-var timer = 60000;
+var balls   = [];
+
+const timer =  60000;
+const maxX  =  2 * Math.sqrt(5) - .6;
+const minX  = -2 * Math.sqrt(5) + .6;
+const maxZ  =  Math.sqrt(5) - .6;
+const minZ  = -Math.sqrt(5) + .6;
 
 
 function getRandomPoint() {
+  // (x, y) between (-3.5, -1.5) and (3.5, 1.5)
   const x = Math.floor(Math.random() * (3.5 + 3.5 + 1)) - 3.5;
   const y = Math.floor(Math.random() * (1.5 + 1.5 + 1)) - 1.5;
 
   return new Point(x, y);
 }
 
-
-
 function onResize() {
 
-  aspect= window.innerWidth / window.innerHeight;
+  aspect = window.innerWidth / window.innerHeight;
 
-  if (aspect > sceneRatio) {
-    	orthographicCamera.left = -sceneWidth * aspect;
-    	orthographicCamera.right = sceneWidth * aspect;
-    	orthographicCamera.top = sceneHeight;
+  // Resize of ortographic camera
+  if ( aspect > sceneRatio ) {
+    	orthographicCamera.left   = -sceneWidth * aspect;
+    	orthographicCamera.right  = sceneWidth * aspect;
+    	orthographicCamera.top    = sceneHeight;
     	orthographicCamera.bottom = -sceneHeight;
   }
   else {
-    	orthographicCamera.left = - sceneWidth;
-    	orthographicCamera.right = sceneWidth;
-    	orthographicCamera.top = sceneHeight / aspect;
+    	orthographicCamera.left   = - sceneWidth;
+    	orthographicCamera.right  = sceneWidth;
+    	orthographicCamera.top    = sceneHeight / aspect;
     	orthographicCamera.bottom = -sceneHeight / aspect;
   }
-
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  orthographicCamera.aspect = aspect;
   orthographicCamera.updateProjectionMatrix();
-  
+
+  // Resize for perspective camera
   perspectiveCamera.aspect = aspect;
   perspectiveCamera.updateProjectionMatrix();
+
+  // Resize for stalker camera
   stalkerCamera.aspect = aspect;
   stalkerCamera.updateProjectionMatrix();
+  renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
 function createCamera() {
+  aspect = window.innerWidth / window.innerHeight;
+  orthographicCamera = new THREE.OrthographicCamera(
+                            -sceneWidth * aspect,
+                            sceneWidth * aspect,
+                            sceneHeight,
+                            -sceneHeight,
+                            -100,
+                            1000);
 
-  aspect= window.innerWidth / window.innerHeight;
-  orthographicCamera = new THREE.OrthographicCamera(-sceneWidth * aspect, sceneWidth * aspect, sceneHeight, -sceneHeight, -100, 1000);
-
-	orthographicCamera.position.set(0, 1, 0);
-	orthographicCamera.lookAt(scene.position);
+	orthographicCamera.position.set( 0, 1, 0 );
+	orthographicCamera.lookAt( scene.position );
 }
 
 function createPerspectiveCamera() {
-	perspectiveCamera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
+	perspectiveCamera = new THREE.PerspectiveCamera(
+                           70,
+                           window.innerWidth / window.innerHeight,
+                           1,
+                           1000);
 
-	perspectiveCamera.position.set(7, 9, 4);
-	perspectiveCamera.lookAt(scene.position);
+	perspectiveCamera.position.set( 7, 9, 4 );
+	perspectiveCamera.lookAt( scene.position );
 }
 
 function createStalkerCamera() {
-	stalkerCamera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 1000);
-
+	stalkerCamera = new THREE.PerspectiveCamera(70,
+                       window.innerWidth / window.innerHeight,
+                       1,
+                       1000);
+  // So it follows a ball
 	moveStalkerCamera();
 }
 
 function moveStalkerCamera() {
-
+  // The chosen ball is irrelevant
   var ball = balls[1];
 
+  // Sets the distance to the ball to give a 3rd person perspective
 	stalkerCamera.position.x = ball.position.x - 1.5 * ball.direction.x;
 	stalkerCamera.position.y = ball.position.y + 2;
 	stalkerCamera.position.z = ball.position.z - 1.5 * ball.direction.z;
@@ -100,33 +118,35 @@ function createField() {
   scene.add(field);
 }
 
-function createBall(x,y,z) {
+function createBall( x,y,z ) {
   const ball = new Ball( x, y, z );
-  materials.push(ball.material);
+  materials.push(ball.material); // For the toggling wireframe feature
   balls.push(ball);
   scene.add(ball);
 }
 
 function createBalls() {
-  while (balls.length < 10) {
+  // Create 10 balls
+  while ( balls.length < 10 ) {
     var overlaps  = false;  // flag to know if possible position
     var newCenter = getRandomPoint();
+    // Check if the new ball will overlap with any existent one
     for (var i = 0; i < balls.length; i++) {
       var distance = Point.distance(balls[i].center, newCenter);
+      // If overlapping the ball is not created
       if (distance < 1.2) { // 1.2 > 2 * radius (0.5)
         overlaps = true;
         break;
       }
     }
     if (!overlaps) {
-      createBall(newCenter.x, 1.5, newCenter.y); // 2 = base height + radius
+      createBall(newCenter.x, 1.5, newCenter.y); // 1.5 = base height + radius
     }
   }
 }
 
 function onKeyDown(e) {
-
-  switch (e.keyCode) {
+  switch ( e.keyCode ) {
     case 65:  //A
     case 97: //a
       materials.forEach(function(material) {
@@ -147,28 +167,31 @@ function onKeyDown(e) {
       break;
     case 50:  // 2
       switchCamera = 2;
-      console.log("onKeyDown! Switch to camera: " + switchCamera);
+      console.log(`onKeyDown! Switch to camera: ${switchCamera}`);
       break;
     case 51:  // 3
       switchCamera = 3;
-      console.log("onKeyDown! Switch to camera: " + switchCamera);
+      console.log(`onKeyDown! Switch to camera: ${switchCamera}`);
       break;
   }
 }
 
 function moveBalls() {
-  deltaT = clock.getDelta();
-  if (deltaT < 0.1) {
-    for(var i = 0; i < balls.length - 1; i++)
+  // To avoid "changing tabs" bug
+  if ( deltaT < 0.1 ) {
+    // Check collisions for all pairs of balls
+    for(var i = 0; i < balls.length - 1; i++) { // len-1 to compare with the next
       balls[i].seeCollision(i + 1);
-    for(var i = 0; i < balls.length; i++){
+    }
+    // Move balls according to the collisions
+    for(var i = 0; i < balls.length; i++) {
       balls[i].moveB();
     }
   }
 }
 
 function render() {
-  switch (switchCamera) {
+  switch ( switchCamera ) {
     case 1:
       orthographicCamera.position.x = 0;
       orthographicCamera.position.y = 10;
@@ -194,17 +217,17 @@ function render() {
 
 }
 
-function updateVelocity() {
-  for (var i = 0; i < balls.length; i++){
+function levelUp() {
+  // Accelerate all balls by the same rate
+  for ( var i = 0; i < balls.length; i++ ) {
     balls[i].updateVelocity();
   }
-  console.log("AAA");
-  setTimeout(updateVelocity, timer);
-
+  console.log("Level up!");
+  setTimeout(levelUp, timer); // set the time until next level up
 }
 
 function animate() {
-
+  deltaT = clock.getDelta();
   moveBalls();
   render();
   requestAnimationFrame(animate);
@@ -215,7 +238,7 @@ function init() {
 
   clock = new THREE.Clock();
   clock.start();
-  setTimeout(updateVelocity, timer);
+  setTimeout(levelUp, timer); // setup for the first level up
   renderer = new THREE.WebGLRenderer( { antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight );
 
