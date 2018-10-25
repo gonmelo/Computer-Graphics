@@ -66,4 +66,16 @@ class Plane extends THREE.Object3D {
 		stabilizer.add(mesh);
 		this.add(stabilizer);
 	}
+
+	changeBasic(){
+
+	}
+
+	changeGouraud(){
+		
+	}
+
+	changePhong(){
+
+	}
 }
