@@ -65,7 +65,21 @@ function createPlane( x,y,z ) {
   scene.add(plane);
 }
 
-
+function onKeyUp(e) {
+  switch (e.keyCode) {
+    case 37:  // left arrow
+      rotateY = 0;
+      break;
+    case 38:  // up arrow
+      rotateX = 0;
+      break;
+    case 39:  // right arrow
+      rotateX = 0;
+      break;
+    case 40: // down arrow
+      rotateY = 0;
+  }
+}
 
 function onKeyDown(e) {
   switch ( e.keyCode ) {
@@ -136,8 +150,8 @@ function animate() {
       plane.rotation.y += 0.05;
   if (rotateY == 2)
       plane.rotation.y -= 0.05;
-  rotateX = 0;
-  rotateY = 0;
+  //rotateX = 0;
+  //rotateY = 0;
   render();
   requestAnimationFrame(animate);
 }
@@ -157,4 +171,5 @@ function init() {
 
   window.addEventListener("resize", onResize);
   window.addEventListener("keydown", onKeyDown);
+  window.addEventListener("keyup", onKeyUp);
 }
