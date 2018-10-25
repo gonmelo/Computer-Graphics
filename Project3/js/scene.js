@@ -1,7 +1,7 @@
 'use strict'
 
 var clock;
-var orthographicCamera, perspectiveCamera;
+var camera, orthographicCamera, perspectiveCamera;
 var scene, renderer;
 var geometry, material, mesh;
 var deltaT;
@@ -11,11 +11,6 @@ var aspect;
 var rotateX = 0, rotateY = 0;
 var switchCamera = 0;
 var plane;
-var sun;
-var directionalLight;
-var ligthingPhong = true;
-var calculatingLight = true;
-var headLightsON = true;
 
 var materials = [];
 
@@ -41,6 +36,15 @@ function createCamera() {
 
 	orthographicCamera.position.set( 0, 6, 50 );
 	orthographicCamera.lookAt( scene.position );
+
+  camera = new THREE.PerspectiveCamera(
+    70,
+    window.innerWidth / window.innerHeight,
+    1,
+    1000);
+
+	camera.position.set( -30, 0, -14);
+	camera.lookAt( scene.position );
 }
 
 function createPerspectiveCamera() {
@@ -61,20 +65,34 @@ function createScene() {
 
   scene.add( new THREE.AxesHelper(10) );
   createPlane();
-
-  sun = new THREE.DirectionalLight(0xeedd82, 1);
-  sun.position.set(0, 500, 500);
-  scene.add(sun);
 }
 
 
 function createPlane( x,y,z ) {
   plane = new Plane(0,0,0);
-  materials = [...materials, plane.mainPieceMaterial, plane.wingMaterial, plane.cockpitMaterial];
+  materials = [...materials,
+              plane.mainPieceMaterial,
+              plane.wingMaterial,
+              plane.cockpitMaterial,
+              plane.stabilizerMaterial];
   scene.add(plane);
 }
 
-
+function onKeyUp(e) {
+  switch (e.keyCode) {
+    case 37:  // left arrow
+      rotateY = 0;
+      break;
+    case 38:  // up arrow
+      rotateX = 0;
+      break;
+    case 39:  // right arrow
+      rotateY = 0;
+      break;
+    case 40: // down arrow
+      rotateX = 0;
+  }
+}
 
 function onKeyDown(e) {
   switch ( e.keyCode ) {
@@ -108,42 +126,11 @@ function onKeyDown(e) {
         switchCamera = 2;
         console.log(`onKeyDown! Switch to camera: ${switchCamera}`);
         break;
-      case 76: // L
-        changeAllBasic();
-        break;
-      case 71: // G
-        changeLighting();
-        break;
-      case 78: // N
-        sun.visible = !(sun.visible);
+      case 51:  // 3
+        switchCamera = 3;
+        console.log(`onKeyDown! Switch to camera: ${switchCamera}`);
         break;
   }
-}
-
-function changeAllBasic() {
-	if (calculatingLight) {
-		plane.changeBasic();
-		calculatingLight = false;
-
-	} else if (ligthingPhong == false) {
-		plane.changeGouraud();
-		calculatingLight = true;
-
-	} else if (ligthingPhong == true) {
-		plane.changePhong();
-		calculatingLight = true;
-	}
-}
-
-function changeLighting() {
-	if (ligthingPhong) {
-		plane.changeGouraud();
-		ligthingPhong = false;
-    
-	} else {
-		plane.changePhong();
-		ligthingPhong = true;
-	}
 }
 
 
@@ -161,7 +148,11 @@ function render() {
         perspectiveCamera.lookAt(scene.position);
         renderer.render(scene, perspectiveCamera);
         break;
-
+      case 3:
+          camera.updateProjectionMatrix();
+          camera.lookAt(scene.position);
+          renderer.render(scene, camera);
+          break;
       default:
         renderer.render(scene, perspectiveCamera);
     }
@@ -172,16 +163,24 @@ function render() {
 function animate() {
   deltaT = clock.getDelta();
 
-  if (rotateX == 1)
-      plane.rotation.x -= 0.05;
-  if (rotateX == 2)
+  if (rotateX == 1){
+//    if (Math.cos(plane.rotation.y) > 0)
+  //    plane.rotation.x -= 0.05;
+//    else
       plane.rotation.x += 0.05;
+  }
+  if (rotateX == 2){
+/*    if (Math.cos(plane.rotation.y) > 0)
+      plane.rotation.x += 0.05;
+    else */
+      plane.rotation.x -= 0.05;
+  }
+
   if (rotateY == 1)
       plane.rotation.y += 0.05;
   if (rotateY == 2)
       plane.rotation.y -= 0.05;
-  rotateX = 0;
-  rotateY = 0;
+
   render();
   requestAnimationFrame(animate);
 }
@@ -201,4 +200,5 @@ function init() {
 
   window.addEventListener("resize", onResize);
   window.addEventListener("keydown", onKeyDown);
+  window.addEventListener("keyup", onKeyUp);
 }
