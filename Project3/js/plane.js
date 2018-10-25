@@ -16,6 +16,7 @@ class Plane extends THREE.Object3D {
 		this.addHorizontalStabilizer(3, 0, -13);
 		this.addHorizontalStabilizer(-11, 0, -13);
 		this.addVerticalStabilizer(0, 2.5, -13);
+    this.addMouth(0, 0, 15);
 	}
 
 	addMainPiece(x, y, z) {
@@ -67,12 +68,23 @@ class Plane extends THREE.Object3D {
 		this.add(stabilizer);
 	}
 
+  addMouth(x, y, z){
+		var mouth = new THREE.Object3D();
+		var geometry = new THREE.CylinderGeometry(0.5, 3, 4, 10);
+    mesh = new THREE.Mesh(geometry, this.mainPieceMaterial);
+    mesh.position.set(x, y, z + 2);
+    mesh.name = "mouth";
+		mesh.rotation.x += Math.PI / 2;
+    mouth.add(mesh);
+		this.add(mouth);
+	}
+
 	changeBasic(){
 
 	}
 
 	changeGouraud(){
-		
+
 	}
 
 	changePhong(){

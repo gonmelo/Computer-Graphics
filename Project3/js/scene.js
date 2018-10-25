@@ -141,12 +141,15 @@ function onKeyDown(e) {
         switchCamera = 3;
         console.log(`onKeyDown! Switch to camera: ${switchCamera}`);
         break;
+      case 108: // l
       case 76: // L
         changeAllBasic();
         break;
+      case 103: // g
       case 71: // G
         changeLighting();
         break;
+      case 110: // n
       case 78: // N
         sun.visible = !(sun.visible);
         break;
