@@ -54,9 +54,44 @@ function createScene() {
 
   scene.add( new THREE.AxisHelper(10) );
 
-  createField(0, 0, 0);
-  createBalls();
+  createTable();
+  createChair();
+  createLamp();
 }
+
+function createTable(){
+
+    table = new Table();
+    materials.push(table.material);
+    scene.add(table);
+
+    table.position.x = 0;
+    table.position.y = 0;
+    table.position.z = 0;
+}
+
+function createChair(){
+
+    chair = new Chair();
+    materials.push(chair.material);
+    scene.add(chair);
+
+    chair.position.x = 0;
+    chair.position.y = 0;
+    chair.position.z = -15;
+}
+
+function createLamp(){
+
+    lamp = new Lamp();
+    materials.push(lamp.material);
+    scene.add(lamp);
+
+    lamp.position.x = 50;
+    lamp.position.y = 0;
+    lamp.position.z = 0;
+}
+
 
 function onKeyUp(e) {
   switch (e.keyCode) {
