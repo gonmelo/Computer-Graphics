@@ -1,7 +1,7 @@
 'use strict'
 
 var clock;
-var orthographicCamera, perspectiveCamera;
+var camera, orthographicCamera, perspectiveCamera;
 var scene, renderer;
 var geometry, material, mesh;
 var deltaT;
@@ -36,6 +36,15 @@ function createCamera() {
 
 	orthographicCamera.position.set( 0, 6, 50 );
 	orthographicCamera.lookAt( scene.position );
+
+  camera = new THREE.PerspectiveCamera(
+    70,
+    window.innerWidth / window.innerHeight,
+    1,
+    1000);
+
+	camera.position.set( -30, 0, -14);
+	camera.lookAt( scene.position );
 }
 
 function createPerspectiveCamera() {
@@ -61,7 +70,11 @@ function createScene() {
 
 function createPlane( x,y,z ) {
   plane = new Plane(0,0,0);
-  materials = [...materials, plane.mainPieceMaterial, plane.wingMaterial, plane.cockpitMaterial];
+  materials = [...materials,
+              plane.mainPieceMaterial,
+              plane.wingMaterial,
+              plane.cockpitMaterial,
+              plane.stabilizerMaterial];
   scene.add(plane);
 }
 
@@ -74,10 +87,10 @@ function onKeyUp(e) {
       rotateX = 0;
       break;
     case 39:  // right arrow
-      rotateX = 0;
+      rotateY = 0;
       break;
     case 40: // down arrow
-      rotateY = 0;
+      rotateX = 0;
   }
 }
 
@@ -113,6 +126,10 @@ function onKeyDown(e) {
         switchCamera = 2;
         console.log(`onKeyDown! Switch to camera: ${switchCamera}`);
         break;
+      case 51:  // 3
+        switchCamera = 3;
+        console.log(`onKeyDown! Switch to camera: ${switchCamera}`);
+        break;
   }
 }
 
@@ -131,7 +148,11 @@ function render() {
         perspectiveCamera.lookAt(scene.position);
         renderer.render(scene, perspectiveCamera);
         break;
-
+      case 3:
+          camera.updateProjectionMatrix();
+          camera.lookAt(scene.position);
+          renderer.render(scene, camera);
+          break;
       default:
         renderer.render(scene, perspectiveCamera);
     }
@@ -142,16 +163,24 @@ function render() {
 function animate() {
   deltaT = clock.getDelta();
 
-  if (rotateX == 1)
-      plane.rotation.x -= 0.05;
-  if (rotateX == 2)
+  if (rotateX == 1){
+//    if (Math.cos(plane.rotation.y) > 0)
+  //    plane.rotation.x -= 0.05;
+//    else
       plane.rotation.x += 0.05;
+  }
+  if (rotateX == 2){
+/*    if (Math.cos(plane.rotation.y) > 0)
+      plane.rotation.x += 0.05;
+    else */
+      plane.rotation.x -= 0.05;
+  }
+
   if (rotateY == 1)
       plane.rotation.y += 0.05;
   if (rotateY == 2)
       plane.rotation.y -= 0.05;
-  //rotateX = 0;
-  //rotateY = 0;
+
   render();
   requestAnimationFrame(animate);
 }
