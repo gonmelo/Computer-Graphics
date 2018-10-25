@@ -11,6 +11,11 @@ var aspect;
 var rotateX = 0, rotateY = 0;
 var switchCamera = 0;
 var plane;
+var sun;
+var directionalLight;
+var ligthingPhong = true;
+var calculatingLight = true;
+var headLightsON = true;
 
 var materials = [];
 
@@ -56,6 +61,10 @@ function createScene() {
 
   scene.add( new THREE.AxesHelper(10) );
   createPlane();
+
+  sun = new THREE.DirectionalLight(0xeedd82, 1);
+  sun.position.set(0, 500, 500);
+  scene.add(sun);
 }
 
 
@@ -99,7 +108,42 @@ function onKeyDown(e) {
         switchCamera = 2;
         console.log(`onKeyDown! Switch to camera: ${switchCamera}`);
         break;
+      case 76: // L
+        changeAllBasic();
+        break;
+      case 71: // G
+        changeLighting();
+        break;
+      case 78: // N
+        sun.visible = !(sun.visible);
+        break;
   }
+}
+
+function changeAllBasic() {
+	if (calculatingLight) {
+		plane.changeBasic();
+		calculatingLight = false;
+
+	} else if (ligthingPhong == false) {
+		plane.changeGouraud();
+		calculatingLight = true;
+
+	} else if (ligthingPhong == true) {
+		plane.changePhong();
+		calculatingLight = true;
+	}
+}
+
+function changeLighting() {
+	if (ligthingPhong) {
+		plane.changeGouraud();
+		ligthingPhong = false;
+    
+	} else {
+		plane.changePhong();
+		ligthingPhong = true;
+	}
 }
 
 
