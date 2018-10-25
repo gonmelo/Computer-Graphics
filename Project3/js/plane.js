@@ -7,16 +7,20 @@ class Plane extends THREE.Object3D {
     this.mainPieceMaterial  = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
 		this.wingMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
 		this.cockpitMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+		this.stabilizerMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
 
 		this.addMainPiece(0,0,0);
 		this.addWing(4, 0, 0);
 		this.addWing(-18, 0, 0);
-		this.addCockpit(0, 3, 7);
+		this.addCockpit(0, 2.5, 7);
+		this.addHorizontalStabilizer(3, 0, -13);
+		this.addHorizontalStabilizer(-11, 0, -13);
+		this.addVerticalStabilizer(0, 2.5, -13);
 	}
 
 	addMainPiece(x, y, z) {
 		var mainPiece = new THREE.Object3D();
-    var geometry = new THREE.CubeGeometry(6, 6, 30);
+    var geometry = new THREE.CubeGeometry(6, 5, 30);
     mesh = new THREE.Mesh(geometry, this.mainPieceMaterial);
     mesh.position.set(x, y, z);
 		mesh.name = "mainPiece";
@@ -43,4 +47,23 @@ class Plane extends THREE.Object3D {
 		this.add(cockpit);
 	}
 
+	addHorizontalStabilizer(x, y, z){
+		var stabilizer = new THREE.Object3D();
+		var geometry = new THREE.CubeGeometry(8, 1, 2);
+    mesh = new THREE.Mesh(geometry, this.stabilizerMaterial);
+    mesh.position.set(x + 4, y, z);
+    mesh.name = "horizintalStabilizer";
+    stabilizer.add(mesh);
+		this.add(stabilizer);
+	}
+
+	addVerticalStabilizer(x, y, z){
+		var stabilizer = new THREE.Object3D();
+		var geometry = new THREE.CubeGeometry(1, 8, 2);
+		mesh = new THREE.Mesh(geometry, this.stabilizerMaterial);
+		mesh.position.set(x, y + 4, z);
+		mesh.name = "verticalStabilizer";
+		stabilizer.add(mesh);
+		this.add(stabilizer);
+	}
 }
