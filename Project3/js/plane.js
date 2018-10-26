@@ -4,10 +4,12 @@ class Plane extends THREE.Object3D {
 
 	constructor(x,y,z) {
 		super();
-    this.mainPieceMaterial  = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
-		this.wingMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: true });
-		this.cockpitMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
-		this.stabilizerMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
+    this.mainPieceMaterial  = new THREE.MeshPhongMaterial({ color: 0x0000ff, wireframe: false });
+		this.wingMaterial = new THREE.MeshPhongMaterial({ color: 0x0000ff, wireframe: false });
+		this.cockpitMaterial = new THREE.MeshPhongMaterial({ color: 0x00ff00, wireframe: false });
+		this.stabilizerMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000, wireframe: false });
+
+
 
 		this.addMainPiece(0,0,0);
 		this.addWing(3, 0, 0);
@@ -88,6 +90,7 @@ class Plane extends THREE.Object3D {
 	}
 
 	changePhong(){
+
 
 	}
 }
