@@ -12,13 +12,12 @@ var rotateX = 0, rotateY = 0;
 var switchCamera = 0;
 var plane;
 var sun;
-var directionalLight;
-var ligthingPhong = true;
+var lightingPhong = true;
 var calculatingLight = true;
 var headLightsON = true;
 
-
 var materials = [];
+var lights = [];
 
 
 function onResize() {
@@ -71,11 +70,14 @@ function createScene() {
 
   scene.add( new THREE.AxesHelper(10) );
   createPlane();
+  createPointlight(50, 50, 50);
+  createPointlight(-50, 50 , 50);
+  createPointlight(50, 50, -50);
+  createPointlight(-50, 50, -50);
 
   sun = new THREE.DirectionalLight(0xeedd82, 1);
   sun.position.set(0, 500, 500);
   scene.add(sun);
-
 }
 
 
@@ -87,6 +89,14 @@ function createPlane( x,y,z ) {
               plane.cockpitMaterial,
               plane.stabilizerMaterial];
   scene.add(plane);
+}
+
+
+function createPointlight(x, y, z){
+  var light = new THREE.PointLight( 0xff0000, 1, 100 );
+  light.position.set( x, y, z );
+  scene.add( light );
+  lights.push(light);
 }
 
 function onKeyUp(e) {
@@ -129,33 +139,60 @@ function onKeyDown(e) {
       rotateX = 2;
       console.log(`onKeyDown! Rotate down: ${switchCamera}`);
       break;
-      case 49:  // 1
-        switchCamera = 1;
-        console.log(`onKeyDown! Switch to camera: ${switchCamera}`);
-        break;
-      case 50:  // 2
-        switchCamera = 2;
-        console.log(`onKeyDown! Switch to camera: ${switchCamera}`);
-        break;
-      case 51:  // 3
-        switchCamera = 3;
-        console.log(`onKeyDown! Switch to camera: ${switchCamera}`);
-        break;
-      case 108: // l
-      case 76: // L
-        changeAllBasic();
-        break;
-      case 103: // g
-      case 71: // G
-        changeLighting();
-        break;
-      case 110: // n
-      case 78: // N
-        sun.visible = !(sun.visible);
-        break;
-
+    case 49:  // 1
+      switchCamera = 1;
+      console.log(`onKeyDown! Switch to camera: ${switchCamera}`);
+      break;
+    case 50:  // 2
+      switchCamera = 2;
+      console.log(`onKeyDown! Switch to camera: ${switchCamera}`);
+      break;
+    case 51:  // 3
+      switchCamera = 3;
+      console.log(`onKeyDown! Switch to camera: ${switchCamera}`);
+      break;
+    case 110: // n
+    case 78: // N
+  		sun.visible = !(sun.visible);
+      console.log(`onKeyDown! Sun: ${sun.visible}`);
+  		break;
+    case 103: // g
+    case 71: // G
+		  changeLighting();
+		  break;
+    case 108: // l
+    case 76: // L
+  		changeAllBasic();
+			break;
   }
 }
+
+
+function changeAllBasic() {
+  	if (calculatingLight) {
+  		plane.changeBasic();
+  		calculatingLight = false;
+
+  	} else if (ligthingPhong == false) {
+  		plane.changeGouraud();
+  		calculatingLight = true;
+
+  	} else if (ligthingPhong == true) {
+  		plane.changePhong();
+  		calculatingLight = true;
+  	}
+  }
+
+  function changeLighting() {
+  	if (ligthingPhong) {
+  		plane.changeGouraud();
+  		lightingPhong = false;
+
+  	} else {
+  		plane.changePhong();
+  		lightingPhong = true;
+  	}
+  }
 
 
 function render() {
@@ -182,31 +219,7 @@ function render() {
     }
   }
 
-  function changeAllBasic() {
-  	if (calculatingLight) {
-  		plane.changeBasic();
-  		calculatingLight = false;
 
-  	} else if (ligthingPhong == false) {
-  		plane.changeGouraud();
-  		calculatingLight = true;
-
-  	} else if (ligthingPhong == true) {
-  		plane.changePhong();
-  		calculatingLight = true;
-  	}
-  }
-
-  function changeLighting() {
-  	if (ligthingPhong) {
-  		plane.changeGouraud();
-  		ligthingPhong = false;
-
-  	} else {
-  		plane.changePhong();
-  		ligthingPhong = true;
-  	}
-  }
 
 function animate() {
   deltaT = clock.getDelta();

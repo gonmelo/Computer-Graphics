@@ -10,13 +10,13 @@ class Plane extends THREE.Object3D {
 		this.stabilizerMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });
 
 		this.addMainPiece(0,0,0);
-		this.addWing(4, 0, 0);
-		this.addWing(-18, 0, 0);
+		this.addWing(3, 0, 0);
+		this.addWing(-17, 0, 0);
 		this.addCockpit(0, 2.5, 7);
 		this.addHorizontalStabilizer(3, 0, -13);
 		this.addHorizontalStabilizer(-11, 0, -13);
 		this.addVerticalStabilizer(0, 2.5, -13);
-    this.addMouth(0, 0, 15);
+		this.addMouth(0, 0, 15);
 	}
 
 	addMainPiece(x, y, z) {
@@ -68,9 +68,9 @@ class Plane extends THREE.Object3D {
 		this.add(stabilizer);
 	}
 
-  addMouth(x, y, z){
+	addMouth(x, y, z){
 		var mouth = new THREE.Object3D();
-		var geometry = new THREE.CylinderGeometry(0.5, 3, 4, 10);
+		var geometry = new THREE.CylinderGeometry(0.5, 2.5, 4, 20);
     mesh = new THREE.Mesh(geometry, this.mainPieceMaterial);
     mesh.position.set(x, y, z + 2);
     mesh.name = "mouth";
