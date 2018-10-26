@@ -13,7 +13,7 @@ var switchCamera = 0;
 var plane;
 var sun;
 var directionalLight;
-var ligthingPhong = true;
+var lightingPhong = true;
 var calculatingLight = true;
 var headLightsON = true;
 
@@ -81,11 +81,11 @@ function createScene() {
 
 function createPlane( x,y,z ) {
   plane = new Plane(0,0,0);
-  materials = [...materials,
+  /*materials = [...materials,
               plane.mainPieceMaterial,
               plane.wingMaterial,
               plane.cockpitMaterial,
-              plane.stabilizerMaterial];
+              plane.stabilizerMaterial]; */
   scene.add(plane);
 }
 
@@ -107,12 +107,12 @@ function onKeyUp(e) {
 
 function onKeyDown(e) {
   switch ( e.keyCode ) {
-    case 65:  //A
+/*    case 65:  //A
     case 97: //a
       materials.forEach(function(material) {
         material.wireframe = !material.wireframe;
       });
-      break;
+      break;*/
     case 37:  // left
       rotateY = 1;
       console.log(`onKeyDown! Rotate left: ${switchCamera}`);
@@ -144,14 +144,17 @@ function onKeyDown(e) {
       case 108: // l
       case 76: // L
         changeAllBasic();
+        console.log(`onKeyDown! changeBasic: ${calculatingLight}`);
         break;
       case 103: // g
       case 71: // G
-        changeLighting();
+        changelighting();
+        console.log(`onKeyDown! changelighting: ${lightingPhong}`);
         break;
       case 110: // n
       case 78: // N
         sun.visible = !(sun.visible);
+        console.log(`onKeyDown! sun: ${sun.visible}`);
         break;
 
   }
@@ -161,23 +164,23 @@ function onKeyDown(e) {
 function render() {
   switch ( switchCamera ) {
       case 1:
-
         orthographicCamera.updateProjectionMatrix();
         orthographicCamera.lookAt(scene.position);
         renderer.render(scene, orthographicCamera);
         break;
-
       case 2:
         perspectiveCamera.updateProjectionMatrix();
         perspectiveCamera.lookAt(scene.position);
         renderer.render(scene, perspectiveCamera);
         break;
       case 3:
-          camera.updateProjectionMatrix();
-          camera.lookAt(scene.position);
-          renderer.render(scene, camera);
-          break;
+        camera.updateProjectionMatrix();
+        camera.lookAt(scene.position);
+        renderer.render(scene, camera);
+        break;
       default:
+        perspectiveCamera.updateProjectionMatrix();
+        perspectiveCamera.lookAt(scene.position);
         renderer.render(scene, perspectiveCamera);
     }
   }
@@ -187,24 +190,24 @@ function render() {
   		plane.changeBasic();
   		calculatingLight = false;
 
-  	} else if (ligthingPhong == false) {
+  	} else if (lightingPhong == false) {
   		plane.changeGouraud();
   		calculatingLight = true;
 
-  	} else if (ligthingPhong == true) {
+  	} else if (lightingPhong == true) {
   		plane.changePhong();
   		calculatingLight = true;
   	}
   }
 
-  function changeLighting() {
-  	if (ligthingPhong) {
+  function changelighting() {
+  	if (lightingPhong) {
   		plane.changeGouraud();
-  		ligthingPhong = false;
+  		lightingPhong = false;
 
   	} else {
   		plane.changePhong();
-  		ligthingPhong = true;
+  		lightingPhong = true;
   	}
   }
 
