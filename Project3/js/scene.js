@@ -19,6 +19,7 @@ var headLightsON = true;
 
 
 var materials = [];
+var headlights = [];
 
 
 function onResize() {
@@ -74,13 +75,35 @@ function createScene() {
 
   sun = new THREE.DirectionalLight(0xeedd82, 1);
   sun.position.set(500, 500, 500);
+  sun.castShadow = true;
   scene.add(sun);
+
+  createPointLights();
+
+}
+
+function createPointLights(){
+
+    var pointLight1 = new PointLight(30, 30, 30);
+    var pointLight2 = new PointLight(-30, 30, 30);
+    var pointLight3 = new PointLight(30, 30, -30);
+    var pointLight4 = new PointLight(-35, 30, -30);
+    headlights.push(pointLight1.light);
+    headlights.push(pointLight2.light);
+    headlights.push(pointLight3.light);
+    headlights.push(pointLight4.light);
+
+    scene.add(pointLight1);
+    scene.add(pointLight2);
+    scene.add(pointLight3);
+    scene.add(pointLight4);
 
 }
 
 
-function createPlane( x,y,z ) {
-  plane = new Plane(0,0,0);
+
+function createPlane(x, y, z) {
+  plane = new Plane();
   /*materials = [...materials,
               plane.mainPieceMaterial,
               plane.wingMaterial,
@@ -129,16 +152,16 @@ function onKeyDown(e) {
       rotateX = 2;
       console.log(`onKeyDown! Rotate down: ${switchCamera}`);
       break;
-      case 49:  // 1
-        switchCamera = 1;
+      case 53:  // 1
+        switchCamera = 5;
         console.log(`onKeyDown! Switch to camera: ${switchCamera}`);
         break;
-      case 50:  // 2
-        switchCamera = 2;
+      case 54:  // 2
+        switchCamera = 6;
         console.log(`onKeyDown! Switch to camera: ${switchCamera}`);
         break;
-      case 51:  // 3
-        switchCamera = 3;
+      case 55:  // 3
+        switchCamera = 7;
         console.log(`onKeyDown! Switch to camera: ${switchCamera}`);
         break;
       case 108: // l
@@ -156,6 +179,18 @@ function onKeyDown(e) {
         sun.visible = !(sun.visible);
         console.log(`onKeyDown! sun: ${sun.visible}`);
         break;
+      case 49: // 1
+        changePointlight(headlights[0]);
+        break;
+      case 50:
+        changePointlight(headlights[1]);
+        break;
+      case 51:
+        changePointlight(headlights[2]);
+        break;
+      case 52:
+        changePointlight(headlights[3]);
+        break;
 
   }
 }
@@ -163,17 +198,17 @@ function onKeyDown(e) {
 
 function render() {
   switch ( switchCamera ) {
-      case 1:
+      case 5:
         orthographicCamera.updateProjectionMatrix();
         orthographicCamera.lookAt(scene.position);
         renderer.render(scene, orthographicCamera);
         break;
-      case 2:
+      case 6:
         perspectiveCamera.updateProjectionMatrix();
         perspectiveCamera.lookAt(scene.position);
         renderer.render(scene, perspectiveCamera);
         break;
-      case 3:
+      case 7:
         camera.updateProjectionMatrix();
         camera.lookAt(scene.position);
         renderer.render(scene, camera);
@@ -201,15 +236,29 @@ function render() {
   }
 
   function changelighting() {
-  	if (lightingPhong) {
+  	if (lightingPhong && calculatingLight == true) {
   		plane.changeGouraud();
   		lightingPhong = false;
 
-  	} else {
+  	} else if(lightingPhong == false && calculatingLight == true){
   		plane.changePhong();
   		lightingPhong = true;
   	}
+    else if (!calculatingLight){
+      if (lightingPhong){
+        lightingPhong = false;
+      }
+      else {
+        lightingPhong = true;
+      }
+    }
   }
+
+function changePointlight(pointlight){
+  pointlight.visible = !pointlight.visible;
+
+}
+
 
 function animate() {
   deltaT = clock.getDelta();

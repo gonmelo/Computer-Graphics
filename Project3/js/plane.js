@@ -2,22 +2,22 @@
 
 class Plane extends THREE.Object3D {
 
-	constructor(x,y,z) {
+	constructor() {
 		super();
     this.mainPiecePhongMaterial  = new THREE.MeshPhongMaterial({ color: 0x0000ff, wireframe: false });
 		this.wingPhongMaterial = new THREE.MeshPhongMaterial({ color: 0x0000ff, wireframe: false });
 		this.cockpitPhongMaterial = new THREE.MeshPhongMaterial({ color: 0x00ff00, wireframe: false });
-		this.stabilizerPhongMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000, wireframe: false });
+		this.stabilizerPhongMaterial = new THREE.MeshPhongMaterial({ color: 0x00ff00, wireframe: false });
 
 		this.mainPieceBasicMaterial  = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: false });
 		this.wingBasicMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: false });
 		this.cockpitBasicMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: false });
-		this.stabilizerBasicMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: false });
+		this.stabilizerBasicMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: false });
 
 		this.mainPieceGouraudMaterial  = new THREE.MeshLambertMaterial({ color: 0x0000ff, wireframe: false });
 		this.wingGouraudMaterial = new THREE.MeshLambertMaterial({ color: 0x0000ff, wireframe: false });
 		this.cockpitGouraudMaterial = new THREE.MeshLambertMaterial({ color: 0x00ff00, wireframe: false });
-		this.stabilizerGouraudMaterial = new THREE.MeshLambertMaterial({ color: 0xff0000, wireframe: false });
+		this.stabilizerGouraudMaterial = new THREE.MeshLambertMaterial({ color: 0x00ff00, wireframe: false });
 
 		this.mainPieceMaterial  = this.mainPiecePhongMaterial;
 		this.wingMaterial = this.wingPhongMaterial;
@@ -25,75 +25,99 @@ class Plane extends THREE.Object3D {
 		this.stabilizerMaterial = this.stabilizerPhongMaterial;
 
 
-		this.addMainPiece(0,0,0);
-		this.addWing(3, 0, 0);
-		this.addWing(-17, 0, 0);
 		this.addCockpit(0, 2.5, 7);
-		this.addHorizontalStabilizer(3, 0, -13);
-		this.addHorizontalStabilizer(-11, 0, -13);
-		this.addVerticalStabilizer(0, 2.5, -13);
-		this.addMouth(0, 0, 15);
-	}
 
-	addMainPiece(x, y, z) {
+
 		var mainPiece = new THREE.Object3D();
-    var geometry = new THREE.CubeGeometry(6, 5, 30);
-    this.mesh1 = new THREE.Mesh(geometry, this.mainPieceMaterial);
-    this.mesh1.position.set(x, y, z);
-		this.mesh1.name = "mainPiece";
-		mainPiece.add(this.mesh1);
+		var geometry = new THREE.CubeGeometry(6, 5, 30);
+		var mesh = new THREE.Mesh(geometry, this.mainPieceMaterial);
+		mesh.position.set(0, 0, 0);
+		mesh.name = "mainPiece";
+		this.mesh1 = new THREE.Mesh();
 		this.add(mainPiece);
-	}
+		this.mesh1.add(mesh);
 
-	addWing(x, y, z){
-		var wing = new THREE.Object3D();
-		var geometry = new THREE.CubeGeometry(14, 1, 4);
-		this.mesh2 = new THREE.Mesh(geometry, this.wingMaterial);
-    this.mesh2.position.set(x + 7, y, z);
-		this.mesh2.name = "wing";
-		wing.add(this.mesh2);
-		this.add(wing);
+		var mouth = new THREE.Object3D();
+		var geometry = new THREE.CylinderGeometry(0.5, 2.5, 4, 20);
+		var mesh6 = new THREE.Mesh(geometry, this.mainPieceMaterial);
+		mesh6.position.set(0, 0, 17);
+		mesh6.name = "mouth";
+		mesh6.rotation.x += Math.PI / 2;
+		this.add(mouth);
+		this.mesh1.add(mesh6);
+
+		mainPiece.add(this.mesh1);
+		mouth.add(this.mesh1);
+
+		this.mesh1.name = "main"
+
+		var wing1 = new THREE.Object3D();
+		var geometry1 = new THREE.CubeGeometry(14, 1, 4);
+		var mesh1 = new THREE.Mesh(geometry1, this.wingMaterial);
+    mesh1.position.set(10, 0, 0);
+		mesh1.name = "wing";
+		this.mesh2 = new THREE.Mesh();
+		this.add(wing1);
+		this.mesh2.add(mesh1);
+
+		var wing2 = new THREE.Object3D();
+		var geometry2 = new THREE.CubeGeometry(14, 1, 4);
+		var mesh2 = new THREE.Mesh(geometry2, this.wingMaterial);
+    mesh2.position.set(-10, 0, 0);
+		mesh2.name = "wing";
+		this.add(wing2);
+		this.mesh2.name = "wings";
+		this.mesh2.add(mesh2);
+
+		wing1.add(this.mesh2);
+		wing2.add(this.mesh2);
+
+		var horizontalStabilizer1 = new THREE.Object3D();
+		var geometry3 = new THREE.CubeGeometry(8, 1, 2);
+    var mesh3 = new THREE.Mesh(geometry3, this.stabilizerMaterial);
+    mesh3.position.set(7, 0, -13);
+    mesh3.name = "horizontalStabilizer";
+		this.mesh4 = new THREE.Mesh();
+		this.add(horizontalStabilizer1);
+		this.mesh4.add(mesh3);
+
+		var horizontalStabilizer2 = new THREE.Object3D();
+		var geometry4 = new THREE.CubeGeometry(8, 1, 2);
+    var mesh4 = new THREE.Mesh(geometry4, this.stabilizerMaterial);
+    mesh4.position.set(-7, 0, -13);
+    mesh4.name = "horizontalStabilizer";
+		this.add(horizontalStabilizer2);
+		this.mesh4.add(mesh4);
+
+		var verticalStabilizer = new THREE.Object3D();
+		var geometry5 = new THREE.CubeGeometry(1, 8, 2);
+		var mesh5 = new THREE.Mesh(geometry5, this.stabilizerMaterial);
+		mesh5.position.set(0, 6.5, -13);
+		mesh5.name = "verticalStabilizer";
+		this.add(verticalStabilizer);
+		this.mesh4.add(mesh5);
+
+		horizontalStabilizer1.add(this.mesh4);
+		horizontalStabilizer2.add(this.mesh4);
+		verticalStabilizer.add(this.mesh4);
+
+		this.mesh4.name = "stabilizers";
+
 }
+
+
 	addCockpit(x, y, z){
 		var cockpit = new THREE.Object3D();
 		var geometry = new THREE.SphereGeometry(3, 30, 15, 0, 6.3, 0, 1.6);
-    this.mesh3 = new THREE.Mesh(geometry, this.cockpitMaterial);
-    this.mesh3.position.set(x, y, z);
-    this.mesh3.name = "cockpit";
+    mesh = new THREE.Mesh(geometry, this.cockpitMaterial);
+    mesh.position.set(x, y, z);
+    mesh.name = "cockpit";
+		this.mesh3 = new THREE.Mesh();
 		cockpit.add(this.mesh3);
 		this.add(cockpit);
+		this.mesh3.add(mesh);
 	}
 
-	addHorizontalStabilizer(x, y, z){
-		var stabilizer = new THREE.Object3D();
-		var geometry = new THREE.CubeGeometry(8, 1, 2);
-    this.mesh4 = new THREE.Mesh(geometry, this.stabilizerMaterial);
-    this.mesh4.position.set(x + 4, y, z);
-    this.mesh4.name = "stabilizer";
-    stabilizer.add(this.mesh4);
-		this.add(stabilizer);
-	}
-
-	addVerticalStabilizer(x, y, z){
-		var stabilizer = new THREE.Object3D();
-		var geometry = new THREE.CubeGeometry(1, 8, 2);
-		this.mesh5 = new THREE.Mesh(geometry, this.stabilizerMaterial);
-		this.mesh5.position.set(x, y + 4, z);
-		this.mesh5.name = "verticalStabilizer";
-		stabilizer.add(this.mesh5);
-		this.add(stabilizer);
-	}
-
-	addMouth(x, y, z){
-		var mouth = new THREE.Object3D();
-		var geometry = new THREE.CylinderGeometry(0.5, 2.5, 4, 20);
-    this.mesh6 = new THREE.Mesh(geometry, this.mainPieceMaterial);
-    this.mesh6.position.set(x, y, z + 2);
-    this.mesh6.name = "mouth";
-		this.mesh6.rotation.x += Math.PI / 2;
-    mouth.add(this.mesh6);
-		this.add(mouth);
-	}
 
 	changeBasic(){
 		this.mainPieceMaterial  = this.mainPieceBasicMaterial;
@@ -101,12 +125,14 @@ class Plane extends THREE.Object3D {
 		this.cockpitMaterial = this.cockpitBasicMaterial;
 		this.stabilizerMaterial = this.stabilizerBasicMaterial;
 
-		this.mesh1.material = this.mainPieceMaterial;
-		this.mesh2.material = this.wingMaterial;
-		this.mesh3.material = this.cockpitMaterial;
-		this.mesh4.material = this.stabilizerMaterial;
-		this.mesh5.material = this.stabilizerMaterial;
-		this.mesh6.material = this.mainPieceMaterial;
+		this.mesh1.children[0].material = this.mainPieceMaterial;
+		this.mesh1.children[1].material = this.mainPieceMaterial;
+		this.mesh2.children[0].material = this.wingMaterial;
+		this.mesh2.children[1].material = this.wingMaterial;
+		this.mesh3.children[0].material = this.cockpitMaterial;
+		this.mesh4.children[0].material = this.stabilizerMaterial;
+		this.mesh4.children[1].material = this.stabilizerMaterial;
+		this.mesh4.children[2].material = this.stabilizerMaterial;
 
 
 	}
@@ -117,12 +143,14 @@ class Plane extends THREE.Object3D {
 		this.cockpitMaterial = this.cockpitGouraudMaterial;
 		this.stabilizerMaterial = this.stabilizerGouraudMaterial;
 
-		this.mesh1.material = this.mainPieceMaterial;
-		this.mesh2.material = this.wingMaterial;
-		this.mesh3.material = this.cockpitMaterial;
-		this.mesh4.material = this.stabilizerMaterial;
-		this.mesh5.material = this.stabilizerMaterial;
-		this.mesh6.material = this.mainPieceMaterial;
+		this.mesh1.children[0].material = this.mainPieceMaterial;
+		this.mesh1.children[1].material = this.mainPieceMaterial;
+		this.mesh2.children[0].material = this.wingMaterial;
+		this.mesh2.children[1].material = this.wingMaterial;
+		this.mesh3.children[0].material = this.cockpitMaterial;
+		this.mesh4.children[0].material = this.stabilizerMaterial;
+		this.mesh4.children[1].material = this.stabilizerMaterial;
+		this.mesh4.children[2].material = this.stabilizerMaterial;
 	}
 
 	changePhong(){
@@ -131,11 +159,13 @@ class Plane extends THREE.Object3D {
 		this.cockpitMaterial = this.cockpitPhongMaterial;
 		this.stabilizerMaterial = this.stabilizerPhongMaterial;
 
-		this.mesh1.material = this.mainPieceMaterial;
-		this.mesh2.material = this.wingMaterial;
-		this.mesh3.material = this.cockpitMaterial;
-		this.mesh4.material = this.stabilizerMaterial;
-		this.mesh5.material = this.stabilizerMaterial;
-		this.mesh6.material = this.mainPieceMaterial;
+		this.mesh1.children[0].material = this.mainPieceMaterial;
+		this.mesh1.children[1].material = this.mainPieceMaterial;
+		this.mesh2.children[0].material = this.wingMaterial;
+		this.mesh2.children[1].material = this.wingMaterial;
+		this.mesh3.children[0].material = this.cockpitMaterial;
+		this.mesh4.children[0].material = this.stabilizerMaterial;
+		this.mesh4.children[1].material = this.stabilizerMaterial;
+		this.mesh4.children[2].material = this.stabilizerMaterial;
 	}
 }
