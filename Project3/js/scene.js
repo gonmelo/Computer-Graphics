@@ -61,7 +61,7 @@ function createPerspectiveCamera() {
                            1,
                            1000);
 
-	perspectiveCamera.position.set( 30, 40, 30 );
+	perspectiveCamera.position.set( 30, 40, 25 );
 	perspectiveCamera.lookAt( scene.position );
 }
 

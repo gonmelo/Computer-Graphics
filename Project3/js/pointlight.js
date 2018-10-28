@@ -4,7 +4,7 @@ class PointLight extends THREE.Object3D {
 
   constructor(x, y, z){
     super();
-    this.light = new THREE.PointLight (0xff0000, 10);
+    this.light = new THREE.PointLight (0xffff00, 10);
     this.light.position.set(x, y - 3.5, z);
     this.add(this.light);
     this.material = new THREE.MeshPhongMaterial({ color: 0xffff00, wireframe: false });

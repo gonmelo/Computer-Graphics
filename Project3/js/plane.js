@@ -4,18 +4,18 @@ class Plane extends THREE.Object3D {
 
 	constructor() {
 		super();
-    this.mainPiecePhongMaterial  = new THREE.MeshPhongMaterial({ color: 0x0000ff, wireframe: false });
-		this.wingPhongMaterial = new THREE.MeshPhongMaterial({ color: 0x0000ff, wireframe: false });
+    this.mainPiecePhongMaterial  = new THREE.MeshPhongMaterial({ color: 0xff0000, wireframe: false });
+		this.wingPhongMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000, wireframe: false });
 		this.cockpitPhongMaterial = new THREE.MeshPhongMaterial({ color: 0x00ff00, wireframe: false });
 		this.stabilizerPhongMaterial = new THREE.MeshPhongMaterial({ color: 0x00ff00, wireframe: false });
 
-		this.mainPieceBasicMaterial  = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: false });
-		this.wingBasicMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff, wireframe: false });
+		this.mainPieceBasicMaterial  = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: false });
+		this.wingBasicMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: false });
 		this.cockpitBasicMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: false });
 		this.stabilizerBasicMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: false });
 
-		this.mainPieceGouraudMaterial  = new THREE.MeshLambertMaterial({ color: 0x0000ff, wireframe: false });
-		this.wingGouraudMaterial = new THREE.MeshLambertMaterial({ color: 0x0000ff, wireframe: false });
+		this.mainPieceGouraudMaterial  = new THREE.MeshLambertMaterial({ color: 0xff0000, wireframe: false });
+		this.wingGouraudMaterial = new THREE.MeshLambertMaterial({ color: 0xff0000, wireframe: false });
 		this.cockpitGouraudMaterial = new THREE.MeshLambertMaterial({ color: 0x00ff00, wireframe: false });
 		this.stabilizerGouraudMaterial = new THREE.MeshLambertMaterial({ color: 0x00ff00, wireframe: false });
 
