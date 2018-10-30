@@ -90,9 +90,11 @@ class Plane extends THREE.Object3D {
 		this.mesh4.add(mesh4);
 
 		var verticalStabilizer = new THREE.Object3D();
-		var geometry5 = new THREE.CubeGeometry(1, 8, 2);
+		var geometry5 = new THREE.CylinderGeometry(4, 4, 1, 3);
 		var mesh5 = new THREE.Mesh(geometry5, this.stabilizerMaterial);
-		mesh5.position.set(0, 6.5, -13);
+		mesh5.position.set(0, 4.25, -11);
+		mesh5.rotation.z += Math.PI / 2;
+		mesh5.rotation.x += Math.PI / 6;
 		mesh5.name = "verticalStabilizer";
 		this.add(verticalStabilizer);
 		this.mesh4.add(mesh5);

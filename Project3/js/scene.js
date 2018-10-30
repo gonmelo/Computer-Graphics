@@ -15,7 +15,6 @@ var sun;
 var directionalLight;
 var lightingPhong = true;
 var calculatingLight = true;
-var headLightsON = true;
 
 
 var materials = [];
@@ -69,34 +68,33 @@ function createPerspectiveCamera() {
 function createScene() {
 
   scene = new THREE.Scene();
-
+  scene.position.set(0,0,0);
   scene.add( new THREE.AxesHelper(10) );
   createPlane();
 
   sun = new THREE.DirectionalLight(0xeedd82, 1);
   sun.position.set(500, 500, 500);
-  sun.castShadow = true;
   scene.add(sun);
 
-  createPointLights();
+  createSpotlights();
 
 }
 
-function createPointLights(){
+function createSpotlights(){
 
-    var pointLight1 = new PointLight(30, 30, 30);
-    var pointLight2 = new PointLight(-30, 30, 30);
-    var pointLight3 = new PointLight(30, 30, -30);
-    var pointLight4 = new PointLight(-35, 30, -30);
-    headlights.push(pointLight1.light);
-    headlights.push(pointLight2.light);
-    headlights.push(pointLight3.light);
-    headlights.push(pointLight4.light);
+    var spotlight1 = new SpotLight(30, 30, 30, -Math.PI / 4, 1);
+    var spotlight2 = new SpotLight(-30, 30, 30, Math.PI / 4, 1);
+    var spotlight3 = new SpotLight(30, 30, -30, -Math.PI / 4, 2);
+    var spotlight4 = new SpotLight(-30, 30, -30, Math.PI / 4, 2);
+    headlights.push(spotlight1.light);
+    headlights.push(spotlight2.light);
+    headlights.push(spotlight3.light);
+    headlights.push(spotlight4.light);
 
-    scene.add(pointLight1);
-    scene.add(pointLight2);
-    scene.add(pointLight3);
-    scene.add(pointLight4);
+    scene.add(spotlight1);
+    scene.add(spotlight2);
+    scene.add(spotlight3);
+    scene.add(spotlight4);
 
 }
 
@@ -180,16 +178,16 @@ function onKeyDown(e) {
         console.log(`onKeyDown! sun: ${sun.visible}`);
         break;
       case 49: // 1
-        changePointlight(headlights[0]);
+        changespotlight(headlights[0]);
         break;
       case 50:
-        changePointlight(headlights[1]);
+        changespotlight(headlights[1]);
         break;
       case 51:
-        changePointlight(headlights[2]);
+        changespotlight(headlights[2]);
         break;
       case 52:
-        changePointlight(headlights[3]);
+        changespotlight(headlights[3]);
         break;
 
   }
@@ -254,8 +252,8 @@ function render() {
     }
   }
 
-function changePointlight(pointlight){
-  pointlight.visible = !pointlight.visible;
+function changespotlight(spotlight){
+  spotlight.visible = !spotlight.visible;
 
 }
 
