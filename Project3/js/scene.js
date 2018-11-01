@@ -40,7 +40,7 @@ function createCamera() {
     1,
     1000);
 
-	orthographicCamera.position.set( 0, 6, 50 );
+	orthographicCamera.position.set( 30, 0, 0 );
 	orthographicCamera.lookAt( scene.position );
 
   camera = new THREE.PerspectiveCamera(
@@ -49,7 +49,7 @@ function createCamera() {
     1,
     1000);
 
-	camera.position.set( -30, 0, -14);
+	camera.position.set( -20, 5, -12);
 	camera.lookAt( scene.position );
 }
 
@@ -60,7 +60,7 @@ function createPerspectiveCamera() {
                            1,
                            1000);
 
-	perspectiveCamera.position.set( 30, 40, 25 );
+	perspectiveCamera.position.set( 30, 50, 40 );
 	perspectiveCamera.lookAt( scene.position );
 }
 
@@ -262,15 +262,9 @@ function animate() {
   deltaT = clock.getDelta();
 
   if (rotateX == 1){
-//    if (Math.cos(plane.rotation.y) > 0)
-  //    plane.rotation.x -= 0.05;
-//    else
       plane.rotation.x += 0.05;
   }
   if (rotateX == 2){
-/*    if (Math.cos(plane.rotation.y) > 0)
-      plane.rotation.x += 0.05;
-    else */
       plane.rotation.x -= 0.05;
   }
 
