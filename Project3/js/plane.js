@@ -4,29 +4,32 @@ class Plane extends THREE.Object3D {
 
 	constructor() {
 		super();
+		// Create all MeshPhongMaterials needed.
     this.mainPiecePhongMaterial  = new THREE.MeshPhongMaterial({ color: 0x904B00, wireframe: false , side: THREE.DoubleSide});
 		this.wingPhongMaterial = new THREE.MeshPhongMaterial({ color: 0xDD2590, wireframe: false , side: THREE.DoubleSide});
 		this.cockpitPhongMaterial = new THREE.MeshPhongMaterial({ color: 0x0125990, wireframe: false , side: THREE.DoubleSide});
 		this.stabilizerPhongMaterial = new THREE.MeshPhongMaterial({ color: 0x2B9B2E, wireframe: false, side: THREE.DoubleSide });
 
+		// Create all the MeshBasicMaterial's needed.
 		this.mainPieceBasicMaterial  = new THREE.MeshBasicMaterial({ color: 0x904B00, wireframe: false , side: THREE.DoubleSide});
 		this.wingBasicMaterial = new THREE.MeshBasicMaterial({ color: 0xDD2590, wireframe: false , side: THREE.DoubleSide});
 		this.cockpitBasicMaterial = new THREE.MeshBasicMaterial({ color: 0x125990, wireframe: false , side: THREE.DoubleSide});
 		this.stabilizerBasicMaterial = new THREE.MeshBasicMaterial({ color: 0x2B9B2E, wireframe: false, side: THREE.DoubleSide });
 
+		// Create all the MeshLamberMaterials needed.
 		this.mainPieceGouraudMaterial  = new THREE.MeshLambertMaterial({ color: 0x904B00, wireframe: false , side: THREE.DoubleSide});
 		this.wingGouraudMaterial = new THREE.MeshLambertMaterial({ color: 0xDD2590, wireframe: false , side: THREE.DoubleSide});
 		this.cockpitGouraudMaterial = new THREE.MeshLambertMaterial({ color: 0x125990, wireframe: false , side: THREE.DoubleSide});
 		this.stabilizerGouraudMaterial = new THREE.MeshLambertMaterial({ color: 0x2B9B2E, wireframe: false , side: THREE.DoubleSide});
 
+		// Set the "current materials" as the MeshPhongMaterials
 		this.mainPieceMaterial  = this.mainPiecePhongMaterial;
 		this.wingMaterial = this.wingPhongMaterial;
 		this.cockpitMaterial = this.cockpitPhongMaterial;
 		this.stabilizerMaterial = this.stabilizerPhongMaterial;
 
-
+		// Generate the mainPiece of the plane
 		this.geometry1 = new THREE.Geometry();
-
 		this.geometry1.vertices.push(
 
 			new THREE.Vector3(3, 0, 3),
@@ -60,7 +63,6 @@ class Plane extends THREE.Object3D {
 			new THREE.Vector3(-3, 0, -15),
 
 		)
-
 		this.geometry1.faces.push(
 			//sides
 			new THREE.Face3(0, 1, 2),
@@ -124,16 +126,14 @@ class Plane extends THREE.Object3D {
 			new THREE.Face3(11, 23, 21),
 
 		)
-
 		this.geometry1.computeFaceNormals();
 		this.mesh1 = new THREE.Mesh();
 		var mesh = new THREE.Mesh(this.geometry1, this.mainPieceMaterial);
 		mesh.name = "mainPiece";
 		this.mesh1.add(mesh);
 
-		//mouth
+		// Generate the mouth of the plane
 		this.geometry2 = new THREE.Geometry();
-
 		this.geometry2.vertices.push(
 			new THREE.Vector3(0, 2.5, 21),
 			new THREE.Vector3(-3, 5, 15),
@@ -141,7 +141,6 @@ class Plane extends THREE.Object3D {
 			new THREE.Vector3(3, 5, 15),
 			new THREE.Vector3(3, 0, 15)
 	)
-
 		this.geometry2.faces.push(
 			new THREE.Face3(0, 2, 4),
 			new THREE.Face3(0, 3, 1),
@@ -149,18 +148,15 @@ class Plane extends THREE.Object3D {
 			new THREE.Face3(0, 4, 3),
 
 		)
-
+		// normalized cross product of two edges of the triangle
 		this.geometry2.computeFaceNormals();
 		var mesh0 = new THREE.Mesh(this.geometry2, this.mainPieceMaterial);
 		mesh0.name = "mouth";
 		this.mesh1.add(mesh0);
-
-
 		this.add(this.mesh1);
 
-		//wing
+		// Generate the wings of the plane
 		this.geometry3 = new THREE.Geometry();
-
 		this.geometry3.vertices.push(
 			new THREE.Vector3(3, 2.5, 3),
 			new THREE.Vector3(6, 2.5, 2.6),
@@ -177,7 +173,6 @@ class Plane extends THREE.Object3D {
 			new THREE.Vector3(15, 2.5, -1.4),
 			new THREE.Vector3(18, 2.5, -1)
 		)
-
 		this.geometry3.faces.push(
 			new THREE.Face3(6, 0, 1),
 			new THREE.Face3(7, 6, 1),
@@ -192,24 +187,19 @@ class Plane extends THREE.Object3D {
 			new THREE.Face3(5, 11, 10),
 
 		)
-
 		this.geometry3.computeFaceNormals();
 		this.mesh2 = new THREE.Mesh();
-
 		var mesh1 = new THREE.Mesh(this.geometry3, this.wingMaterial);
 		mesh1.name = "leftWing";
 		this.mesh2.add(mesh1);
-
 		var mesh2 = new THREE.Mesh(this.geometry3, this.wingMaterial);
 		mesh2.rotateY(Math.PI);
 		mesh2.name = "rightWing";
 		this.mesh2.add(mesh2);
-
 		this.add(this.mesh2);
 
 		//horizontalStabilizer
 		this.geometry4 = new THREE.Geometry();
-
 		this.geometry4.vertices.push(
 			new THREE.Vector3(3, 2.5, -11),
 			new THREE.Vector3(5, 2.5, -11.25),
@@ -224,7 +214,6 @@ class Plane extends THREE.Object3D {
 			new THREE.Vector3(9, 2.5, -13.25),
 			new THREE.Vector3(11, 2.5, -13)
 		)
-
 		this.geometry4.faces.push(
 			new THREE.Face3(5, 0, 1),
 			new THREE.Face3(6, 5, 1),
@@ -237,7 +226,6 @@ class Plane extends THREE.Object3D {
 			new THREE.Face3(8, 4, 9)
 
 		)
-
 		this.geometry4.computeFaceNormals();
 		this.mesh3 = new THREE.Mesh();
 
@@ -255,7 +243,6 @@ class Plane extends THREE.Object3D {
 
 		//verticalStabilizer
 		this.geometry5 = new THREE.Geometry();
-
 		this.geometry5.vertices.push(
 			new THREE.Vector3(0.5, 5, -15),
 			new THREE.Vector3(0.5, 13, -15),
@@ -277,7 +264,6 @@ class Plane extends THREE.Object3D {
 			new THREE.Vector3(-0.5, 6.5, -12),
 			new THREE.Vector3(-0.5, 5, -9.5),
 		)
-
 		this.geometry5.faces.push(
 			//left
 			new THREE.Face3(1, 2, 0),
@@ -309,87 +295,78 @@ class Plane extends THREE.Object3D {
 			new THREE.Face3(1, 9, 8),
 
 		)
+		this.geometry5.computeFaceNormals();
+	  var mesh4 = new THREE.Mesh(this.geometry5, this.stabilizerMaterial);
+		mesh4.position.set(0, 0, 0);
+		mesh4.name = "verticalStabilizer";
+		this.mesh3.add(mesh4);
+		this.add(this.mesh3);
 
-			this.geometry5.computeFaceNormals();
+		// Generate the cockpit of the plane
+		this.geometry6 = new THREE.Geometry();
+		this.geometry6.vertices.push(
+			new THREE.Vector3(2.5, 5, 10),
+			new THREE.Vector3(1, 5, 10),
+			new THREE.Vector3(-1, 5, 10),
+			new THREE.Vector3(-2.5, 5, 10),
 
-			var mesh4 = new THREE.Mesh(this.geometry5, this.stabilizerMaterial);
-			mesh4.position.set(0, 0, 0);
-			mesh4.name = "verticalStabilizer";
-			this.mesh3.add(mesh4);
+			new THREE.Vector3(-2.5, 5, 7),
+			new THREE.Vector3(-2.5, 5, 5),
+			new THREE.Vector3(-2.5, 5, 2),
+			new THREE.Vector3(-1, 5, 2),
 
-			this.add(this.mesh3);
+			new THREE.Vector3(1, 5, 2),
+			new THREE.Vector3(2.5, 5, 2),
+			new THREE.Vector3(2.5, 5, 5),
+			new THREE.Vector3(2.5, 5, 7),
 
+			new THREE.Vector3(1, 7.5, 7),
+			new THREE.Vector3(-1, 7.5, 7),
+			new THREE.Vector3(-1, 7.5, 5),
+			new THREE.Vector3(1, 7.5, 5),
+		)
+		this.geometry6.faces.push(
+			// sides
+			new THREE.Face3(0, 1, 12),
+			new THREE.Face3(1, 12, 13),
+			new THREE.Face3(1, 2, 13),
+			new THREE.Face3(2, 3, 13),
 
-			//cockpit
+			new THREE.Face3(4, 3, 13),
+			new THREE.Face3(4, 5, 13),
+			new THREE.Face3(13, 14, 5),
+			new THREE.Face3(5, 6, 14),
 
-			this.geometry6 = new THREE.Geometry();
+			new THREE.Face3(6, 7, 14),
+			new THREE.Face3(14, 15, 7),
+			new THREE.Face3(7, 8, 15),
+			new THREE.Face3(8, 9, 15),
 
-			this.geometry6.vertices.push(
-				new THREE.Vector3(2.5, 5, 10),
-				new THREE.Vector3(1, 5, 10),
-				new THREE.Vector3(-1, 5, 10),
-				new THREE.Vector3(-2.5, 5, 10),
+			new THREE.Face3(9, 10, 15),
+			new THREE.Face3(10, 15, 12),
+			new THREE.Face3(10, 11, 12),
+			new THREE.Face3(0, 11, 12),
 
-				new THREE.Vector3(-2.5, 5, 7),
-				new THREE.Vector3(-2.5, 5, 5),
-				new THREE.Vector3(-2.5, 5, 2),
-				new THREE.Vector3(-1, 5, 2),
-
-				new THREE.Vector3(1, 5, 2),
-				new THREE.Vector3(2.5, 5, 2),
-				new THREE.Vector3(2.5, 5, 5),
-				new THREE.Vector3(2.5, 5, 7),
-
-				new THREE.Vector3(1, 7.5, 7),
-				new THREE.Vector3(-1, 7.5, 7),
-				new THREE.Vector3(-1, 7.5, 5),
-				new THREE.Vector3(1, 7.5, 5),
+			// top
+			new THREE.Face3(12, 13, 14),
+			new THREE.Face3(14, 15, 12),
 			)
-
-			this.geometry6.faces.push(
-				//sides
-				new THREE.Face3(0, 1, 12),
-				new THREE.Face3(1, 12, 13),
-				new THREE.Face3(1, 2, 13),
-				new THREE.Face3(2, 3, 13),
-
-				new THREE.Face3(4, 3, 13),
-				new THREE.Face3(4, 5, 13),
-				new THREE.Face3(13, 14, 5),
-				new THREE.Face3(5, 6, 14),
-
-				new THREE.Face3(6, 7, 14),
-				new THREE.Face3(14, 15, 7),
-				new THREE.Face3(7, 8, 15),
-				new THREE.Face3(8, 9, 15),
-
-				new THREE.Face3(9, 10, 15),
-				new THREE.Face3(10, 15, 12),
-				new THREE.Face3(10, 11, 12),
-				new THREE.Face3(0, 11, 12),
-
-				//top
-				new THREE.Face3(12, 13, 14),
-				new THREE.Face3(14, 15, 12),
+		this.geometry6.computeFaceNormals();
+		this.mesh4 = new THREE.Mesh();
+		var mesh5 = new THREE.Mesh(this.geometry6, this.cockpitMaterial);
+		mesh5.position.set(0, 0, 0);
+		mesh5.name = "cockpit";
+		this.mesh4.add(mesh5);
+		this.add(this.mesh4);
+	}
 
 
-			)
+	changeBasic() {
+  /*
+   * Changes the material of all the plane components to MeshBasicMaterial's and
+   * stores the that value in properties.
+   */
 
-			this.geometry6.computeFaceNormals();
-			this.mesh4 = new THREE.Mesh();
-
-			var mesh5 = new THREE.Mesh(this.geometry6, this.cockpitMaterial);
-			mesh5.position.set(0, 0, 0);
-			mesh5.name = "cockpit";
-
-			this.mesh4.add(mesh5);
-
-			this.add(this.mesh4);
-}
-
-
-
-	changeBasic(){
 		this.mainPieceMaterial  = this.mainPieceBasicMaterial;
 		this.wingMaterial = this.wingBasicMaterial;
 		this.cockpitMaterial = this.cockpitBasicMaterial;
@@ -402,11 +379,15 @@ class Plane extends THREE.Object3D {
 		this.mesh3.children[0].material = this.stabilizerMaterial;
 		this.mesh3.children[1].material = this.stabilizerMaterial;
 		this.mesh4.material = this.cockpitMaterial;
-
-
 	}
 
-	changeGouraud(){
+
+	changeGouraud() {
+	/*
+	 * Changes the material of all the plane components to MeshGouraudMaterial's
+	 * and stores the that value in properties.
+   */
+
 		this.mainPieceMaterial  = this.mainPieceGouraudMaterial;
 		this.wingMaterial = this.wingGouraudMaterial;
 		this.cockpitMaterial = this.cockpitGouraudMaterial;
@@ -420,10 +401,15 @@ class Plane extends THREE.Object3D {
 		this.mesh3.children[1].material = this.stabilizerMaterial;
 		this.mesh3.children[2].material = this.stabilizerMaterial;
 		this.mesh4.material = this.cockpitMaterial;
-
 	}
 
-	changePhong(){
+
+	changePhong() {
+  /*
+	 * Changes the material of all the plane components to MeshGourardMaterial's
+	 * and stores the that value in properties.
+	 */
+
 		this.mainPieceMaterial  = this.mainPiecePhongMaterial;
 		this.wingMaterial = this.wingPhongMaterial;
 		this.cockpitMaterial = this.cockpitPhongMaterial;
