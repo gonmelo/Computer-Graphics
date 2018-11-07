@@ -384,7 +384,8 @@ class Plane extends THREE.Object3D {
 		this.mesh2.children[1].material = this.wingMaterial;
 		this.mesh3.children[0].material = this.stabilizerMaterial;
 		this.mesh3.children[1].material = this.stabilizerMaterial;
-		this.mesh4.material = this.cockpitMaterial;
+		this.mesh3.children[2].material = this.stabilizerMaterial;
+		this.mesh4.children[0].material = this.cockpitMaterial;
 	}
 
 
@@ -406,7 +407,7 @@ class Plane extends THREE.Object3D {
 		this.mesh3.children[0].material = this.stabilizerMaterial;
 		this.mesh3.children[1].material = this.stabilizerMaterial;
 		this.mesh3.children[2].material = this.stabilizerMaterial;
-		this.mesh4.material = this.cockpitMaterial;
+		this.mesh4.children[0].material = this.cockpitMaterial;
 	}
 
 
@@ -428,6 +429,6 @@ class Plane extends THREE.Object3D {
 		this.mesh3.children[0].material = this.stabilizerMaterial;
 		this.mesh3.children[1].material = this.stabilizerMaterial;
 		this.mesh3.children[2].material = this.stabilizerMaterial;
-		this.mesh4.material = this.cockpitMaterial;
+		this.mesh4.children[0].material = this.cockpitMaterial;
 	}
 }
