@@ -30,6 +30,7 @@ class Plane extends THREE.Object3D {
 
 		// Generate the mainPiece of the plane
 		this.geometry1 = new THREE.Geometry();
+		// Add the vertices to the geometry's vertices array
 		this.geometry1.vertices.push(
 
 			new THREE.Vector3(3, 0, 3),
@@ -63,6 +64,7 @@ class Plane extends THREE.Object3D {
 			new THREE.Vector3(-3, 0, -15),
 
 		)
+		// Add the faces to the geometry's faces array
 		this.geometry1.faces.push(
 			//sides
 			new THREE.Face3(0, 1, 2),
@@ -89,7 +91,6 @@ class Plane extends THREE.Object3D {
 			new THREE.Face3(21, 23, 20),
 			new THREE.Face3(23, 22, 20),
 
-
 			//front
 			new THREE.Face3(7, 6, 18),
 			new THREE.Face3(7, 19, 18),
@@ -99,7 +100,7 @@ class Plane extends THREE.Object3D {
 			new THREE.Face3(11, 10, 22),
 
 			//top
-			new THREE.Face3(3, 2, 14),
+			new THREE.Face3(2, 3, 14),
 			new THREE.Face3(3, 15, 14),
 			new THREE.Face3(2, 14, 16),
 			new THREE.Face3(4, 2, 16),
@@ -112,7 +113,6 @@ class Plane extends THREE.Object3D {
 			new THREE.Face3(10, 22, 20),
 
 			//bottom
-
 			new THREE.Face3(0, 1, 12),
 			new THREE.Face3(1, 13, 12),
 			new THREE.Face3(0, 12, 17),
@@ -124,9 +124,10 @@ class Plane extends THREE.Object3D {
 			new THREE.Face3(9, 21, 13),
 			new THREE.Face3(9, 11, 21),
 			new THREE.Face3(11, 23, 21),
-
 		)
+
 		this.geometry1.computeFaceNormals();
+		this.geometry1.computeVertexNormals();
 		this.mesh1 = new THREE.Mesh();
 		var mesh = new THREE.Mesh(this.geometry1, this.mainPieceMaterial);
 		mesh.name = "mainPiece";
@@ -150,6 +151,7 @@ class Plane extends THREE.Object3D {
 		)
 		// normalized cross product of two edges of the triangle
 		this.geometry2.computeFaceNormals();
+		this.geometry2.computeVertexNormals();
 		var mesh0 = new THREE.Mesh(this.geometry2, this.mainPieceMaterial);
 		mesh0.name = "mouth";
 		this.mesh1.add(mesh0);
@@ -188,6 +190,7 @@ class Plane extends THREE.Object3D {
 
 		)
 		this.geometry3.computeFaceNormals();
+		this.geometry3.computeVertexNormals();
 		this.mesh2 = new THREE.Mesh();
 		var mesh1 = new THREE.Mesh(this.geometry3, this.wingMaterial);
 		mesh1.name = "leftWing";
@@ -227,6 +230,7 @@ class Plane extends THREE.Object3D {
 
 		)
 		this.geometry4.computeFaceNormals();
+		this.geometry4.computeVertexNormals();
 		this.mesh3 = new THREE.Mesh();
 
 		var mesh3 = new THREE.Mesh(this.geometry4, this.stabilizerMaterial);
@@ -296,6 +300,7 @@ class Plane extends THREE.Object3D {
 
 		)
 		this.geometry5.computeFaceNormals();
+		this.geometry5.computeVertexNormals();
 	  var mesh4 = new THREE.Mesh(this.geometry5, this.stabilizerMaterial);
 		mesh4.position.set(0, 0, 0);
 		mesh4.name = "verticalStabilizer";
@@ -328,30 +333,31 @@ class Plane extends THREE.Object3D {
 		this.geometry6.faces.push(
 			// sides
 			new THREE.Face3(0, 1, 12),
-			new THREE.Face3(1, 12, 13),
+			new THREE.Face3(12, 1, 13),
 			new THREE.Face3(1, 2, 13),
 			new THREE.Face3(2, 3, 13),
 
 			new THREE.Face3(4, 3, 13),
-			new THREE.Face3(4, 5, 13),
+			new THREE.Face3(5, 4, 13),
 			new THREE.Face3(13, 14, 5),
-			new THREE.Face3(5, 6, 14),
+			new THREE.Face3(6, 5, 14),
 
 			new THREE.Face3(6, 7, 14),
-			new THREE.Face3(14, 15, 7),
+			new THREE.Face3(15, 14, 7),
 			new THREE.Face3(7, 8, 15),
 			new THREE.Face3(8, 9, 15),
 
 			new THREE.Face3(9, 10, 15),
-			new THREE.Face3(10, 15, 12),
+			new THREE.Face3(15, 10, 12),
 			new THREE.Face3(10, 11, 12),
-			new THREE.Face3(0, 11, 12),
+			new THREE.Face3(11, 0, 12),
 
 			// top
 			new THREE.Face3(12, 13, 14),
 			new THREE.Face3(14, 15, 12),
 			)
 		this.geometry6.computeFaceNormals();
+		this.geometry6.computeVertexNormals();
 		this.mesh4 = new THREE.Mesh();
 		var mesh5 = new THREE.Mesh(this.geometry6, this.cockpitMaterial);
 		mesh5.position.set(0, 0, 0);

@@ -71,10 +71,10 @@ function createSpotlights(){
  */
 
   // SpotLight(x, y, z, angle, axis)
-  var spotlight1 = new SpotLight(30, 30, 30, -Math.PI / 4, 1);
-  var spotlight2 = new SpotLight(-30, 30, 30, Math.PI / 4, 1);
-  var spotlight3 = new SpotLight(30, 30, -30, -Math.PI / 4, 2);
-  var spotlight4 = new SpotLight(-30, 30, -30, Math.PI / 4, 2);
+  var spotlight1 = new SpotLight(30, 30, 30, -Math.PI / 4, 1);  // near
+  var spotlight2 = new SpotLight(-30, 30, 30, Math.PI / 4, 1);  // left
+  var spotlight3 = new SpotLight(30, 30, -30, -Math.PI / 4, 2); // right
+  var spotlight4 = new SpotLight(-30, 30, -30, Math.PI / 4, 2); // far
   // Add the spotlights to a global vector
   headlights.push(spotlight1.light);
   headlights.push(spotlight2.light);
@@ -103,18 +103,16 @@ function onKeyUp(e) {
  * Callback function for when a key is no longer pressed. Supported keys so far:
  * all arrows to stop rotation in that direction.
  */
+
   switch (e.keyCode) {
     case 37:  // left arrow
-      rotateY = 0;
-      break;
-    case 38:  // up arrow
-      rotateX = 0;
-      break;
     case 39:  // right arrow
       rotateY = 0;
       break;
+    case 38:  // up arrow
     case 40: // down arrow
       rotateX = 0;
+      break;
   }
 }
 
@@ -229,15 +227,15 @@ function animate() {
   deltaT = clock.getDelta();
 
   if (rotateX == 1) {
-    plane.rotation.x += 0.05;
+    plane.rotateX(0.05);
   }
   if (rotateX == 2) {
-    plane.rotation.x -= 0.05;
+    plane.rotateX(-0.05);
   }
   if (rotateY == 1)
-  plane.rotation.y += 0.05;
+  plane.rotateY(0.05);
   if (rotateY == 2)
-  plane.rotation.y -= 0.05;
+  plane.rotateY(-0.05);
 
   render();
   requestAnimationFrame(animate);
