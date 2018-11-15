@@ -1,21 +1,25 @@
 'use strict'
 
 var clock;
-var perspectiveCamera;
+var camera, controls;
 var scene, renderer;
+var controls;
 var geometry, material, mesh;
 var deltaT;
 var sceneWidth = 3.8, sceneHeight = 3.8;
 var sceneRatio = sceneWidth / sceneHeight;
 var aspect;
+var speed = 0;  //Don't touch this
+var maxSpeed = 50;//This is the maximum speed that the object will achieve
+var acceleration = 20;
 var rotateX = 0, rotateY = 0;
-var board;
-//var switchCamera = 0;
+var board, ball, magicMike;
 var directionalLight;
 var pointLight;
 var lightingPhong = true;
 var calculatingLight = true;
-
+var stopped = false, dead = false;
+var moveBall = 0;
 
 var materials = [];
 
@@ -24,8 +28,9 @@ function onResize() {
 
   aspect = window.innerWidth / window.innerHeight;
 
-  perspectiveCamera.aspect = aspect;
-  perspectiveCamera.updateProjectionMatrix();
+  camera.aspect = aspect;
+  camera.updateProjectionMatrix();
+  controls.update();
 
   renderer.setSize( window.innerWidth, window.innerHeight );
 }
@@ -34,16 +39,30 @@ function onResize() {
 function createCamera() {
   aspect = window.innerWidth / window.innerHeight;
 
-  perspectiveCamera = new THREE.PerspectiveCamera(
+  camera = new THREE.PerspectiveCamera (
     70,
     window.innerWidth / window.innerHeight,
     1,
     1000);
-
-	perspectiveCamera.position.set( 20, 10, 5);
-	perspectiveCamera.lookAt( scene.position );
+	camera.position.set(40, 30, 5);
+	camera.lookAt( scene.position );
 }
 
+
+function pauseGame() {
+	pauseMenu.visible = true;
+	stopAnimaton();
+}
+
+function restartDead() {
+	dead = false;
+
+}
+
+function stopAnimaton() {
+	stopped = !stopped;
+	world_clock.running ? world_clock.stop() : world_clock.start();
+}
 
 
 function createScene() {
@@ -52,20 +71,21 @@ function createScene() {
   scene.position.set(0,0,0);
   scene.add( new THREE.AxesHelper(10) );
   createBoard();
+  createBall();
+  createMagicMike();
 
-  directionalLight = new THREE.DirectionalLight(0xeedd82, 1);
+  directionalLight = new THREE.DirectionalLight(0xffffff, 1);
   directionalLight.position.set(500, 500, 500);
   scene.add(directionalLight);
 
   pointLight = new THREE.PointLight(0xffffff, 1);
-  pointLight.position.set(0, 10, 0);
-
+  pointLight.position.set(0, 10, 10);
   scene.add(pointLight);
 
 }
 
 
-function createBoard(x, y, z) {
+function createBoard() {
   board = new Board();
   /*materials = [...materials,
               plane.mainPieceMaterial,
@@ -73,6 +93,18 @@ function createBoard(x, y, z) {
               plane.cockpitMaterial,
               plane.stabilizerMaterial]; */
   scene.add(board);
+}
+
+
+function createBall() {
+  ball = new Ball();
+  scene.add(ball);
+}
+
+
+function createMagicMike() {
+  magicMike = new MagicMike();
+  scene.add(magicMike);
 }
 
 function onKeyUp(e) {
@@ -106,8 +138,8 @@ function onKeyDown(e) {
       break;
     case 103: // g
     case 71: // G
-    changelighting();
-    console.log(`onKeyDown! changelighting: ${lightingPhong}`);
+      changelighting();
+      console.log(`onKeyDown! changelighting: ${lightingPhong}`);
     break;
     case 100: // d
     case 68: // D
@@ -117,39 +149,61 @@ function onKeyDown(e) {
     case 80: //P
     case 112: // p
       pointLight.visible = !(pointLight.visible);
-      console.log(`onKeyDown! sun: ${pointLight.visible}`);
+      console.log(`onKeyDown! point: ${pointLight.visible}`);
+    break;
+    case 83: // S
+      if (!dead)
+        pauseGame();
+    break;
+    case 82: // R
+      if (dead) {
+        dead = false;
+        restartDead();
+      }
+    break;
+    case 66: //B
+    case 98: //b
+      if (moveBall == 0){
+        moveBall = 1;
+      }
+      else {
+        moveBall = 2;
+      }
+
   }
 }
 
 
 function render() {
-    perspectiveCamera.updateProjectionMatrix();
-    perspectiveCamera.lookAt(scene.position);
-    renderer.render(scene, perspectiveCamera);
+    camera.updateProjectionMatrix();
+    camera.lookAt(scene.position);
+    controls.update();
+    renderer.render(scene, camera);
   }
 
-  function changeAllBasic() {
-  	if (calculatingLight) {
-  		plane.changeBasic();
-  		calculatingLight = false;
 
-  	} else if (lightingPhong == false) {
-  		plane.changeGouraud();
-  		calculatingLight = true;
-
-  	} else if (lightingPhong == true) {
-  		plane.changePhong();
-  		calculatingLight = true;
-  	}
+function changeAllBasic() {
+  if (calculatingLight) {
+  	board.changeBasic();
+  	calculatingLight = false;
   }
-
+}
 
 
 function animate() {
 
+  if (moveBall == 1) {
+    ball.move(acceleration);
+  }
+  else if (moveBall == 2) {
+    ball.move(-acceleration);
+    moveBall = 0;
+  }
   render();
+
   requestAnimationFrame(animate);
 }
+
 
 function init() {
 
@@ -162,6 +216,8 @@ function init() {
 
   createScene();
   createCamera();
+  controls = new THREE.OrbitControls( camera );
+  controls.autoRotate = true;
 
   window.addEventListener("resize", onResize);
   window.addEventListener("keydown", onKeyDown);
