@@ -1,6 +1,5 @@
 'use strict'
 
-var clock;
 var camera;
 var scene, renderer;
 var geometry, material, mesh;
@@ -184,6 +183,7 @@ function render() {
   renderer.render(scene, camera);
 }
 
+
 function changeAllBasic() {
   if (calculatingLight) {
    plane.changeBasic();
@@ -218,13 +218,13 @@ function changelighting() {
   }
 }
 
+
 function changespotlight(spotlight) {
   spotlight.visible = !spotlight.visible;
 }
 
 
 function animate() {
-  deltaT = clock.getDelta();
 
   if (rotateX == 1) {
     plane.rotateX(0.05);
@@ -243,8 +243,6 @@ function animate() {
 
 function init() {
 
-  clock = new THREE.Clock();
-  clock.start();
   renderer = new THREE.WebGLRenderer( { antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight );
 

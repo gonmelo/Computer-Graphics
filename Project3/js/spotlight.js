@@ -4,7 +4,7 @@ class SpotLight extends THREE.Object3D {
 
   constructor(x, y, z, angle, axis){
     super();
-    // THREE.SpotLight(color, intensity, distance, angle penumbra, decay)
+    // THREE.SpotLight(color, intensity, distance, angle, penumbra, decay)
     this.light = new THREE.SpotLight(0xffffff, 1, 100, Math.PI/6);
     this.angle = angle;
     this.light.position.set(x,  y - 1.75 * Math.cos(this.angle), z);

@@ -4,22 +4,22 @@ class Plane extends THREE.Object3D {
 
 	constructor() {
 		super();
-		// Create all MeshPhongMaterials needed.
-    this.mainPiecePhongMaterial  = new THREE.MeshPhongMaterial({ color: 0x904B00, wireframe: false , side: THREE.DoubleSide});
+		// Create all MeshPhongMaterials needed. Default shininess = 30.
+    this.mainPiecePhongMaterial  = new THREE.MeshPhongMaterial({ color: 0x904B00, wireframe: false});
 		this.wingPhongMaterial = new THREE.MeshPhongMaterial({ color: 0xDD2590, wireframe: false , side: THREE.DoubleSide});
-		this.cockpitPhongMaterial = new THREE.MeshPhongMaterial({ color: 0x0125990, wireframe: false , side: THREE.DoubleSide});
+		this.cockpitPhongMaterial = new THREE.MeshPhongMaterial({ color: 0x0125990, wireframe: false});
 		this.stabilizerPhongMaterial = new THREE.MeshPhongMaterial({ color: 0x2B9B2E, wireframe: false, side: THREE.DoubleSide });
 
 		// Create all the MeshBasicMaterial's needed.
-		this.mainPieceBasicMaterial  = new THREE.MeshBasicMaterial({ color: 0x904B00, wireframe: false , side: THREE.DoubleSide});
+		this.mainPieceBasicMaterial  = new THREE.MeshBasicMaterial({ color: 0x904B00, wireframe: false});
 		this.wingBasicMaterial = new THREE.MeshBasicMaterial({ color: 0xDD2590, wireframe: false , side: THREE.DoubleSide});
-		this.cockpitBasicMaterial = new THREE.MeshBasicMaterial({ color: 0x125990, wireframe: false , side: THREE.DoubleSide});
+		this.cockpitBasicMaterial = new THREE.MeshBasicMaterial({ color: 0x125990, wireframe: false});
 		this.stabilizerBasicMaterial = new THREE.MeshBasicMaterial({ color: 0x2B9B2E, wireframe: false, side: THREE.DoubleSide });
 
 		// Create all the MeshLamberMaterials needed.
-		this.mainPieceGouraudMaterial  = new THREE.MeshLambertMaterial({ color: 0x904B00, wireframe: false , side: THREE.DoubleSide});
+		this.mainPieceGouraudMaterial  = new THREE.MeshLambertMaterial({ color: 0x904B00, wireframe: false});
 		this.wingGouraudMaterial = new THREE.MeshLambertMaterial({ color: 0xDD2590, wireframe: false , side: THREE.DoubleSide});
-		this.cockpitGouraudMaterial = new THREE.MeshLambertMaterial({ color: 0x125990, wireframe: false , side: THREE.DoubleSide});
+		this.cockpitGouraudMaterial = new THREE.MeshLambertMaterial({ color: 0x125990, wireframe: false});
 		this.stabilizerGouraudMaterial = new THREE.MeshLambertMaterial({ color: 0x2B9B2E, wireframe: false , side: THREE.DoubleSide});
 
 		// Set the "current materials" as the MeshPhongMaterials
@@ -79,25 +79,25 @@ class Plane extends THREE.Object3D {
 			new THREE.Face3(8, 9, 11),
 			new THREE.Face3(11, 10, 8),
 
-			new THREE.Face3(12, 13, 14),
-			new THREE.Face3(13, 15, 14),
-			new THREE.Face3(12, 14, 16),
-			new THREE.Face3(16, 17, 12),
-			new THREE.Face3(17, 16, 18),
+			new THREE.Face3(13, 12, 14),
+			new THREE.Face3(15, 13, 14),
+			new THREE.Face3(14, 12, 16),
+			new THREE.Face3(17, 16, 12),
+			new THREE.Face3(16, 17, 18),
 
-			new THREE.Face3(17, 18, 19),
-			new THREE.Face3(13, 21, 15),
-			new THREE.Face3(21, 20, 15),
-			new THREE.Face3(21, 23, 20),
-			new THREE.Face3(23, 22, 20),
+			new THREE.Face3(18, 17, 19),
+			new THREE.Face3(21, 13, 15),
+			new THREE.Face3(20, 21, 15),
+			new THREE.Face3(23, 21, 20),
+			new THREE.Face3(22, 23, 20),
 
 			//front
-			new THREE.Face3(7, 6, 18),
+			new THREE.Face3(6, 7, 18),
 			new THREE.Face3(7, 19, 18),
 
 			//back
-			new THREE.Face3(23, 11, 22),
-			new THREE.Face3(11, 10, 22),
+			new THREE.Face3(11, 23, 22),
+			new THREE.Face3(10, 11, 22),
 
 			//top
 			new THREE.Face3(2, 3, 14),
@@ -113,17 +113,17 @@ class Plane extends THREE.Object3D {
 			new THREE.Face3(10, 22, 20),
 
 			//bottom
-			new THREE.Face3(0, 1, 12),
-			new THREE.Face3(1, 13, 12),
-			new THREE.Face3(0, 12, 17),
-			new THREE.Face3(0, 17, 5),
-			new THREE.Face3(5, 17, 19),
+			new THREE.Face3(1, 0, 12),
+			new THREE.Face3(13, 1, 12),
+			new THREE.Face3(12, 0, 17),
+			new THREE.Face3(17, 0, 5),
+			new THREE.Face3(17, 5, 19),
 
-			new THREE.Face3(7, 5, 19),
-			new THREE.Face3(1, 9, 13),
-			new THREE.Face3(9, 21, 13),
-			new THREE.Face3(9, 11, 21),
-			new THREE.Face3(11, 23, 21),
+			new THREE.Face3(5, 7, 19),
+			new THREE.Face3(9, 1, 13),
+			new THREE.Face3(21, 9, 13),
+			new THREE.Face3(11, 9, 21),
+			new THREE.Face3(23, 11, 21),
 		)
 
 		this.geometry1.computeFaceNormals();
@@ -332,29 +332,29 @@ class Plane extends THREE.Object3D {
 		)
 		this.geometry6.faces.push(
 			// sides
-			new THREE.Face3(0, 1, 12),
-			new THREE.Face3(12, 1, 13),
-			new THREE.Face3(1, 2, 13),
-			new THREE.Face3(2, 3, 13),
+			new THREE.Face3(1, 0, 12),
+			new THREE.Face3(1, 12, 13),
+			new THREE.Face3(2, 1, 13),
+			new THREE.Face3(3, 2, 13),
 
 			new THREE.Face3(4, 3, 13),
 			new THREE.Face3(5, 4, 13),
 			new THREE.Face3(13, 14, 5),
 			new THREE.Face3(6, 5, 14),
 
-			new THREE.Face3(6, 7, 14),
-			new THREE.Face3(15, 14, 7),
-			new THREE.Face3(7, 8, 15),
-			new THREE.Face3(8, 9, 15),
+			new THREE.Face3(7, 6, 14),
+			new THREE.Face3(14, 15, 7),
+			new THREE.Face3(8, 7, 15),
+			new THREE.Face3(9, 8, 15),
 
-			new THREE.Face3(9, 10, 15),
-			new THREE.Face3(15, 10, 12),
-			new THREE.Face3(10, 11, 12),
-			new THREE.Face3(11, 0, 12),
+			new THREE.Face3(10, 9, 15),
+			new THREE.Face3(10, 15, 12),
+			new THREE.Face3(11, 10, 12),
+			new THREE.Face3(0, 11, 12),
 
 			// top
-			new THREE.Face3(12, 13, 14),
-			new THREE.Face3(14, 15, 12),
+			new THREE.Face3(13, 12, 14),
+			new THREE.Face3(15, 14, 12),
 			)
 		this.geometry6.computeFaceNormals();
 		this.geometry6.computeVertexNormals();
