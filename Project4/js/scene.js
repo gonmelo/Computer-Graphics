@@ -99,21 +99,6 @@ function createMagicMike() {
   scene.add(magicMike);
 }
 
-function onKeyUp(e) {
-  switch (e.keyCode) {
-    case 37:  // left arrow
-      rotateY = 0;
-      break;
-    case 38:  // up arrow
-      rotateX = 0;
-      break;
-    case 39:  // right arrow
-      rotateY = 0;
-      break;
-    case 40: // down arrow
-      rotateX = 0;
-  }
-}
 
 function onKeyDown(e) {
   switch ( e.keyCode ) {
@@ -149,7 +134,7 @@ function onKeyDown(e) {
     break;
     case 66: //B
     case 98: //b
-      if (moveBall == 0){
+      if (moveBall == 0 || moveBall == 2){
         moveBall = 1;
       }
       else {
@@ -159,7 +144,6 @@ function onKeyDown(e) {
     break;
   }
 }
-
 
 function render() {
     camera.updateProjectionMatrix();
@@ -196,11 +180,6 @@ function animate() {
     ball.move(-acceleration);
   }
 
-  if (speed == 0){
-    moveBall = 0;
-    acceleration = 0.5;
-  }
-
   render();
 
   requestAnimationFrame(animate);
@@ -223,7 +202,5 @@ function init() {
 
   window.addEventListener("resize", onResize);
   window.addEventListener("keydown", onKeyDown);
-  window.addEventListener("keyup", onKeyUp);
-
 
 }
