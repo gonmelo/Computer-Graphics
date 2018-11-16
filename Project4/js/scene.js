@@ -197,8 +197,13 @@ function animate() {
   }
   else if (moveBall == 2) {
     ball.move(-acceleration);
-    moveBall = 0;
   }
+
+  if (speed == 0){
+    moveBall = 0;
+    acceleration = 2;
+  }
+  
   render();
 
   requestAnimationFrame(animate);
