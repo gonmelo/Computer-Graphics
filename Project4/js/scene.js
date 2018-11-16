@@ -10,7 +10,7 @@ var sceneWidth = 3.8, sceneHeight = 3.8;
 var sceneRatio = sceneWidth / sceneHeight;
 var aspect;
 var speed = 0;  //Don't touch this
-var maxSpeed = 50;//This is the maximum speed that the object will achieve
+var maxSpeed = 20;//This is the maximum speed that the object will achieve
 var acceleration = 2;
 var rotateX = 0, rotateY = 0;
 var board, ball, magicMike;
@@ -59,7 +59,7 @@ function restartPaused() {
 
 function stopAnimaton() {
 	stopped = !stopped;
-	world_clock.running ? world_clock.stop() : world_clock.start();
+	clock.running ? clock.stop() : clock.start();
 }
 
 
