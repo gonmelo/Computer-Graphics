@@ -17,13 +17,7 @@ class MagicMike extends THREE.Object3D{
       new THREE.MeshPhongMaterial({ map: textloader.load("http://web.tecnico.ulisboa.pt/ist187660/IPM/images/009B48.png"), bumpMap: cubeBumpMap}),
       new THREE.MeshPhongMaterial({ map: textloader.load("http://web.tecnico.ulisboa.pt/ist187660/IPM/images/0045AD.png"), bumpMap: cubeBumpMap}),
     ];
-<<<<<<< HEAD
 		this.mesh = new THREE.Mesh(this.geometry, this.materials);
-=======
-
-    var material = new THREE.MeshFaceMaterial(faceMaterials)
-		this.mesh = new THREE.Mesh(this.geometry, material);
->>>>>>> 07010134fee3a6dbddbb0080c0d1710e87906e2b
 		this.mesh.position.set(0,3,0);
 		this.add(this.mesh);
   }
