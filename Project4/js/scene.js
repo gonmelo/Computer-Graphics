@@ -10,7 +10,7 @@ var sceneRatio = sceneWidth / sceneHeight;
 var aspect;
 var speed = 0;  //Don't touch this
 var maxSpeed = 10;//This is the maximum speed that the object will achieve
-var acceleration = 0.5;
+var acceleration = 1;
 var rotateX = 0, rotateY = 0;
 var board, ball, magicMike;
 var directionalLight;
@@ -19,6 +19,7 @@ var lightingPhong = true;
 var calculatingLight = true;
 var stopped = false;
 var moveBall = 0;
+var pauseGame;
 
 var materials = [];
 
@@ -48,12 +49,7 @@ function createCamera() {
 }
 
 
-function pauseGame() {
-	stopAnimaton();
-}
-
-
-function stopAnimaton() {
+function stopAnimation() {
 	stopped = !stopped;
 	clock.running ? clock.stop() : clock.start();
 }
@@ -72,10 +68,12 @@ function createScene() {
   directionalLight.position.set(500, 500, 500);
   scene.add(directionalLight);
 
-  pointLight = new THREE.PointLight(0xffffff, 1);
-  pointLight.position.set(-10, 10, -10);
+  pointLight = new THREE.PointLight(0xffffff, 1, 0, 2);
+  pointLight.position.set(0, 30, 0);
   scene.add(pointLight);
 
+  pauseGame = new Pause();
+  scene.add(pauseGame);
 }
 
 
@@ -146,9 +144,11 @@ function onKeyDown(e) {
       console.log(`onKeyDown! point: ${pointLight.visible}`);
     break;
     case 83: // S
-        pauseGame();
+    case 115:
+        pause();
     break;
     case 82: // R
+    case 114: // r
       if(stopped)
         init();
     break;
@@ -160,6 +160,7 @@ function onKeyDown(e) {
       else {
         moveBall = 2;
       }
+      console.log(`onKeyDown! ball: ${moveBall}`);
     break;
   }
 }
@@ -180,6 +181,16 @@ function changeAllBasic() {
   }
 }
 
+function pause() {
+	stopAnimation();
+  pauseGame.visible = !pauseGame.visible;
+  controls.autoRotate =  !controls.autoRotate;
+  controls.update();
+  if (pauseGame.visible) {
+    pauseGame.mesh.position.set((camera.position.x - scene.position.x)/2, (camera.position.y - scene.position.y)/2, (camera.position.z - scene.position.z)/2);
+    pauseGame.mesh.lookAt(camera.position);
+  }
+}
 
 function animate() {
 
@@ -218,4 +229,6 @@ function init() {
   window.addEventListener("resize", onResize);
   window.addEventListener("keydown", onKeyDown);
   window.addEventListener("keyup", onKeyUp);
+
+
 }
