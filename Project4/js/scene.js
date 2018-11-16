@@ -5,13 +5,12 @@ var camera, controls;
 var scene, renderer;
 var controls;
 var geometry, material, mesh;
-var deltaT;
 var sceneWidth = 3.8, sceneHeight = 3.8;
 var sceneRatio = sceneWidth / sceneHeight;
 var aspect;
 var speed = 0;  //Don't touch this
-var maxSpeed = 20;//This is the maximum speed that the object will achieve
-var acceleration = 2;
+var maxSpeed = 10;//This is the maximum speed that the object will achieve
+var acceleration = 0.5;
 var rotateX = 0, rotateY = 0;
 var board, ball, magicMike;
 var directionalLight;
@@ -53,9 +52,6 @@ function pauseGame() {
 	stopAnimaton();
 }
 
-function restartPaused() {
-
-}
 
 function stopAnimaton() {
 	stopped = !stopped;
@@ -153,7 +149,8 @@ function onKeyDown(e) {
         pauseGame();
     break;
     case 82: // R
-        restartPaused();
+      if(stopped)
+        init();
     break;
     case 66: //B
     case 98: //b
@@ -195,7 +192,7 @@ function animate() {
 
   if (speed == 0){
     moveBall = 0;
-    acceleration = 2;
+    acceleration = 0.5;
   }
 
   render();
