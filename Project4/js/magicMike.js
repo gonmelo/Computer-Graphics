@@ -7,13 +7,20 @@ class MagicMike extends THREE.Object3D{
     super();
 
     var textloader = new THREE.TextureLoader();
-		this.texture = textloader.load("http://web.tecnico.ulisboa.pt/ist187660/IPM/images/magicColor.jpg");
+    var cubeBumpMap = textloader.load("http://web.tecnico.ulisboa.pt/ist187660/IPM/images/bump.png");
+		this.geometry = new THREE.CubeGeometry(5, 5, 5);
+		var faceMaterials = [
+      new THREE.MeshPhongMaterial({ map: textloader.load("http://web.tecnico.ulisboa.pt/ist187660/IPM/images/ffd500.png"), bumpMap: cubeBumpMap}),
+      new THREE.MeshPhongMaterial({ map: textloader.load("http://web.tecnico.ulisboa.pt/ist187660/IPM/images/ffffff.png"), bumpMap: cubeBumpMap}),
+      new THREE.MeshPhongMaterial({ map: textloader.load("http://web.tecnico.ulisboa.pt/ist187660/IPM/images/F51105.png"), bumpMap: cubeBumpMap}),
+      new THREE.MeshPhongMaterial({ map: textloader.load("http://web.tecnico.ulisboa.pt/ist187660/IPM/images/B90000.png"), bumpMap: cubeBumpMap}),
+      new THREE.MeshPhongMaterial({ map: textloader.load("http://web.tecnico.ulisboa.pt/ist187660/IPM/images/009B48.png"), bumpMap: cubeBumpMap}),
+      new THREE.MeshPhongMaterial({ map: textloader.load("http://web.tecnico.ulisboa.pt/ist187660/IPM/images/0045AD.png"), bumpMap: cubeBumpMap}),
+    ];
 
-		this.geometry = new THREE.CubeGeometry(2, 2, 2);
-		this.material = new THREE.MeshLambertMaterial({ color: 0xFFFFFF, map: this.texture });
-
-		this.mesh = new THREE.Mesh(this.geometry, this.material);
-		this.mesh.position.set(0,0.5,0);
+    var material = new THREE.MeshFaceMaterial(faceMaterials)
+		this.mesh = new THREE.Mesh(this.geometry, material);
+		this.mesh.position.set(0,4.5,0);
 		this.add(this.mesh);
   }
 
