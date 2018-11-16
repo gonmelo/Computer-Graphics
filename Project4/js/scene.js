@@ -18,7 +18,7 @@ var directionalLight;
 var pointLight;
 var lightingPhong = true;
 var calculatingLight = true;
-var stopped = false, dead = false;
+var stopped = false;
 var moveBall = 0;
 
 var materials = [];
@@ -50,12 +50,10 @@ function createCamera() {
 
 
 function pauseGame() {
-	pauseMenu.visible = true;
 	stopAnimaton();
 }
 
-function restartDead() {
-	dead = false;
+function restartPaused() {
 
 }
 
@@ -152,13 +150,10 @@ function onKeyDown(e) {
       console.log(`onKeyDown! point: ${pointLight.visible}`);
     break;
     case 83: // S
-      if (!dead)
         pauseGame();
     break;
     case 82: // R
-      if (dead) {
-        dead = false;
-        restartDead();
+        restartPaused();
       }
     break;
     case 66: //B
