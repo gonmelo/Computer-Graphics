@@ -13,37 +13,35 @@ class Ball extends THREE.Object3D{
 		this.material = new THREE.MeshPhongMaterial({ map: this.texture });
 
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
-		this.mesh.position.set( 15, 6.5, 0 );
+		this.mesh.position.set( 15, 3.5, 0 );
 		this.add(this.mesh);
   }
 
 
   move(acceleration) {
-		deltaT = clock.getDelta();
+		var deltaT = clock.getDelta();
 
-    if (acceleration > 0){
+		if (speed < maxSpeed && speed >= 0){
+	    speed += acceleration * deltaT;
+		 }
 
-		  if (speed < maxSpeed && speed > -maxSpeed){
-		      speed += acceleration * deltaT;
-           //acceleration * deltaT / 3;
-		    }
-    }
-    else {
-      speed += acceleration * deltaT;
+    if (acceleration < 0){
       //this.rotation.y -= 0.05; //acceleration * deltaT / 3;
-      if (speed < 0.0001|| speed > -0.0001) {
+      if (speed < 0.0001) {
   			speed = 0;
   			acceleration = 0;
   		}
     }
 		var deltaX = ( speed * deltaT + 0.5 * acceleration * Math.pow(deltaT,2) );
 
-    this.rotation.y += deltaX / 3;
-    this.position.x += (Math.sin(this.rotation.y)) * deltaX;
-    this.position.z += (Math.cos(this.rotation.y)) * deltaX;
 
-    //this.rotation.x -= (Math.sin(this.rotation.y)) * deltaX / 3;
-    //this.rotation.z -= (Math.cos(this.rotation.y)) * deltaX / 3;
+    this.rotation.y += deltaX;
+
+    //this.position.x += (Math.sin(this.rotation.y)) * deltaX;
+    //this.position.z += (Math.cos(this.rotation.y)) * deltaX;
+
+    //this.rotation.x += (Math.sin(this.rotation.y)) * deltaX / 3;
+    //this.rotation.z += (Math.cos(this.rotation.y)) * deltaX / 3;
   }
 
 }
