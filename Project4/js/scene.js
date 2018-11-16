@@ -154,7 +154,6 @@ function onKeyDown(e) {
     break;
     case 82: // R
         restartPaused();
-      }
     break;
     case 66: //B
     case 98: //b
@@ -164,7 +163,7 @@ function onKeyDown(e) {
       else {
         moveBall = 2;
       }
-
+    break;
   }
 }
 
@@ -198,7 +197,7 @@ function animate() {
     moveBall = 0;
     acceleration = 2;
   }
-  
+
   render();
 
   requestAnimationFrame(animate);
