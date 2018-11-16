@@ -77,7 +77,7 @@ function createScene() {
   scene.add(directionalLight);
 
   pointLight = new THREE.PointLight(0xffffff, 1);
-  pointLight.position.set(0, 10, 10);
+  pointLight.position.set(-10, 10, -10);
   scene.add(pointLight);
 
 }
