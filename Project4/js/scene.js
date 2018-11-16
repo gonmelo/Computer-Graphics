@@ -11,7 +11,6 @@ var aspect;
 var speed = 0;  //Don't touch this
 var maxSpeed = 10;//This is the maximum speed that the object will achieve
 var acceleration = 1;
-var rotateX = 0, rotateY = 0;
 var board, ball, magicMike;
 var directionalLight;
 var pointLight;
@@ -20,6 +19,7 @@ var calculatingLight = true;
 var stopped = false;
 var moveBall = 0;
 var pauseGame;
+var ballCenter;
 
 var materials = [];
 
@@ -61,8 +61,8 @@ function createScene() {
   scene.position.set(0,0,0);
   scene.add( new THREE.AxesHelper(10) );
   createBoard();
-  createBall();
   createMagicMike();
+  createBall();
 
   directionalLight = new THREE.DirectionalLight(0xffffff, 1);
   directionalLight.position.set(500, 500, 500);
@@ -91,12 +91,16 @@ function createBoard() {
 function createBall() {
   ball = new Ball();
   scene.add(ball);
+  ballCenter.add( ball.mesh);
 }
 
 
 function createMagicMike() {
   magicMike = new MagicMike();
   scene.add(magicMike);
+
+  ballCenter = new THREE.Group();
+	magicMike.mesh.add( ballCenter );
 }
 
 
@@ -129,8 +133,9 @@ function onKeyDown(e) {
     break;
     case 82: // R
     case 114: // r
-      if(stopped)
-        init();
+      if(stopped){
+        location.reload(true);
+      }
     break;
     case 66: //B
     case 98: //b
