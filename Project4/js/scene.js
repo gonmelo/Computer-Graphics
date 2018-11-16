@@ -127,11 +127,6 @@ function onKeyDown(e) {
     case 76: // L
       changeAllBasic();
       console.log(`onKeyDown! changeBasic: ${calculatingLight}`);
-      break;
-    case 103: // g
-    case 71: // G
-      changelighting();
-      console.log(`onKeyDown! changelighting: ${lightingPhong}`);
     break;
     case 100: // d
     case 68: // D

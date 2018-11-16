@@ -26,7 +26,6 @@ class Ball extends THREE.Object3D{
 		 }
 
     if (acceleration < 0){
-      //this.rotation.y -= 0.05; //acceleration * deltaT / 3;
       if (speed < 0.0001) {
   			speed = 0;
   			acceleration = 0;
