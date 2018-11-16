@@ -35,7 +35,7 @@ class Ball extends THREE.Object3D{
 		var deltaX = ( speed * deltaT + 0.5 * acceleration * Math.pow(deltaT,2) );
 
 
-    this.rotation.y += deltaX / 12;
+    this.rotation.y += deltaX / 15;
     this.mesh.rotation.x -= deltaX/ 3;
 
   }
