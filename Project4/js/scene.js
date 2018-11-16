@@ -11,7 +11,7 @@ var sceneRatio = sceneWidth / sceneHeight;
 var aspect;
 var speed = 0;  //Don't touch this
 var maxSpeed = 50;//This is the maximum speed that the object will achieve
-var acceleration = 20;
+var acceleration = 2;
 var rotateX = 0, rotateY = 0;
 var board, ball, magicMike;
 var directionalLight;

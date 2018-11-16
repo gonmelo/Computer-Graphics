@@ -20,8 +20,9 @@ class Ball extends THREE.Object3D{
 
   move(acceleration) {
 		deltaT = clock.getDelta();
+
     if (acceleration > 0){
-      this.rotation.y += 0.05;
+
 		  if (speed < maxSpeed && speed > -maxSpeed){
 		      speed += acceleration * deltaT;
            //acceleration * deltaT / 3;
@@ -29,7 +30,7 @@ class Ball extends THREE.Object3D{
     }
     else {
       speed += acceleration * deltaT;
-      this.rotation.y -= 0.05; //acceleration * deltaT / 3;
+      //this.rotation.y -= 0.05; //acceleration * deltaT / 3;
       if (speed < 0.0001|| speed > -0.0001) {
   			speed = 0;
   			acceleration = 0;
@@ -37,7 +38,7 @@ class Ball extends THREE.Object3D{
     }
 		var deltaX = ( speed * deltaT + 0.5 * acceleration * Math.pow(deltaT,2) );
 
-
+    this.rotation.y += deltaX / 3;
     this.position.x += (Math.sin(this.rotation.y)) * deltaX;
     this.position.z += (Math.cos(this.rotation.y)) * deltaX;
 
