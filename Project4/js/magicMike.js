@@ -20,7 +20,7 @@ class MagicMike extends THREE.Object3D{
 
     var material = new THREE.MeshFaceMaterial(faceMaterials)
 		this.mesh = new THREE.Mesh(this.geometry, material);
-		this.mesh.position.set(0,4.5,0);
+		this.mesh.position.set(0,3,0);
 		this.add(this.mesh);
   }
 
