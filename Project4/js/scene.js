@@ -24,6 +24,7 @@ var pauseGame;
 var materials = [];
 
 
+
 function onResize() {
 
   aspect = window.innerWidth / window.innerHeight;
@@ -78,12 +79,11 @@ function createScene() {
 
 
 function createBoard() {
+  var bM = new THREE.MeshBasicMaterial( {
+		map:
+		visible: true
+	} );
   board = new Board();
-  /*materials = [...materials,
-              plane.mainPieceMaterial,
-              plane.wingMaterial,
-              plane.cockpitMaterial,
-              plane.stabilizerMaterial]; */
   scene.add(board);
 }
 

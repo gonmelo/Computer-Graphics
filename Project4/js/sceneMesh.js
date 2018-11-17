@@ -2,7 +2,7 @@
 
 class SceneMesh extends THREE.Mesh {
 
-  constructor( bM, pM = null, lM = null, geometry ) {
+  constructor(geometry, bM, pM = null, lM = null) {
 
     super(geometry, basicMaterial);
 
