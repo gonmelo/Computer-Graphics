@@ -79,12 +79,12 @@ function createScene() {
 
 
 function createBoard() {
-  var bM = new THREE.MeshBasicMaterial( {
-		map:
-		visible: true
-	} );
   board = new Board();
   scene.add(board);
+
+  materials = [... materials,
+              board.mesh.phongMaterial,
+              board.mesh.basicMaterial]
 }
 
 
@@ -92,6 +92,10 @@ function createBall() {
   ball = new Ball();
   scene.add(ball);
   ballCenter.add( ball.mesh);
+
+  materials = [... materials,
+              ball.mesh.phongMaterial,
+              ball.mesh.basicMaterial]
 }
 
 
@@ -114,7 +118,7 @@ function onKeyDown(e) {
     break;
     case 108: // l
     case 76: // L
-      changeAllBasic();
+      changeLight();
       console.log(`onKeyDown! changeBasic: ${calculatingLight}`);
     break;
     case 100: // d
@@ -139,11 +143,11 @@ function onKeyDown(e) {
     break;
     case 66: //B
     case 98: //b
-      if (moveBall == 0 || moveBall == 2){
+      if (moveBall == 0){
         moveBall = 1;
       }
       else {
-        moveBall = 2;
+        moveBall = 0;
       }
       console.log(`onKeyDown! ball: ${moveBall}`);
     break;
@@ -158,10 +162,16 @@ function render() {
   }
 
 
-function changeAllBasic() {
+function changeLight() {
   if (calculatingLight) {
-  	board.changeBasic();
+  	board.changeMaterial(2);
+    ball.changeMaterial(2);
   	calculatingLight = false;
+  }
+  else {
+    board.changeMaterial(1);
+    ball.changeMaterial(1);
+    calculatingLight = true;
   }
 }
 
@@ -181,7 +191,7 @@ function animate() {
   if (moveBall == 1) {
     ball.move(acceleration);
   }
-  else if (moveBall == 2) {
+  else if (moveBall == 0) {
     ball.move(-acceleration);
   }
 

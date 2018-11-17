@@ -10,9 +10,9 @@ class Ball extends THREE.Object3D{
 		this.texture = textloader.load("http://web.tecnico.ulisboa.pt/ist187660/IPM/images/ball12.jpg");
 
 		this.geometry = new THREE.SphereGeometry( 3, 32, 32 );
-		this.material = new THREE.MeshPhongMaterial({ map: this.texture, shininess: 70, specular: 0x1f1f1f });
-
-		this.mesh = new THREE.Mesh(this.geometry, this.material);
+		var pM = new THREE.MeshPhongMaterial({ map: this.texture, shininess: 70, specular: 0x1f1f1f , wireframe: false});
+    var bM = new THREE.MeshBasicMaterial({ map: this.texture , wireframe: false});
+		this.mesh = new SceneMesh(this.geometry, bM, pM, 1);
 		this.mesh.position.set( magicMike.mesh.position.x + 15, 0.5, magicMike.mesh.position.z );
 		this.add(this.mesh);
   }
@@ -37,6 +37,14 @@ class Ball extends THREE.Object3D{
     //this.rotation.y += deltaX / 13;
     this.mesh.rotation.x -= deltaX / 3;
 
+  }
+
+  changeMaterial(flag) {
+    if(flag == 1)
+      this.mesh.material = this.mesh.phongMaterial;
+    else {
+      this.mesh.material = this.mesh.basicMaterial;
+      }
   }
 
 }

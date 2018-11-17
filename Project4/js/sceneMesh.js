@@ -2,13 +2,16 @@
 
 class SceneMesh extends THREE.Mesh {
 
-  constructor(geometry, bM, pM = null, lM = null) {
+  constructor(geometry, bM, pM, mat) {
 
-    super(geometry, basicMaterial);
+    if (mat == 1)
+      super(geometry, pM);
+    else {
+      super(geometry, bM);
+    }
 
     this.basicMaterial = bM;
     this.phongMaterial = pM;
-    this.lambertMaterial = lM;
   }
 
 }
