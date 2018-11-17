@@ -134,7 +134,7 @@ function onKeyDown(e) {
     case 82: // R
     case 114: // r
       if(stopped){
-        location.reload(true);
+
       }
     break;
     case 66: //B
