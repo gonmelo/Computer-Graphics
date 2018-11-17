@@ -13,29 +13,29 @@ class Ball extends THREE.Object3D{
 		this.material = new THREE.MeshPhongMaterial({ map: this.texture, shininess: 70, specular: 0x1f1f1f });
 
 		this.mesh = new THREE.Mesh(this.geometry, this.material);
-		this.mesh.position.set( 13, 3.5, 0 );
+		this.mesh.position.set( magicMike.mesh.position.x + 15, 0.5, magicMike.mesh.position.z );
 		this.add(this.mesh);
   }
 
 
-  move(acceleration) {
+  move(accel) {
 		var deltaT = clock.getDelta();
-
-		if (speed < maxSpeed && speed >= 0){
-	    speed += acceleration * deltaT;
+    var speed_tmp = speed + accel * deltaT;
+		if (speed_tmp < maxSpeed && speed >= 0){
+	    speed += accel * deltaT;
 		 }
 
-    if (acceleration < 0){
+    if (accel < 0){
       if (speed < 0.0001) {
   			speed = 0;
-  			acceleration = 0;
+  			accel = 0;
   		}
     }
-		var deltaX = ( speed * deltaT + 0.5 * acceleration * Math.pow(deltaT,2) );
+		var deltaX = ( speed * deltaT + 0.5 * accel * Math.pow(deltaT,2) );
 
-
-    this.rotation.y += deltaX / 15;
-    this.mesh.rotation.x -= deltaX/ 3;
+    ballCenter.rotation.y += deltaX/ 12;
+    //this.rotation.y += deltaX / 13;
+    this.mesh.rotation.x -= deltaX / 3;
 
   }
 
