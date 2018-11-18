@@ -1,7 +1,7 @@
 'use strict'
 
 var clock;
-var camera, controls;
+var camera, controls, pauseCamera;
 var scene, renderer;
 var controls;
 var geometry, material, mesh;
@@ -14,7 +14,6 @@ var acceleration = 1;
 var board, ball, magicMike;
 var directionalLight;
 var pointLight;
-var lightingPhong = true;
 var calculatingLight = true;
 var stopped = false;
 var moveBall = 0;
@@ -28,6 +27,21 @@ var materials = [];
 function onResize() {
 
   aspect = window.innerWidth / window.innerHeight;
+
+  if ( aspect > sceneRatio ) {
+    	pauseCamera.left   = -sceneWidth * aspect;
+    	pauseCamera.right  = sceneWidth * aspect;
+    	pauseCamera.top    = sceneHeight;
+    	pauseCamera.bottom = -sceneHeight;
+  }
+  else {
+    	pauseCamera.left   = - sceneWidth;
+    	pauseCamera.right  = sceneWidth;
+    	pauseCamera.top    = sceneHeight / aspect;
+    	pauseCamera.bottom = -sceneHeight / aspect;
+  }
+  pauseCamera.updateProjectionMatrix();
+
 
   camera.aspect = aspect;
   camera.updateProjectionMatrix();
@@ -49,6 +63,20 @@ function createCamera() {
 	camera.lookAt( scene.position );
 }
 
+
+function createPauseCamera() {
+  aspect = window.innerWidth / window.innerHeight;
+
+  pauseCamera = new THREE.OrthographicCamera (
+                                  -sceneWidth * aspect,
+                                  sceneWidth * aspect,
+                                  sceneHeight,
+                                  -sceneHeight,
+                                  -100,
+                                  1000);
+	pauseCamera.position.set(0, -10, 0);
+	pauseCamera.lookAt( pauseGame.position );
+}
 
 function stopAnimation() {
 	stopped = !stopped;
@@ -105,6 +133,10 @@ function createMagicMike() {
 
   ballCenter = new THREE.Group();
 	magicMike.mesh.add( ballCenter );
+
+  magicMike.materials.forEach(function(material) {
+    materials = [... materials, material];
+  });
 }
 
 
@@ -132,13 +164,13 @@ function onKeyDown(e) {
       console.log(`onKeyDown! point: ${pointLight.visible}`);
     break;
     case 83: // S
-    case 115:
+    case 115: // s
         pause();
     break;
     case 82: // R
     case 114: // r
       if(stopped){
-
+        restart();
       }
     break;
     case 66: //B
@@ -154,11 +186,33 @@ function onKeyDown(e) {
   }
 }
 
+function restart(){
+    stopAnimation();
+    speed = 0;
+    moveBall = 0;
+    calculatingLight = true;
+    pauseGame.visible = !pauseGame.visible;
+    camera.position.set(40, 30, 5);
+    ball.restart();
+    controls.autoRotate = true;
+    render();
+}
+
 function render() {
-    camera.updateProjectionMatrix();
-    camera.lookAt(scene.position);
+  switch (stopped){
+    case true:
+      pauseCamera.updateProjectionMatrix();
+      pauseCamera.lookAt(pauseGame.position);
+      renderer.render(scene, pauseCamera);
+    break;
+    case false:
+      camera.updateProjectionMatrix();
+      camera.lookAt(scene.position);
+      renderer.render(scene, camera);
+      break;
+    }
     controls.update();
-    renderer.render(scene, camera);
+
   }
 
 
@@ -180,10 +234,10 @@ function pause() {
   pauseGame.visible = !pauseGame.visible;
   controls.autoRotate =  !controls.autoRotate;
   controls.update();
-  if (pauseGame.visible) {
-    pauseGame.mesh.position.set((camera.position.x - scene.position.x)/2, (camera.position.y - scene.position.y)/2, (camera.position.z - scene.position.z)/2);
-    pauseGame.mesh.lookAt(camera.position);
-  }
+//  if (pauseGame.visible) {
+  //  pauseGame.mesh.position.set((pauseCamera.position.x - pauseGame.position.x)/2, (pauseCamera.position.y - pauseGame.position.y)/2, (pauseCamera.position.z - pauseGame.position.z)/2);
+  pauseGame.mesh.lookAt(pauseCamera.position);
+  //}
 }
 
 function animate() {
@@ -212,6 +266,7 @@ function init() {
 
   createScene();
   createCamera();
+  createPauseCamera();
   controls = new THREE.OrbitControls( camera );
   controls.autoRotate = true;
 

@@ -47,4 +47,9 @@ class Ball extends THREE.Object3D{
       }
   }
 
+  restart(){
+    ballCenter.rotation.y = 0;
+    this.mesh.rotation.x = 0;
+  }
+
 }
