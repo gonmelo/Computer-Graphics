@@ -119,7 +119,7 @@ function createBoard() {
 function createBall() {
   ball = new Ball();
   scene.add(ball);
-  ballCenter.add( ball.mesh);
+  ballPivot.add( ball.mesh);
 
   materials = [... materials,
               ball.mesh.phongMaterial,
