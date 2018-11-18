@@ -3,6 +3,7 @@
 var clock;
 var camera, controls, pauseCamera;
 var scene, renderer;
+var scenePause;
 var controls;
 var geometry, material, mesh;
 var sceneWidth = 3.8, sceneHeight = 3.8;
@@ -18,7 +19,7 @@ var calculatingLight = true;
 var stopped = false;
 var moveBall = 0;
 var pauseGame;
-var ballCenter;
+var ballPivot;
 
 var materials = [];
 
@@ -84,11 +85,15 @@ function stopAnimation() {
 }
 
 
-function createScene() {
+function createScenes() {
 
   scene = new THREE.Scene();
   scene.position.set(0,0,0);
   scene.add( new THREE.AxesHelper(10) );
+
+  scenePause = new THREE.Scene();
+  scenePause.position.set(0,-2,0);
+
   createBoard();
   createMagicMike();
   createBall();
@@ -102,7 +107,7 @@ function createScene() {
   scene.add(pointLight);
 
   pauseGame = new Pause();
-  scene.add(pauseGame);
+  scenePause.add(pauseGame);
 }
 
 
@@ -131,11 +136,17 @@ function createMagicMike() {
   magicMike = new MagicMike();
   scene.add(magicMike);
 
-  ballCenter = new THREE.Group();
-	magicMike.mesh.add( ballCenter );
+  ballPivot = new THREE.Group();
+	magicMike.mesh.add( ballPivot );
 
-  magicMike.materials.forEach(function(material) {
-    materials = [... materials, material];
+  magicMike.mesh.phongMaterial.forEach(function(material) {
+    materials = [... materials,
+                material]
+  });
+
+  magicMike.mesh.basicMaterial.forEach(function(material) {
+    materials = [... materials,
+                material]
   });
 }
 
@@ -192,6 +203,8 @@ function restart(){
     moveBall = 0;
     calculatingLight = true;
     pauseGame.visible = !pauseGame.visible;
+    pointLight.visible = true;
+    directionalLight.visible = true;
     camera.position.set(40, 30, 5);
     ball.restart();
     controls.autoRotate = true;
@@ -202,8 +215,8 @@ function render() {
   switch (stopped){
     case true:
       pauseCamera.updateProjectionMatrix();
-      pauseCamera.lookAt(pauseGame.position);
-      renderer.render(scene, pauseCamera);
+      pauseCamera.lookAt(scenePause.position);
+      renderer.render(scenePause, pauseCamera);
     break;
     case false:
       camera.updateProjectionMatrix();
@@ -220,11 +233,13 @@ function changeLight() {
   if (calculatingLight) {
   	board.changeMaterial(2);
     ball.changeMaterial(2);
+    magicMike.changeMaterial(2);
   	calculatingLight = false;
   }
   else {
     board.changeMaterial(1);
     ball.changeMaterial(1);
+    magicMike.changeMaterial(1);
     calculatingLight = true;
   }
 }
@@ -264,7 +279,7 @@ function init() {
 
   document.body.appendChild(renderer.domElement);
 
-  createScene();
+  createScenes();
   createCamera();
   createPauseCamera();
   controls = new THREE.OrbitControls( camera );
