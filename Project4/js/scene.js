@@ -1,7 +1,7 @@
 'use strict'
 
 var clock;
-var camera, controls, pauseCamera;
+var camera, pauseCamera;
 var scene, renderer;
 var scenePause;
 var controls;
@@ -9,26 +9,24 @@ var geometry, material, mesh;
 var sceneWidth = 3.8, sceneHeight = 3.8;
 var sceneRatio = sceneWidth / sceneHeight;
 var aspect;
-var speed = 0;  //Don't touch this
-var maxSpeed = 10;//This is the maximum speed that the object will achieve
+var speed = 0;
+var maxSpeed = 15;
 var acceleration = 1;
 var board, ball, magicMike;
 var directionalLight;
 var pointLight;
 var calculatingLight = true;
 var stopped = false;
-var moveBall = 0;
+var moveBall = false;
 var pauseGame;
 var ballPivot;
-
 var materials = [];
-
+var textloader = new THREE.TextureLoader();
 
 
 function onResize() {
-
   aspect = window.innerWidth / window.innerHeight;
-
+  // PauseCamera is ortographic.
   if ( aspect > sceneRatio ) {
     	pauseCamera.left   = -sceneWidth * aspect;
     	pauseCamera.right  = sceneWidth * aspect;
@@ -42,12 +40,11 @@ function onResize() {
     	pauseCamera.bottom = -sceneHeight / aspect;
   }
   pauseCamera.updateProjectionMatrix();
-
-
+  // camera is a PerspectiveCamera
   camera.aspect = aspect;
   camera.updateProjectionMatrix();
-  controls.update();
 
+  controls.update();
   renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
@@ -67,17 +64,16 @@ function createCamera() {
 
 function createPauseCamera() {
   aspect = window.innerWidth / window.innerHeight;
-
-  pauseCamera = new THREE.OrthographicCamera (
-                                  -sceneWidth * aspect,
-                                  sceneWidth * aspect,
-                                  sceneHeight,
-                                  -sceneHeight,
-                                  -100,
-                                  1000);
-	pauseCamera.position.set(0, -10, 0);
-	pauseCamera.lookAt( pauseGame.position );
+  pauseCamera = new THREE.PerspectiveCamera (
+    70,
+    window.innerWidth / window.innerHeight,
+    1,
+    1000);
+  pauseCamera.position.set(0, 5, 0);
+  pauseCamera.lookAt( scenePause.position );
+  pauseGame.lookAt(pauseCamera.position)
 }
+
 
 function stopAnimation() {
 	stopped = !stopped;
@@ -86,17 +82,15 @@ function stopAnimation() {
 
 
 function createScenes() {
+  createScene();
+  createPauseScene();
+}
 
+
+function createScene() {
   scene = new THREE.Scene();
   scene.position.set(0,0,0);
   scene.add( new THREE.AxesHelper(10) );
-
-  scenePause = new THREE.Scene();
-  scenePause.position.set(0,-2,0);
-
-  createBoard();
-  createMagicMike();
-  createBall();
 
   directionalLight = new THREE.DirectionalLight(0xffffff, 1);
   directionalLight.position.set(500, 500, 500);
@@ -106,6 +100,16 @@ function createScenes() {
   pointLight.position.set(0, 30, 0);
   scene.add(pointLight);
 
+  createBoard();
+  createMagicMike();
+  createBall();
+}
+
+
+function createPauseScene() {
+  scenePause = new THREE.Scene();
+  scenePause.position.set(0,0,0);
+
   pauseGame = new Pause();
   scenePause.add(pauseGame);
 }
@@ -114,7 +118,6 @@ function createScenes() {
 function createBoard() {
   board = new Board();
   scene.add(board);
-
   materials = [... materials,
               board.mesh.phongMaterial,
               board.mesh.basicMaterial]
@@ -124,11 +127,11 @@ function createBoard() {
 function createBall() {
   ball = new Ball();
   scene.add(ball);
-  ballPivot.add( ball.mesh);
+  ballPivot.add( ball );
 
   materials = [... materials,
               ball.mesh.phongMaterial,
-              ball.mesh.basicMaterial]
+              ball.mesh.basicMaterial];
 }
 
 
@@ -137,13 +140,12 @@ function createMagicMike() {
   scene.add(magicMike);
 
   ballPivot = new THREE.Group();
-	magicMike.mesh.add( ballPivot );
+	magicMike.add( ballPivot );
 
   magicMike.mesh.phongMaterial.forEach(function(material) {
     materials = [... materials,
                 material]
   });
-
   magicMike.mesh.basicMaterial.forEach(function(material) {
     materials = [... materials,
                 material]
@@ -153,80 +155,81 @@ function createMagicMike() {
 
 function onKeyDown(e) {
   switch ( e.keyCode ) {
+    // Turn wireframe on/off
     case 87:  //W
     case 119: // w
       materials.forEach(function(material) {
         material.wireframe = !material.wireframe;
       });
     break;
+    // Turn basic on/off
     case 108: // l
     case 76: // L
       changeLight();
       console.log(`onKeyDown! changeBasic: ${calculatingLight}`);
     break;
+    // Turn directional light on/off.
     case 100: // d
     case 68: // D
       directionalLight.visible = !(directionalLight.visible);
       console.log(`onKeyDown! sun: ${directionalLight.visible}`);
     break;
+    // Turn point light on/off.
     case 80: //P
     case 112: // p
       pointLight.visible = !(pointLight.visible);
       console.log(`onKeyDown! point: ${pointLight.visible}`);
     break;
+    // Pause and resume scene.
     case 83: // S
     case 115: // s
         pause();
     break;
+    // Restart game.
     case 82: // R
     case 114: // r
       if(stopped){
         restart();
       }
     break;
+    // Turn ball movement on/off.
     case 66: //B
     case 98: //b
-      if (moveBall == 0){
-        moveBall = 1;
-      }
-      else {
-        moveBall = 0;
-      }
+      moveBall = !moveBall;
       console.log(`onKeyDown! ball: ${moveBall}`);
     break;
   }
 }
 
+
 function restart(){
     stopAnimation();
     speed = 0;
-    moveBall = 0;
+    moveBall = false;
     calculatingLight = true;
     pauseGame.visible = !pauseGame.visible;
     pointLight.visible = true;
     directionalLight.visible = true;
     camera.position.set(40, 30, 5);
-    ball.restart();
     controls.autoRotate = true;
+    ball.restart();
     render();
 }
 
-function render() {
-  switch (stopped){
-    case true:
-      pauseCamera.updateProjectionMatrix();
-      pauseCamera.lookAt(scenePause.position);
-      renderer.render(scenePause, pauseCamera);
-    break;
-    case false:
-      camera.updateProjectionMatrix();
-      camera.lookAt(scene.position);
-      renderer.render(scene, camera);
-      break;
-    }
-    controls.update();
 
+function render() {
+  if(stopped) {
+    pauseCamera.updateProjectionMatrix();
+    pauseCamera.lookAt(scenePause.position);
+    renderer.render(scenePause, pauseCamera);
   }
+  else {
+    camera.updateProjectionMatrix();
+    camera.lookAt(scene.position);
+    renderer.render(scene, camera);
+  }
+  controls.update();
+}
 
 
 function changeLight() {
@@ -244,28 +247,26 @@ function changeLight() {
   }
 }
 
+
 function pause() {
 	stopAnimation();
+  controls.enabled = !controls.enabled;
   pauseGame.visible = !pauseGame.visible;
   controls.autoRotate =  !controls.autoRotate;
   controls.update();
-//  if (pauseGame.visible) {
-  //  pauseGame.mesh.position.set((pauseCamera.position.x - pauseGame.position.x)/2, (pauseCamera.position.y - pauseGame.position.y)/2, (pauseCamera.position.z - pauseGame.position.z)/2);
-  pauseGame.mesh.lookAt(pauseCamera.position);
-  //}
 }
+
 
 function animate() {
 
-  if (moveBall == 1) {
+  if (moveBall) {
     ball.move(acceleration);
   }
-  else if (moveBall == 0) {
+  else {
     ball.move(-acceleration);
   }
 
   render();
-
   requestAnimationFrame(animate);
 }
 
@@ -282,6 +283,7 @@ function init() {
   createScenes();
   createCamera();
   createPauseCamera();
+
   controls = new THREE.OrbitControls( camera );
   controls.autoRotate = true;
 
