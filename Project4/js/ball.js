@@ -31,7 +31,6 @@ class Ball extends THREE.Object3D{
 		var deltaX = ( speed * deltaT + 0.5 * accel * Math.pow(deltaT,2) );
 
     ballPivot.rotation.y += deltaX/ 15;
-    //this.rotation.y += deltaX / 13;
     this.rotation.x -= deltaX / 3;
 
   }
