@@ -19,7 +19,7 @@ We developed 4 small projects using three.js, with different objectives. Each on
 
 </a>
 
-1. Download the projects [here!](https://github.com/marianasrv/computer-graphics/archive/main.zip) and unzip at a desired directory. 
+1. Download the projects [here!](https://github.com/gonmelo/Computer-Graphics/archive/refs/heads/master.zip) and unzip at a desired directory. 
 2. See the ReadMe of each project and follow the instructions!
 
 - [Project 1](https://github.com/marianasrv/computer-graphics/tree/main/Project1)
