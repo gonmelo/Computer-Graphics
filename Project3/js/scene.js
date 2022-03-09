@@ -1,10 +1,3 @@
-, ball;
-
-
-function createBall() {
-  ball = new Ball();
-  scene.add(ball);
-}
 'use strict'
 
 var camera;
