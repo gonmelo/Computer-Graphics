@@ -44,12 +44,11 @@ For help getting started with Three.js, check
 ## Contributors
 
 </a>
-
-<a href="https://github.com/marianasrv">
-	<img src="https://github.com/marianasrv.png" width="80" style="border-radius:50%">
-</a>
 <a href="https://github.com/gonmelo">
 	<img src="https://github.com/gonmelo.png" width="80" style="border-radius:50%">
+</a>
+<a href="https://github.com/marianasrv">
+	<img src="https://github.com/marianasrv.png" width="80" style="border-radius:50%">
 </a>
 
 <a name="support"> 
