@@ -22,10 +22,10 @@ We developed 4 small projects using three.js, with different objectives. Each on
 1. Download the projects [here!](https://github.com/gonmelo/Computer-Graphics/archive/refs/heads/master.zip) and unzip at a desired directory. 
 2. See the ReadMe of each project and follow the instructions!
 
-- [Project 1](https://github.com/marianasrv/computer-graphics/tree/main/Project1)
-- [Project 2](https://github.com/marianasrv/computer-graphics/tree/main/Project2)
-- [Project 3](https://github.com/marianasrv/computer-graphics/tree/main/Project3)
-- [Project 4](https://github.com/marianasrv/computer-graphics/tree/main/Project4)
+- [Project 1](https://github.com/gonmelo/Computer-Graphics/tree/master/Project1)
+- [Project 2](https://github.com/gonmelo/Computer-Graphics/tree/master/Project2)
+- [Project 3](https://github.com/gonmelo/Computer-Graphics/tree/master/Project3)
+- [Project 4](https://github.com/gonmelo/Computer-Graphics/tree/master/Project4)
 
 
 <a name="flutter"> 
